@@ -25,27 +25,34 @@ public class TripServiceUmpl implements ITripService{
 	}
 
 	@Override
-	public void updateTrip(Trip trip, Long idUser, Integer idTrip) {
-		// TODO Auto-generated method stub
-		
+	public void updateTrip(Trip trip, Integer idTrip) {
+		Trip t = tripRepo.findById(idTrip).orElse(null);
+		t.setDestination(trip.getDestination());
+		t.setEndDate(trip.getEndDate());
+		t.setObject(trip.getObject());
+		t.setStartDate(trip.getStartDate());
+		t.setUtilisateur(t.getUtilisateur());
+		tripRepo.save(t);
+	
 	}
 
 	@Override
 	public void deleteTrip(Integer idTrip) {
 		// TODO Auto-generated method stub
+		tripRepo.deleteById(idTrip);
 		
 	}
 
 	@Override
 	public Trip affichDetailTrip(Integer idTrip) {
 		// TODO Auto-generated method stub
-		return null;
+		return tripRepo.findById(idTrip).orElse(null);
 	}
 
 	@Override
 	public List<Trip> affichTrip() {
 		// TODO Auto-generated method stub
-		return null;
+		return tripRepo.findAll();
 	}
 
 	
