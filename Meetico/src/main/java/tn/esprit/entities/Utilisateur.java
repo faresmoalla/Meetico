@@ -49,7 +49,7 @@ public class Utilisateur implements Serializable {
 	@JsonIgnore
 	private Set<PostDislike> dislikes;
 	
-	@ManyToMany(mappedBy="utilisateurs", cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Set<Trip> Trips;
+	private Set<Trip> trips;
 }

@@ -38,9 +38,10 @@ public class Trip implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	private String object;
-	@ManyToMany(cascade = CascadeType.ALL)
+	
+	@ManyToMany(mappedBy="trips", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Set<Utilisateur> utilisateurs;
+	private Set<Utilisateur> Utilisateur;
 	
 
 }
