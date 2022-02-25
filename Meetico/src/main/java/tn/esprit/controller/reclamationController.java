@@ -4,6 +4,7 @@ package tn.esprit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,5 +53,12 @@ public class reclamationController {
 	public void deleteReclamation(@PathVariable(name="idReclamation") Integer idReclamation) {
 		reclamationservice.deleteReclamation(idReclamation);
 	}
+	@GetMapping("/retrieveReclamation/{idReclamation}")
+	@ApiOperation(value = "retrieve une Reclamation")
+	@ResponseBody
+	public Reclamation retrieveReclamation(@PathVariable(name="idReclamation") Integer idReclamation) {
+		return reclamationservice.retrieveReclamation(idReclamation);
+	}
+	
 }
 	
