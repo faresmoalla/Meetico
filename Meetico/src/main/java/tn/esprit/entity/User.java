@@ -99,8 +99,8 @@ public class User implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Event> events;
 	
-	@Enumerated(EnumType.STRING)
-	private Role role;
+//	@Enumerated(EnumType.STRING)
+//	private Role role;
 	
 	private String street;
 	
