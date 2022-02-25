@@ -55,7 +55,8 @@ public class serviceReclamation implements Ireclamation {
 
 	@Override
 	public void deleteReclamation(Integer idReclamation) {
-		// TODO Auto-generated method stub
+		
+		reclamationrepository.deleteById(idReclamation);
 		
 	}
 

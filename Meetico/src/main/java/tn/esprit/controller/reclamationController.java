@@ -3,6 +3,7 @@ package tn.esprit.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,6 +45,12 @@ public class reclamationController {
 	@ResponseBody
 	public void updateReclamation(@RequestBody Reclamation reclamation) {
 		reclamationservice.updateReclamation(reclamation);
+	}
+	@DeleteMapping("/DeleteReclamation/{idReclamation}")
+	@ApiOperation(value = "Delete reclamation")
+	@ResponseBody
+	public void deleteReclamation(@PathVariable(name="idReclamation") Integer idReclamation) {
+		reclamationservice.deleteReclamation(idReclamation);
 	}
 }
 	
