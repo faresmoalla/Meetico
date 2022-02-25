@@ -38,11 +38,12 @@ public class reclamationController {
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,@PathVariable(name="userId") Long userId){
 		return reclamationservice.addAffectReclamationUser(reclamation, userId);
 	}
-/*	@PutMapping("/affecteUserReclamation/{idReclamation}")
-	@ApiOperation(value = "affecter utilisateur a une reclamation")
+	
+	@PutMapping("/UpdateReclamation")
+	@ApiOperation(value = "Update reclamation")
 	@ResponseBody
-	public void addCours(@PathVariable(name="idReclamation") Integer idReclamation,@PathVariable(name="userId") Integer userId) {
-		reclamationservice.affecterUtilisateurReclamation(idReclamation, userId);
-	}*/
+	public void updateReclamation(@RequestBody Reclamation reclamation) {
+		reclamationservice.updateReclamation(reclamation);
+	}
 }
 	
