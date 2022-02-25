@@ -1,12 +1,15 @@
 package tn.esprit.service;
 
-import org.apache.catalina.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.Reclamation;
+import tn.esprit.entity.User;
+import tn.esprit.repository.UserRepository;
 import tn.esprit.repository.reclamationRepository;
+
 
 
 
@@ -17,22 +20,24 @@ import tn.esprit.repository.reclamationRepository;
 public class serviceReclamation implements Ireclamation {
 	@Autowired
 	reclamationRepository reclamationrepository;
-
+	@Autowired
+	UserRepository userrepository;
 	
 
 	@Override
-	public Reclamation ajouterReclamation(Reclamation reclamation) {
-		
+	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId) {
+		User user = userrepository.findById(userId).orElse(null);
+		reclamation.setUser(user);
 		return reclamationrepository.save(reclamation);
 	}
 
-	@Override
-	public void affecterUtilisateurReclamation(Integer idReclamation, Integer userId) {
-	/*	Reclamation reclamation = reclamationrepository.findById(idReclamation).orElse(null);
-		User user = (User) reclamationrepository.findById(userId).orElse(null);
-		reclamation.setUser(user);*/
-		
-	}
+
+
+	
+
+	
+
+	
 	
 	
 	

@@ -32,13 +32,13 @@ public class reclamationController {
 	@Autowired
 	Ireclamation reclamationservice;
 	
-	@PostMapping("/AddReclamation")
-	@ApiOperation(value = "Ajouter une reclamation")
+	@PostMapping("/AddAffectReclamationUser/{userId}")
+	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
 	@ResponseBody
-	public Reclamation AddReclamation(@RequestBody Reclamation R){
-		return reclamationservice.ajouterReclamation(R);
+	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,@PathVariable(name="userId") Long userId){
+		return reclamationservice.addAffectReclamationUser(reclamation, userId);
 	}
-/*	@PutMapping("/affecteUserReclamation/{userId}/{idReclamation}")
+/*	@PutMapping("/affecteUserReclamation/{idReclamation}")
 	@ApiOperation(value = "affecter utilisateur a une reclamation")
 	@ResponseBody
 	public void addCours(@PathVariable(name="idReclamation") Integer idReclamation,@PathVariable(name="userId") Integer userId) {
