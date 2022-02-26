@@ -71,7 +71,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	private Set<Reclamation> reclamations;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	@JsonIgnore
 	private Set<Feedback> feedbacks;
 	@ManyToMany(cascade = CascadeType.ALL)
