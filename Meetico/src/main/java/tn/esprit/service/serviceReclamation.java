@@ -1,7 +1,9 @@
 package tn.esprit.service;
 
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.Reclamation;
 import tn.esprit.entity.User;
+import tn.esprit.entity.reclamationPriority;
+import tn.esprit.entity.reclamationType;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.repository.reclamationRepository;
 
@@ -63,29 +67,29 @@ public class serviceReclamation implements Ireclamation {
 
 	@Override
 	public List<Reclamation> ListAllReclamationsAdmin() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return reclamationrepository.findAll();
 	}
 
 
 	@Override
-	public List<Reclamation> listReclamationByPriorityAdmin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Reclamation> listReclamationByPriorityAdmin(reclamationPriority pr) {
+		
+		return reclamationrepository.getReclamationByPriority(pr);
 	}
 
 
 	@Override
-	public List<Reclamation> listReclamationByTypeAdmin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Reclamation> listReclamationByTypeAdmin(reclamationType rt) {
+		
+		return reclamationrepository.getReclamationByType(rt);
 	}
 
 
 	@Override
-	public List<Reclamation> listReclamationByPriorityAndTypeAdmin() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Reclamation> listReclamationByPriorityAndTypeAdmin(reclamationPriority pr, reclamationType rt) {
+		
+		return reclamationrepository.getReclamationByPriorityAndType(pr, rt);
 	}
 
 
@@ -101,6 +105,8 @@ public class serviceReclamation implements Ireclamation {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
 
 
 

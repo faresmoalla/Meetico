@@ -2,6 +2,10 @@ package tn.esprit.controller;
 
 
 
+import java.text.ParseException;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.entity.Reclamation;
+import tn.esprit.entity.reclamationPriority;
+import tn.esprit.entity.reclamationType;
 import tn.esprit.service.Ireclamation;
 
 
@@ -59,6 +65,26 @@ public class reclamationController {
 	public Reclamation retrieveReclamation(@PathVariable(name="idReclamation") Integer idReclamation) {
 		return reclamationservice.retrieveReclamation(idReclamation);
 	}
+	
+	@GetMapping("/getReclamationByType/{typeReclamation}")
+	@ApiOperation(value = "get reclamation by type ")
+	@ResponseBody
+	public 	Set<Reclamation> getReclamationsByType(@PathVariable(name="typeReclamation") reclamationType rt) throws ParseException {
+		return reclamationservice.listReclamationByTypeAdmin(rt);
+	}
+	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
+	@ApiOperation(value = "get reclamation by priority ")
+	@ResponseBody
+	public 	Set<Reclamation> getReclamationsByPriority(@PathVariable(name="reclamationPriority") reclamationPriority pr) throws ParseException {
+		return reclamationservice.listReclamationByPriorityAdmin(pr);
+	}
+	@GetMapping("/getReclamationByPriorityAndType/{reclamationPriority}/{typeReclamation}")
+	@ApiOperation(value = "get reclamation by priority and type")
+	@ResponseBody
+	public 	Set<Reclamation> getReclamationsByPriorityAndType(@PathVariable(name="reclamationPriority") reclamationPriority pr,@PathVariable(name="typeReclamation") reclamationType rt) throws ParseException {
+		return reclamationservice.listReclamationByPriorityAndTypeAdmin(pr, rt);
+	}
+	
 	
 }
 	

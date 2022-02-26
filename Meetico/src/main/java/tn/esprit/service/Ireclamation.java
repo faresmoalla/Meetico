@@ -1,9 +1,12 @@
 package tn.esprit.service;
 
+import java.text.ParseException;
 import java.util.List;
-
+import java.util.Set;
 
 import tn.esprit.entity.Reclamation;
+import tn.esprit.entity.reclamationPriority;
+import tn.esprit.entity.reclamationType;
 
 public interface Ireclamation {
 	public Reclamation addAffectReclamationUser(Reclamation reclamation,Long userId);
@@ -11,11 +14,12 @@ public interface Ireclamation {
 	void updateReclamation(Reclamation reclamation);
 	public void deleteReclamation(Integer idReclamation);
 	public List<Reclamation> ListAllReclamationsAdmin();
-	public List<Reclamation> listReclamationByPriorityAdmin();
-	public List<Reclamation> listReclamationByTypeAdmin();
-	public List<Reclamation> listReclamationByPriorityAndTypeAdmin();
+	public Set<Reclamation> listReclamationByPriorityAdmin(reclamationPriority pr) throws ParseException;
+	public Set<Reclamation> listReclamationByTypeAdmin(reclamationType rt) throws ParseException;
+	public Set<Reclamation> listReclamationByPriorityAndTypeAdmin(reclamationPriority pr, reclamationType rt)throws ParseException;
 	public List<Reclamation> listReclamationByStatusClient();
 	public boolean verif(Reclamation reclamation);
+	
 	
 	
 	
