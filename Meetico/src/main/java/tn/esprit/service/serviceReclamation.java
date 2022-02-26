@@ -94,9 +94,10 @@ public class serviceReclamation implements Ireclamation {
 
 
 	@Override
-	public List<Reclamation> listReclamationByStatusClient() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Reclamation> ListReclamationByStatusClient(Long userId) {
+		
+		return reclamationrepository.getAllReclamationsClientByStatus(userId);
+		
 	}
 
 
@@ -104,6 +105,12 @@ public class serviceReclamation implements Ireclamation {
 	public boolean verif(Reclamation reclamation) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public List<Reclamation> ListAllReclamationsClient(Long userId) {
+		
+		return reclamationrepository.getAllReclamationsClient(userId);
 	}
 
 	

@@ -84,6 +84,22 @@ public class reclamationController {
 	public 	Set<Reclamation> getReclamationsByPriorityAndType(@PathVariable(name="reclamationPriority") reclamationPriority pr,@PathVariable(name="typeReclamation") reclamationType rt) throws ParseException {
 		return reclamationservice.listReclamationByPriorityAndTypeAdmin(pr, rt);
 	}
+	@GetMapping("/getReclamationByUser/{userId}")
+	@ApiOperation(value = "get reclamation by user ")
+	@ResponseBody
+	public 	List<Reclamation> getReclamationsByUser(@PathVariable(name="userId") Long userId) throws ParseException {
+		return reclamationservice.ListAllReclamationsClient(userId);
+	
+	
+	}
+	@GetMapping("/getReclamationByUserandStatus/{userId}")
+	@ApiOperation(value = "get reclamation by user and status ")
+	@ResponseBody
+	public 	Set<Reclamation> getReclamationsByUserAndStatus(@PathVariable(name="userId") Long userId) throws ParseException {
+		return reclamationservice.ListReclamationByStatusClient(userId);
+	
+	
+	}
 	
 	
 }

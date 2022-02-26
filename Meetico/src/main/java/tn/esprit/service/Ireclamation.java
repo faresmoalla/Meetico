@@ -17,7 +17,8 @@ public interface Ireclamation {
 	public Set<Reclamation> listReclamationByPriorityAdmin(reclamationPriority pr) throws ParseException;
 	public Set<Reclamation> listReclamationByTypeAdmin(reclamationType rt) throws ParseException;
 	public Set<Reclamation> listReclamationByPriorityAndTypeAdmin(reclamationPriority pr, reclamationType rt)throws ParseException;
-	public List<Reclamation> listReclamationByStatusClient();
+	public List<Reclamation> ListAllReclamationsClient(Long userId);
+	public Set<Reclamation> ListReclamationByStatusClient(Long userId);
 	public boolean verif(Reclamation reclamation);
 	
 	
