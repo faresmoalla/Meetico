@@ -71,13 +71,27 @@ public void addLike(Long idPublicaiton,Long idUser){
 PostLike lk =    new PostLike();	
 	Publication  publication=publicationrepo.findById(idPublicaiton).orElse(null);	
 	User  user=utiRepo.findById(idUser).orElse(null);	
-	lk.setPublication(publication);
-	lk.setUtilis(user);
+	
+	PostLike  like=likeRepo.GetLike(idPublicaiton,idUser);	
+	
+	if(like==null) {
+		lk.setPublication(publication);
+		lk.setUtilis(user);
 
-	
-	
-	likeRepo.save(lk);
 		
+		
+		likeRepo.save(lk);	
+		
+		
+	}
+	else {
+		
+		
+		likeRepo.delete(like);
+		
+	}
+	
+		//System.out.println("/////////////////////////"+like.getIdLike());
 	
 }
 
