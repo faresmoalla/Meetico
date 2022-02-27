@@ -96,8 +96,13 @@ public class User implements Serializable {
 		private Set<PostDislike> dislikes;
 	
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy="users" , cascade = CascadeType.ALL)
 	private Set<Event> events;
+	
+	
+	
+	
+	
 	
 //	@Enumerated(EnumType.STRING)
 //	private Role role;

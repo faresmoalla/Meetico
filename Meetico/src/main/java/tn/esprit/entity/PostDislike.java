@@ -29,6 +29,38 @@ public class PostDislike implements Serializable {
 	private Long idDislike;
 	
 	
+	public Long getIdDislike() {
+		return idDislike;
+	}
+
+	public void setIdDislike(Long idDislike) {
+		this.idDislike = idDislike;
+	}
+
+	public Comment getCommentt() {
+		return commentt;
+	}
+
+	public void setCommentt(Comment commentt) {
+		this.commentt = commentt;
+	}
+
+	public Publication getPublication() {
+		return publication;
+	}
+
+	public void setPublication(Publication publication) {
+		this.publication = publication;
+	}
+
+	public User getUtilis() {
+		return utilis;
+	}
+
+	public void setUtilis(User utilis) {
+		this.utilis = utilis;
+	}
+
 	@ManyToOne
 	@JsonIgnore
 	Comment commentt;

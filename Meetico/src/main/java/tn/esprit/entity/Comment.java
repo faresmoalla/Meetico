@@ -31,6 +31,62 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment implements Serializable {
+	public Long getIdComment() {
+		return idComment;
+	}
+
+	public void setIdComment(Long idComment) {
+		this.idComment = idComment;
+	}
+
+	public String getContents() {
+		return contents;
+	}
+
+	public void setContents(String contents) {
+		this.contents = contents;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Set<PostLike> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<PostLike> likes) {
+		this.likes = likes;
+	}
+
+	public Set<PostDislike> getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(Set<PostDislike> dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public Publication getPublications() {
+		return publications;
+	}
+
+	public void setPublications(Publication publications) {
+		this.publications = publications;
+	}
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 

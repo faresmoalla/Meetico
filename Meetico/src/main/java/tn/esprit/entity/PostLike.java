@@ -27,6 +27,46 @@ public class PostLike implements Serializable {
 	
 	
 	
+	public Long getIdLike() {
+		return idLike;
+	}
+
+
+	public void setIdLike(Long idLike) {
+		this.idLike = idLike;
+	}
+
+
+	public Comment getComment() {
+		return comment;
+	}
+
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+
+
+	public Publication getPublication() {
+		return publication;
+	}
+
+
+	public void setPublication(Publication publication) {
+		this.publication = publication;
+	}
+
+
+	public User getUtilis() {
+		return utilis;
+	}
+
+
+	public void setUtilis(User utilis) {
+		this.utilis = utilis;
+	}
+
+
 	@ManyToOne
 	@JsonIgnore
 	Comment comment;

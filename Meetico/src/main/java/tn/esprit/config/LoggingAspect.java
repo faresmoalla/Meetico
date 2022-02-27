@@ -19,7 +19,7 @@ public class LoggingAspect {
 	@Before("execution(* tn.esprit.service.*.ajouter*(..))")
 	public void logMethodExit(JoinPoint joinPoint) {
 	String name = joinPoint.getSignature().getName();
-	log.info("/////////////////////////Début Execution " + name + " : ");
+	//log.info("/////////////////////////Début Execution " + name + " : ");
 	
 
 	}
