@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import tn.esprit.entity.Comment;
+import tn.esprit.entity.Publication;
 import tn.esprit.service.CommentServiceImpl;
 import tn.esprit.service.PublicationServiceImpl;
 
@@ -23,14 +26,23 @@ public class PublicationController {
 	PublicationServiceImpl pubService;
 	
 	
+	@PostMapping("/add-publication/{idUtilisateur}")
+	public void addComment(@RequestBody Publication f,@PathVariable("idUtilisateur") Long idUtilisateur)
+	{
+		pubService.addPublication(f,idUtilisateur);
+
+	}
+	
+	
+	
 	@PutMapping("/addLike/{idPublicaiton}/{idUser}")
-public void  aa(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable("idUser") Long idUser){
+public void  addLike(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable("idUser") Long idUser){
 	 pubService.addLike(idPublicaiton,idUser);
 	}
 	
 	
 	@PutMapping("/addDislike/{idPublicaiton}/{idUser}")
-	public void  aaa(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable("idUser") Long idUser){
+	public void  addDislike(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable("idUser") Long idUser){
 		 pubService.addDisLike(idPublicaiton,idUser);
 		}
 	
@@ -50,7 +62,10 @@ public void  aa(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable(
 	 public int  nbrCommentsByPub(@PathVariable("idPublicaiton") Long idPublicaiton){
 	 	 return pubService.nbrCommentsByPu(idPublicaiton); 
 	 
-}		
+}	
+	 
+	 
+	 
 	
 	
 	

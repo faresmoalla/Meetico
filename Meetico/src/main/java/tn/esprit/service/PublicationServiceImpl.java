@@ -1,6 +1,8 @@
 package tn.esprit.service;
 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.entity.Comment;
+import tn.esprit.entity.DictionnaireBadWords;
 import tn.esprit.entity.PostDislike;
 import tn.esprit.entity.PostLike;
 import tn.esprit.entity.Publication;
@@ -36,35 +39,33 @@ DislikeRepository dislikeRepo;
 
 
 
-public void addPublication(Publication publication) {
-	publicationrepo.save(publication);
+
+
+@Override
+public void addPublication(Publication publication,Long idUser) {
+
+User  user=utiRepo.findById(idUser).orElse(null);
+	
+	
+	Date currentSqlDate = new Date(System.currentTimeMillis());
+	publication.setDate(currentSqlDate);
+	
+	publication.setUserr(user);
+
+	
+	
+		publicationrepo.save(publication);
+
+	
+
 }
+
+
+
 
 public void deletePublication(Long idPublication) {
 	publicationrepo.deleteById(idPublication);	
 }
-
-
-
-
-
-/*
-public void createLike(Long postId, Long idUser) {
-	Publication  publication=publicationrepo.findById(postId).orElse(null);	
-	Utilisateur  user=utiRepo.findById(idUser).orElse(null);
-    
-	
-	publication.getLikes().add(user);
-    
-    publicationrepo.save(publication);
-}
-*/
-
-
-
-
-
-
 
 
 public void addLike(Long idPublicaiton,Long idUser){
@@ -73,25 +74,32 @@ PostLike lk =    new PostLike();
 	User  user=utiRepo.findById(idUser).orElse(null);	
 	
 	PostLike  like=likeRepo.GetLike(idPublicaiton,idUser);	
-	
-	if(like==null) {
-		lk.setPublication(publication);
-		lk.setUtilis(user);
+	PostDislike  dislike=dislikeRepo.GetDislike(idPublicaiton,idUser);
+	lk.setPublication(publication);
+	lk.setUtilis(user);
 
+	if(like==null && dislike==null) {
+		
 		
 		
 		likeRepo.save(lk);	
 		
 		
 	}
-	else {
+	
+	else if(like==null && dislike!=null)  {
+		likeRepo.save(lk);
+		dislikeRepo.delete(dislike);
+	
+	}
+	else{
 		
 		
 		likeRepo.delete(like);
 		
 	}
 	
-		//System.out.println("/////////////////////////"+like.getIdLike());
+		
 	
 }
 
@@ -101,12 +109,28 @@ PostLike lk =    new PostLike();
 
 
 public void addDisLike(Long idPublicaiton,Long idUser){
-PostDislike lk =    new PostDislike();	
+	PostDislike lk =    new PostDislike();	
 	Publication  publication=publicationrepo.findById(idPublicaiton).orElse(null);	
 	User  user=utiRepo.findById(idUser).orElse(null);	
-	lk.setPublication(publication);
-	lk.setUtilis(user);
-	dislikeRepo.save(lk);
+	
+	PostDislike  dislike=dislikeRepo.GetDislike(idPublicaiton,idUser);	
+	
+	if(dislike==null) {
+		lk.setPublication(publication);
+		lk.setUtilis(user);
+
+		
+		
+		dislikeRepo.save(lk);	
+		
+		
+	}
+	else {
+		
+		
+		dislikeRepo.delete(dislike);
+		
+	}
 }
 
 public int nbrLikeByPub(Long idPublicaiton) {

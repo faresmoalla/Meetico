@@ -1,5 +1,7 @@
 package tn.esprit.service;
 
-public interface IPublicationService {
+import tn.esprit.entity.Publication;
 
+public interface IPublicationService {
+	public void addPublication(Publication publication,Long idUser);
 }

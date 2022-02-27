@@ -1,6 +1,7 @@
 package tn.esprit.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,9 +34,15 @@ public class Publication implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idPublication;
+	 @NotEmpty(message = "the content field is required")
+     private String contents;
 	
+	@Temporal(TemporalType.DATE)
+	//@NotEmpty(message = "the content field is required")
+	private Date date ;
 	private int nbrLikes;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="publications")
+	@JsonIgnore
 	private Set<Comment> comments;
 	
 	@ManyToOne
