@@ -8,11 +8,10 @@ import tn.esprit.entity.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User,Long> {
-	/*
+
 	User findByUsername(String username);
 	
-	@Query("SELECT user FROM User user WHERE user.id = :idEntrepreneur AND user.role = 'ENTREPRENEUR'")
+	@Query("SELECT user FROM User user WHERE user.userId = :idEntrepreneur AND user.role = 'ENTREPRENEUR'")
 	User findEntrepreneurById(@Param("idEntrepreneur") Long idEntrepreneur);
-	*/
 
 }

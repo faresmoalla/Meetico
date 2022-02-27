@@ -2,9 +2,11 @@ package tn.esprit.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,18 +40,17 @@ public class Request implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
-	
+		
 	private String lastName;
 	
-	private Long NIC;
-		
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	private User sender;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date sendTime;
-	
-	@ManyToOne
-	User sender;
+			
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 }
+

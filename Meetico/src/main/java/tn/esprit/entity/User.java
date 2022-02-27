@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,15 +37,14 @@ public class User implements Serializable {
 	
 	private Boolean active;
 		
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	private Set<ActivityField> activityFields;
+	
+	private String address;
+		
 	@Temporal(TemporalType.DATE)
 	private Date birthday;
-	
-	private String city;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	@JsonIgnore
-	private Set<Domain> domains;
-	
+		
 	private String email;
 	
 	private String firstName;
@@ -55,58 +54,26 @@ public class User implements Serializable {
 	
 	private String lastName;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	@JsonIgnore
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private Set<Occupation> occupations;
 	
 	private String password;
 	
 	private Long phoneNumber;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
-	@JsonIgnore
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private Set<Request> request;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	@JsonIgnore
-	private Set<Reclamation> reclamations;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	@JsonIgnore
-	private Set<Feedback> feedbacks;
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JsonIgnore
-	private Set<Trip> trips;
-	
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-	@JsonIgnore
-	private Set<Comment> comments;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="userr")
-	@JsonIgnore
-	private Set<Publication> publications ;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="utilis")
-	@JsonIgnore
-	private Set<PostLike> Likes;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="utilis")
-	@JsonIgnore
-		private Set<PostDislike> dislikes;
-	
+	private String username;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Event> events;
 	
-//	@Enumerated(EnumType.STRING)
-//	private Role role;
-	
-	private String street;
-	
-	private String username;
-	
-	private Integer zipCode;
-	
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	private Set<Trip> trips;
+		
 }
 

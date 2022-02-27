@@ -16,16 +16,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Occupation implements Serializable {
+public class ActivityField implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
-	private Long occupationId;
+	private Long activityFieldId;
 	
-	private String occupation;
+	private String activityField;
 
 }
 
