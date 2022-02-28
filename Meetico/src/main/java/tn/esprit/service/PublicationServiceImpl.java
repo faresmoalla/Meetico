@@ -36,7 +36,8 @@ UserRepository utiRepo ;
 LikeRepository likeRepo;
 @Autowired
 DislikeRepository dislikeRepo;
-
+@Autowired
+ JavaMailSender javaMailSender;
 
 
 
@@ -56,7 +57,20 @@ User  user=utiRepo.findById(idUser).orElse(null);
 	
 		publicationrepo.save(publication);
 
-	
+		//System.out.println("sending email ...");
+
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		
+		simpleMailMessage.setFrom("9ariniphoenix@gmail.com");
+		simpleMailMessage.setTo("fares.moalla@esprit.tn");
+		simpleMailMessage.setSubject("test");
+		simpleMailMessage.setText("test" );
+
+		javaMailSender.send(simpleMailMessage);
+		//System.out.println("sent email ...");
+		
+		
+		
 
 }
 

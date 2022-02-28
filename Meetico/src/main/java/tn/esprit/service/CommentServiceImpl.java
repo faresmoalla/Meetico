@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,8 @@ public class CommentServiceImpl implements ICommentService {
 	DictionnaireRepository badwordsRepo;
 	@Autowired
 	UserRepository userRepo;
-
+	@Autowired
+	 JavaMailSender javaMailSender;
 	
 	/////////////// Partie Back Admin////////
 	@Override
@@ -67,6 +70,7 @@ public class CommentServiceImpl implements ICommentService {
 	
 @Override
 	public void addcomments(Comment comment , Long idpub,Long idUser ) {
+	
 	Publication  pub=publciationRepo.findById(idpub).orElse(null);	
 	User  user=userRepo.findById(idUser).orElse(null);
 		String commentWords = comment.getContents();
@@ -81,6 +85,17 @@ public class CommentServiceImpl implements ICommentService {
 		}
 		if (verif(comment)) {	
 			commentRepo.save(comment);
+			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+			
+			simpleMailMessage.setFrom(pub.getUserr().getEmail());
+			simpleMailMessage.setTo(user.getEmail());
+			simpleMailMessage.setSubject(user.getFirstName()+" "+"a commenté votre publication");
+			simpleMailMessage.setText(comment.getContents());
+
+			javaMailSender.send(simpleMailMessage);
+			
+			
+			
 		} else {
 			comment.setContents("*****");
 			commentRepo.save(comment);
