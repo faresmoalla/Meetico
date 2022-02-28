@@ -14,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -48,8 +48,11 @@ public class Feedback implements Serializable   {
 	private Date lastModificationDate;
 	private Integer stars;
 	
+	@ManyToOne
+	@JsonIgnore
+	private User user;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "feedbacks")
 	@JsonIgnore
 	private Set<User> users;
 	
