@@ -1,6 +1,9 @@
 package tn.esprit.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -41,7 +44,7 @@ public class EventService implements IEvent {
 	@Override
 	public boolean deleteEvent(int idEvent) {
 		Event event = getEvent(idEvent) ;
-		entityManager.remove(event);
+		entityManager.remove(event);;
 		
 		
 		boolean status = entityManager.contains(event);
@@ -97,15 +100,40 @@ public void assignUserEvent(Long userId,Integer idEvent) {
 	else {
 			System.out.println("number of participant "+ " " + e.getUsers().size()+" "+"is greater than" + " "+e.getCapacity());
 	}
-
 	}
+	
+	
+	
+	
+	
 	@Override
 	public List<Event> getEvets() {
 		return eventrepo.findAll();
 	}
 	
-
 	
+	
+	
+	
+	@Override
+public void deletUserFromEvent (Long userId,int  idEvent) {
+	User u = userrepo.findById(userId).orElse(null) ;
+	Event e = eventrepo.findById(idEvent).orElse(null) ; 
+	
+	Set<User> users= e.getUsers() ; 	
+	users.remove(u) ;
+	e.setUsers(users);
+	eventrepo.save(e) ;
+	}
+	@Override
+	public Set <User> getUserInEvent (int  idEvent) {
+		Event e = eventrepo.findById(idEvent).orElse(null) ;
+		Set<User> users= e.getUsers() ;
+		return users;
+		  
+	}
+	
+
 	
 	
 }

@@ -1,6 +1,7 @@
 package tn.esprit.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.entity.Event;
+import tn.esprit.entity.User;
 import tn.esprit.service.IEvent;
 
 
@@ -52,7 +54,7 @@ public ResponseEntity<String> deleteevent(@PathVariable("id-event") int idEvent)
 
 
 
-@GetMapping("get-event/{id-event}")
+@GetMapping("get-event-byId/{id-event}")
 @ResponseBody
 public ResponseEntity<Event> getEvent(@PathVariable("id-event")  int idEvent){
 	Event event= Ievent.getEvent(idEvent);
@@ -84,4 +86,18 @@ public ResponseEntity<List<Event>> getEvents(){
 	
 }
 
+@ApiOperation(value="remove user from event")
+@DeleteMapping("/remove-user-from-event/{userId}/{idEvent}")
+@ResponseBody
+public void removefromevent (@PathVariable("userId")Long userId,@PathVariable("idEvent")Integer idEvent)
+{
+	Ievent.deletUserFromEvent(userId, idEvent) ;
+	
+}
+@GetMapping("get-users/{id-event}")
+@ResponseBody
+public  Set <User> getUsers(@PathVariable("id-event")  int idEvent){
+	return Ievent.getUserInEvent(idEvent);
+	
+}
 }
