@@ -41,6 +41,23 @@ public class serviceFeedback implements IFeedback {
 			feedback.setUser(u);
 			return feedbackrepository.save(feedback);
 		}
+		@Override
+		public Feedback retrieveFeedback(Integer idfeedback) {
+			return feedbackrepository.findById(idfeedback).orElse(null);
+		}
 		
-
+		@Override
+		public Feedback UpdateFeedback(Feedback f, List<Long> usersId) {
+		Feedback feedback = retrieveFeedback(f.getIdFeedback());
+		feedback.setDescription(f.getDescription());
+		feedback.setLastModificationDate(f.getLastModificationDate());
+		feedback.setStars(f.getStars());
+		
+		for (Long idUser : usersId) {
+			User U = userrepository.findById(idUser).orElse(null);
+			U.getFeedbacks().add(feedback);
+			userrepository.save(U);
+		}
+		return feedbackrepository.save(feedback);
+	}
 }

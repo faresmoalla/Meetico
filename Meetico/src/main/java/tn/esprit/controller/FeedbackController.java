@@ -49,8 +49,13 @@ public class FeedbackController {
 		feedbackservice.AddAndAffectFeedbackusers(feedback, usersId, Us);
 	}
 	
-	
-	
+	@PutMapping("/updateFeedback/{idUsers}")
+	@ApiOperation(value = "Update Feedback")
+	@ResponseBody
+	public Feedback updateFeedback(@RequestBody Feedback feedback,@PathVariable(name="idUsers") List<Long> usersId) {
+		return feedbackservice.UpdateFeedback(feedback,  usersId);
+	}
+
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
 	@ApiOperation(value = "get reclamation by priority ")
