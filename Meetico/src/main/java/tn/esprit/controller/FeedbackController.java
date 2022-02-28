@@ -69,6 +69,12 @@ public class FeedbackController {
 		
 		feedbackservice.desaffecterFeedback(idFeedback, idUser);
 	}
+	@GetMapping("/getAllFeedbacksAdmin")
+	@ApiOperation(value = "get All Feedbacks Admim")
+	@ResponseBody
+	public List<Feedback> getAllFeedbacksAdmin() {
+		return feedbackservice.ListAllFeedbackAdmin();
+	}
 	
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")

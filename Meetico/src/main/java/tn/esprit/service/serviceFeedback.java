@@ -85,4 +85,9 @@ public class serviceFeedback implements IFeedback {
 			feedbackrepository.save(f);
 			
 		}
+		@Override
+		public List<Feedback> ListAllFeedbackAdmin() {
+			
+			return feedbackrepository.findAll();
+		}
 }

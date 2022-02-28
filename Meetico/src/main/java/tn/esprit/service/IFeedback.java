@@ -13,6 +13,7 @@ public interface IFeedback {
 	public Feedback UpdateFeedback(Feedback f, List<Long> usersId);
 	public void deleteFeedback(Integer idfeedback);
 	public void desaffecterFeedback(Integer idfeedback, Long idUser);
+	public List<Feedback> ListAllFeedbackAdmin();
 	
 	
 	
