@@ -15,6 +15,7 @@ public interface IFeedback {
 	public void desaffecterFeedback(Integer idfeedback, Long idUser);
 	public List<Feedback> ListAllFeedbackAdmin();
 	public Set<Feedback> ListFeedbacksByUser(Long idUser);
+	public Set<Feedback> ListFeedbacksByTAG(Long idUser);
 	
 	
 	

@@ -81,6 +81,12 @@ public class FeedbackController {
 	public Set<Feedback> getFeedbackbyClient(@PathVariable(name="idUser") Long idUser) {
 		return feedbackservice.ListFeedbacksByUser(idUser);
 	}
+	@GetMapping("/getFeedbackByClientTAG/{idUser}")
+	@ApiOperation(value = "get Feedback By Client TAG ")
+	@ResponseBody
+	public 	Set<Feedback> getFeedbackByClientTAG(@PathVariable(name="idUser") Long idUser) throws ParseException {
+		return feedbackservice.ListFeedbacksByTAG(idUser);
+	}
 	
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")

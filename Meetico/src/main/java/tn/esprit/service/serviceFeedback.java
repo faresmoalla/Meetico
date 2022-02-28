@@ -95,4 +95,9 @@ public class serviceFeedback implements IFeedback {
 		
 			return feedbackrepository.getAllFeedbacksClient(idUser);
 		}
+		@Override
+		public Set<Feedback> ListFeedbacksByTAG(Long idUser) {
+			
+			return feedbackrepository.getFeedbacksClientTAG(idUser);
+		}
 }
