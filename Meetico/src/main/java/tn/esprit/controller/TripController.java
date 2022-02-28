@@ -50,11 +50,11 @@ public class TripController {
 		int day =t.getStartDate().getDate();
 		int month =t.getStartDate().getMonth()+1;
 		int year =t.getStartDate().getYear()+1900;
-		if(users.size()!=0) {
+		if(users.size() !=0) {
 			for(User us :users) {
 				for(User u: users) {
 					emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
-							+ u.getFirstName() + ", \n we have a trip to"+t.getDestination()+"with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
+							+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
 							+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ "  "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
 			}
 		
@@ -79,7 +79,7 @@ public class TripController {
 			for(User us :users) {
 				for(User u: users) {
 					emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
-							+ u.getFirstName() + ", \n we have a trip to"+t.getDestination()+"with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
+							+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
 							+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ " "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
 				}
 			}
