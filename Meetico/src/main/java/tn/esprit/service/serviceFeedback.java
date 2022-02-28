@@ -90,4 +90,9 @@ public class serviceFeedback implements IFeedback {
 			
 			return feedbackrepository.findAll();
 		}
+		@Override
+		public Set<Feedback> ListFeedbacksByUser(Long idUser) {
+		
+			return feedbackrepository.getAllFeedbacksClient(idUser);
+		}
 }

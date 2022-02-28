@@ -75,6 +75,12 @@ public class FeedbackController {
 	public List<Feedback> getAllFeedbacksAdmin() {
 		return feedbackservice.ListAllFeedbackAdmin();
 	}
+	@GetMapping("/getFeedbackByClient/{idUser}")
+	@ApiOperation(value = "retrieve un Feedback")
+	@ResponseBody
+	public Set<Feedback> getFeedbackbyClient(@PathVariable(name="idUser") Long idUser) {
+		return feedbackservice.ListFeedbacksByUser(idUser);
+	}
 	
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
