@@ -62,6 +62,14 @@ public class FeedbackController {
 		
 		feedbackservice.deleteFeedback(idFeedback);
 	}
+	@PutMapping("/DesaffectUserFeedback/{idFeedback}/{idUser}")
+	@ApiOperation(value = "Desaffect user feedback")
+	@ResponseBody
+	public void DesaffectUserFeedback(@PathVariable(name="idFeedback") Integer idFeedback,@PathVariable(name="idUser") Long idUser) {
+		
+		feedbackservice.desaffecterFeedback(idFeedback, idUser);
+	}
+	
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
 	@ApiOperation(value = "get reclamation by priority ")
