@@ -11,7 +11,7 @@ public interface IFeedback {
 	public void AddAndAffectFeedbackusers(Feedback f , List<Long> idUsers,Long idUs);
 	public Feedback retrieveFeedback(Integer idfeedback);
 	public Feedback UpdateFeedback(Feedback f, List<Long> usersId);
-	
+	public void deleteFeedback(Integer idfeedback);
 	
 	
 	

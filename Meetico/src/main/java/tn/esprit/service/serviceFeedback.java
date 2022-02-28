@@ -60,4 +60,15 @@ public class serviceFeedback implements IFeedback {
 		}
 		return feedbackrepository.save(feedback);
 	}
+		@Override
+		public void deleteFeedback(Integer idfeedback) {
+			Feedback f = retrieveFeedback(idfeedback);
+			for(User u : f.getUsers()) {
+				u.setFeedbacks(null);
+				f.setUsers(null);
+				
+			}
+			feedbackrepository.deleteById(idfeedback);
+			
+		}
 }

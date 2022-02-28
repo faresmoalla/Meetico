@@ -55,7 +55,13 @@ public class FeedbackController {
 	public Feedback updateFeedback(@RequestBody Feedback feedback,@PathVariable(name="idUsers") List<Long> usersId) {
 		return feedbackservice.UpdateFeedback(feedback,  usersId);
 	}
-
+	@DeleteMapping("/DeleteFeedback/{idFeedback}")
+	@ApiOperation(value = "Delete feedback ")
+	@ResponseBody
+	public void DeleteFeedback(@PathVariable(name="idFeedback") Integer idFeedback) {
+		
+		feedbackservice.deleteFeedback(idFeedback);
+	}
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
 	@ApiOperation(value = "get reclamation by priority ")
