@@ -102,9 +102,13 @@ public class serviceReclamation implements Ireclamation {
 
 
 	@Override
-	public boolean verif(Reclamation reclamation) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean verif(Integer idReclamation) {
+		Reclamation f=retrieveReclamation( idReclamation);
+		if(f.getStatus() == false) {
+		f.setStatus(true);
+		}
+		reclamationrepository.save(f);
+		return f.getStatus();
 	}
 
 	@Override

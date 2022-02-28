@@ -19,7 +19,7 @@ public interface Ireclamation {
 	public Set<Reclamation> listReclamationByPriorityAndTypeAdmin(reclamationPriority pr, reclamationType rt)throws ParseException;
 	public List<Reclamation> ListAllReclamationsClient(Long userId);
 	public Set<Reclamation> ListReclamationByStatusClient(Long userId);
-	public boolean verif(Reclamation reclamation);
+	public boolean verif(Integer idReclamation);
 	
 	
 	

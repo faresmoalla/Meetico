@@ -100,6 +100,12 @@ public class reclamationController {
 	
 	
 	}
+	@PutMapping("/verifReclamation/{idReclamation}")
+	@ApiOperation(value = "verif Reclamation")
+	@ResponseBody
+	public Boolean verifReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
+		return reclamationservice.verif(idReclamation);
+	}
 	
 	
 }
