@@ -103,35 +103,47 @@ PostLike lk =    new PostLike();
 	
 }
 
-
-	
-
-
-
-public void addDisLike(Long idPublicaiton,Long idUser){
-	PostDislike lk =    new PostDislike();	
+public void addDislike(Long idPublicaiton,Long idUser){
+PostDislike lk =    new PostDislike();	
 	Publication  publication=publicationrepo.findById(idPublicaiton).orElse(null);	
 	User  user=utiRepo.findById(idUser).orElse(null);	
 	
-	PostDislike  dislike=dislikeRepo.GetDislike(idPublicaiton,idUser);	
-	
-	if(dislike==null) {
-		lk.setPublication(publication);
-		lk.setUtilis(user);
+	PostLike  like=likeRepo.GetLike(idPublicaiton,idUser);	
+	PostDislike  dislike=dislikeRepo.GetDislike(idPublicaiton,idUser);
+	lk.setPublication(publication);
+	lk.setUtilis(user);
 
+	if(like==null && dislike==null) {
+		
 		
 		
 		dislikeRepo.save(lk);	
 		
 		
 	}
-	else {
+	
+	else if(dislike==null && like!=null)  {
+		dislikeRepo.save(lk);
+		likeRepo.delete(like);
+	
+	}
+	else{
 		
 		
-		dislikeRepo.delete(dislike);
+		likeRepo.delete(like);
 		
 	}
+	
+		
+	
 }
+
+
+	
+
+
+
+
 
 public int nbrLikeByPub(Long idPublicaiton) {
 	Publication  publication=publicationrepo.findById(idPublicaiton).orElse(null);	

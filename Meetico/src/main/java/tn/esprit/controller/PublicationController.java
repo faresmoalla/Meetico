@@ -43,7 +43,7 @@ public void  addLike(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVari
 	
 	@PutMapping("/addDislike/{idPublicaiton}/{idUser}")
 	public void  addDislike(@PathVariable("idPublicaiton") Long idPublicaiton,@PathVariable("idUser") Long idUser){
-		 pubService.addDisLike(idPublicaiton,idUser);
+		 pubService.addDislike(idPublicaiton,idUser);
 		}
 	
 	 @GetMapping("/nbrLike/{idPublicaiton}")
