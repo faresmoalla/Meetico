@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -42,9 +43,14 @@ public class Trip implements Serializable{
 	private Date endDate;
 	private String object;
 	
-	@ManyToMany(mappedBy="trips",cascade = CascadeType.PERSIST)
+	@ManyToMany(mappedBy="trips")
 	@JsonIgnore
 	private Set<User> users;
+	
+	@ManyToOne
+	@JsonIgnore
+	private User user;
+	
 	
 
 }

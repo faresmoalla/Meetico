@@ -74,9 +74,12 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	@JsonIgnore
 	private Set<Feedback> feedbacks;
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JsonIgnore
 	private Set<Trip> trips;
+	@OneToMany( mappedBy = "user",cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<Trip> tripss;
 	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
