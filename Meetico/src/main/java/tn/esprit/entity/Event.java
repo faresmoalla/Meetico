@@ -13,6 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,13 +34,18 @@ public class Event implements Serializable  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private int idEvent;
+	@NotBlank(message = "title is mandatory")
 	private String title;
+	@NotBlank(message = "description is mandatory")
 	private String description;
+	@NotBlank(message = "location is mandatory")
 	private String location ;
 	private String img ; 
 	@Enumerated(EnumType.STRING)
 	private Eventkind enentkind;
 	private Date dateEvent ; 
+	@Min(value = 10)
+	@Max(value=999)
 	private int capacity;
 	public int getIdEvent() {
 		return idEvent;

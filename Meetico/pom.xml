@@ -8,22 +8,34 @@
 		<version>2.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>tn.esprit</groupId>
 	<artifactId>FaresMoalla</artifactId>
 	<version>1.0.0</version>
 	<name>FaresMoalla</name>
 	<description>TpSpringboot</description>
+	
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
 		
 		
 			<dependencies>
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
 	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+			<version>1.5.2.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -34,7 +46,12 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 		</dependency>
-		
+		<dependency>
+
+<groupId>io.springfox</groupId>
+<artifactId> springfox-boot-starter </artifactId>
+<version> 3.0.0 </version>
+</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -57,14 +74,12 @@
 		<artifactId>spring-boot-starter-mail</artifactId>
 	</dependency>
 		
-		
-		
-		<dependency>
-
-<groupId>io.springfox</groupId>
-<artifactId> springfox-boot-starter </artifactId>
-<version> 3.0.0 </version>
+		<dependency> 
+    <groupId>org.springframework.boot</groupId> 
+    <artifactId>spring-boot-starter-validation</artifactId> 
 </dependency>
+		
+
 
 	</dependencies>
 

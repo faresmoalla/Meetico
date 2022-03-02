@@ -3,6 +3,8 @@ package tn.esprit.controller;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,7 @@ IEvent Ievent ;
 
 @PostMapping("/add-event")
 @ResponseBody
-public void adddEvent(@RequestBody Event event)
+public void adddEvent(@Valid @RequestBody Event event)
 {
 	Ievent.addEvent(event) ;
 
@@ -63,7 +65,7 @@ public ResponseEntity<Event> getEvent(@PathVariable("id-event")  int idEvent){
 
 
 @PutMapping("update-event/{id-event}")
-public ResponseEntity<Event> updateEvent(@PathVariable("id-event") int idEvent, @RequestBody Event event){
+public ResponseEntity<Event> updateEvent(@Valid @PathVariable("id-event") int idEvent, @RequestBody Event event){
 	
 	Event e = Ievent.updateEvent(idEvent, event);
 	return new ResponseEntity<Event>(e, HttpStatus.OK);
@@ -72,7 +74,7 @@ public ResponseEntity<Event> updateEvent(@PathVariable("id-event") int idEvent, 
 @ApiOperation(value="assign user to event")
 @PostMapping("/add-user-to-event/{userId}/{idEvent}")
 @ResponseBody
-public void ajouteraudevops (@PathVariable("userId")Long userId,@PathVariable("idEvent")Integer idEvent)
+public void assignUserToEvent (@PathVariable("userId")Long userId,@PathVariable("idEvent")Integer idEvent)
 {
 	Ievent.assignUserEvent(userId, idEvent);
 	
