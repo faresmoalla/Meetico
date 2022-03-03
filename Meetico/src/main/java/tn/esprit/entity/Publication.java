@@ -13,7 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,7 +36,9 @@ public class Publication implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idPublication;
-	 @NotEmpty(message = "the content field is required")
+	// @NotEmpty(message = "the content field is required")
+	@NotBlank
+	@Size(max = 100 , message="max akber 100")
      private String contents;
 	
 	@Temporal(TemporalType.DATE)

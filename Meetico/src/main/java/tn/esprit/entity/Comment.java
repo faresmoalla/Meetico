@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,14 +36,16 @@ public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idComment;
-	
-	
+		
+//	@Size(max = 50 , message = "{error ==> lastnameSize}")
 	 @NotEmpty(message = "the content field is required")
      private String contents;
 	
 	@Temporal(TemporalType.DATE)
 	//@NotEmpty(message = "the content field is required")
 	private Date date ;
+	
+	
 	
 	@ManyToOne
 	@JsonIgnore

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.Module;
@@ -37,6 +38,8 @@ public class CommentServiceImpl implements ICommentService {
 	UserRepository userRepo;
 	@Autowired
 	 JavaMailSender javaMailSender;
+	@Autowired
+	PasswordEncoder passwordencoder;
 	
 	/////////////// Partie Back Admin////////
 	@Override
@@ -80,12 +83,18 @@ public class CommentServiceImpl implements ICommentService {
 		comment.setPublications(pub);
 		comment.setUser(user);
 		List<DictionnaireBadWords> badwords = badwordsRepo.findAll();
+		
 		for (DictionnaireBadWords bd : badwords) {
 			badwords1.add(bd.getWord());
 		}
-		if (verif(comment)) {	
+		if (!verif(comment)) {	
+
+
+			
+			//comment.setContents(encodedPass);
 			commentRepo.save(comment);
-			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+			
+			/*SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 			
 			simpleMailMessage.setFrom(pub.getUserr().getEmail());
 			simpleMailMessage.setTo(user.getEmail());
@@ -93,11 +102,14 @@ public class CommentServiceImpl implements ICommentService {
 			simpleMailMessage.setText(comment.getContents());
 
 			javaMailSender.send(simpleMailMessage);
-			
+			*/
 			
 			
 		} else {
-			comment.setContents("*****");
+			
+			String encodedPass =  passwordencoder.encode(comment.getContents());
+			comment.setContents(encodedPass);
+			//comment.setContents("*****");
 			commentRepo.save(comment);
 
 		}
