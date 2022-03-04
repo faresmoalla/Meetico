@@ -217,4 +217,9 @@ public class TripController {
 		return tripService.nbrUserPourChaqueVoyage();
 		
 	}
+	@GetMapping("/meilleurdestination")
+	@ResponseBody
+	public String meilleurdestination(){
+		return tripService.meilleurDestination();
+	}
 }

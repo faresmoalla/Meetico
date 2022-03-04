@@ -1,11 +1,13 @@
 package tn.esprit.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -157,14 +159,14 @@ public class TripServiceUmpl implements ITripService{
 
 	@Override
 	public int listUserByVoyage(Integer idTrip) {
-		// TODO Auto-generated method stub
+		
 		int n = tripRepo.nbduserbyvoyage(idTrip);
 		return n;
 	}
 
 	@Override
 	public List<String> nbrUserPourChaqueVoyage() {
-		// TODO Auto-generated method stub
+		
 		
 		List<Trip> t =tripRepo.findAll();
 		int nombre_total_voyage=t.size();
@@ -176,7 +178,7 @@ public class TripServiceUmpl implements ITripService{
 		int nbr;
 		for(Trip trip :t) {
 			nbr=trip.getUsers().size();
-			n.add(nbr);
+			//n.add(nbr);
 			String s="voayge numero :"+(t.indexOf(trip)+1)+"/"+nombre_total_voyage+"id:"+trip.getIdTrip()+"nombre de voyageur"+nbr+"/"
 					+nombre_total_voygeur;
 			ls.add(s);
@@ -186,6 +188,40 @@ public class TripServiceUmpl implements ITripService{
 			return ls;
 		
 		
+	}
+
+	@Override
+	public String meilleurDestination() {
+		List<Trip> trip =tripRepo.findAll();
+		
+		String s= new String();
+		List<String> ls= new ArrayList<>();
+		List<Integer> ns=new ArrayList<>();
+		String destination=new String();
+		int max_value = 0;
+		for(Trip t:trip) {
+			int n = 0 ;
+			for(Trip tr:trip) {
+				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
+					n++;
+				}
+				ns.add(n);
+				max_value= Collections.max(ns);
+				if(n==max_value) {
+					destination=t.getDestination();
+					}
+				
+			};
+				
+			
+			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
+			//ls.add(s);
+		}
+		s="la destination la plus visitée est :"+destination+" "+max_value+" fois";
+		
+		
+		
+		return s;
 	}
 	
 	
