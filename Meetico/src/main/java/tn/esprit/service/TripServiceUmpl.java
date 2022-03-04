@@ -163,17 +163,28 @@ public class TripServiceUmpl implements ITripService{
 	}
 
 	@Override
-	public List<Integer> nbrUserPourChaqueVoyage() {
+	public List<String> nbrUserPourChaqueVoyage() {
 		// TODO Auto-generated method stub
+		
 		List<Trip> t =tripRepo.findAll();
+		int nombre_total_voyage=t.size();
+		int nombre_total_voygeur=tripRepo.nombretotatldevoyageur();
+		Trip tr;
 		List<Integer> n=new ArrayList<>();
+		List<String> ls= new ArrayList<>();
+		
 		int nbr;
 		for(Trip trip :t) {
 			nbr=trip.getUsers().size();
 			n.add(nbr);
+			String s="voayge numero :"+(t.indexOf(trip)+1)+"/"+nombre_total_voyage+"id:"+trip.getIdTrip()+"nombre de voyageur"+nbr+"/"
+					+nombre_total_voygeur;
+			ls.add(s);
 			
 		}
-		return n;
+		
+			return ls;
+		
 		
 	}
 	

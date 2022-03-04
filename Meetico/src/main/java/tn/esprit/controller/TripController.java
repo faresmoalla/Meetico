@@ -213,7 +213,7 @@ public class TripController {
 	}
 	@GetMapping("/get-user-pour-chaque-voyage")
 	@ResponseBody
-	public List<Integer> nbruserpourchaquevoyage( ){
+	public List<String> nbruserpourchaquevoyage( ){
 		return tripService.nbrUserPourChaqueVoyage();
 		
 	}

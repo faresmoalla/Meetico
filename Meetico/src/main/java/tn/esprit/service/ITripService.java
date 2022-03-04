@@ -23,6 +23,6 @@ public interface ITripService {
 	public void deleteutilisateurdetrip(Integer idtrip,List<Long> iduser);
 	public void affecterFileToTip(List<Long> idFiles,Integer idTrip);
 	public int listUserByVoyage(Integer idTrip);
-	public List<Integer>  nbrUserPourChaqueVoyage();
+	public List<String>  nbrUserPourChaqueVoyage();
 
 }
