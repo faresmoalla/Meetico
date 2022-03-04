@@ -1,5 +1,6 @@
 package tn.esprit.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -7,11 +8,16 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
+import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
+import tn.esprit.repository.FileDBRepository;
 import tn.esprit.repository.TripRepository;
 import tn.esprit.repository.UserRepository;
 
@@ -25,6 +31,8 @@ public class TripServiceUmpl implements ITripService{
 	UserRepository userRepo;
 	@Autowired
 	TripRepository tripRepo;
+	@Autowired
+	FileDBRepository fileRepo;
 	
 
 	@Override
@@ -35,6 +43,7 @@ public class TripServiceUmpl implements ITripService{
 			u.getTrips().add(t);
 			userRepo.save(u);
 		}
+		
 	}
 
 	@Override
@@ -134,6 +143,41 @@ public class TripServiceUmpl implements ITripService{
 		}
 		tripRepo.save(t);*/
 		}
+
+	@Override
+	public void affecterFileToTip(List<Long> idFiles, Integer idTrip) {
+		Trip t=tripRepo.findById(idTrip).orElse(null);
+		for(Long idf :idFiles) {
+			FileDB f=fileRepo.findById(idf).orElse(null);
+			f.setTrip(t);
+			fileRepo.save(f);
+		}
+		
+	}
+
+	@Override
+	public int listUserByVoyage(Integer idTrip) {
+		// TODO Auto-generated method stub
+		int n = tripRepo.nbduserbyvoyage(idTrip);
+		return n;
+	}
+
+	@Override
+	public List<Integer> nbrUserPourChaqueVoyage() {
+		// TODO Auto-generated method stub
+		List<Trip> t =tripRepo.findAll();
+		List<Integer> n=new ArrayList<>();
+		int nbr;
+		for(Trip trip :t) {
+			nbr=trip.getUsers().size();
+			n.add(nbr);
+			
+		}
+		return n;
+		
+	}
+	
+	
 		
 	
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 
@@ -23,5 +24,11 @@ public interface TripRepository extends JpaRepository<Trip, Integer>{
 	 public void deleteuserfromtrip(@Param("idtrip") Integer idtrip,@Param("userId") List<Long> userId);*/
 			
 	//AND t.domainedactivité=:domaine AND perimetre:=perimetre
+	/*
+	@Query("Select r FROM Trip r join r.files t where r.idTrip =:id  ")
+	List<FileDB> filebytrip(@Param("id") Integer id);*/
+	@Query("Select count(*) FROM User r join r.trips t where t.idTrip =:id  ")
+	int nbduserbyvoyage(@Param("id") Integer id);
+	
 	
 }

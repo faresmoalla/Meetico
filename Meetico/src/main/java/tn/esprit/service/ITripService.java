@@ -3,6 +3,9 @@ package tn.esprit.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 
@@ -18,5 +21,8 @@ public interface ITripService {
 	public List<Trip> affichTrip();
 	public List<User> afficherutilisateurbymatching(String destination,Date startdate,String city);
 	public void deleteutilisateurdetrip(Integer idtrip,List<Long> iduser);
+	public void affecterFileToTip(List<Long> idFiles,Integer idTrip);
+	public int listUserByVoyage(Integer idTrip);
+	public List<Integer>  nbrUserPourChaqueVoyage();
 
 }
