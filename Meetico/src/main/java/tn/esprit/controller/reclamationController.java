@@ -108,5 +108,12 @@ public class reclamationController {
 	}
 	
 	
+	@GetMapping("/stat/{type}/{priority}")
+	@ApiOperation(value = "stat ")
+	@ResponseBody
+	public 	float stat(@PathVariable(name="type") reclamationType type ,@PathVariable(name="priority") reclamationPriority priority) throws ParseException {
+		return reclamationservice.statWatingReclamation(type, priority);
+	}
+	
 }
 	

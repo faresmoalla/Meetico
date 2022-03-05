@@ -20,6 +20,7 @@ public interface Ireclamation {
 	public List<Reclamation> ListAllReclamationsClient(Long userId);
 	public Set<Reclamation> ListReclamationByStatusClient(Long userId);
 	public boolean verif(Integer idReclamation);
+	public float statWatingReclamation(reclamationType type ,reclamationPriority priority);
 	
 	
 	
