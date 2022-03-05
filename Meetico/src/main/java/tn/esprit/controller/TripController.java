@@ -227,4 +227,9 @@ public class TripController {
 	public List<String> litsdetrippourchaqueutilisateur(){
 		return tripService.nbrDeVoyagePourChaqueUser();
 	}
+	@GetMapping("/nbr-de-visite-pour-chaque-destination")
+	@ResponseBody
+	public List<String> nbrvisitepourchaquedestination(){
+		return tripService.nbrdevisitepourchaquedestination();
+	}
 }

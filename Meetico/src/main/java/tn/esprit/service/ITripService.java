@@ -28,5 +28,6 @@ public interface ITripService {
 	public List<String> nbrUserPourChaqueVoyage();
 	public String meilleurDestination();
 	public List<String> nbrDeVoyagePourChaqueUser();
+	public List<String> nbrdevisitepourchaquedestination();
 
 }

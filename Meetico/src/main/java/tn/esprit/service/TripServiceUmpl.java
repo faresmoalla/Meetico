@@ -266,6 +266,42 @@ public class TripServiceUmpl implements ITripService{
 		
 		return s;
 	}
+
+	@Override
+	public List<String> nbrdevisitepourchaquedestination() {
+		// TODO Auto-generated method stub
+List<Trip> trip =tripRepo.findAll();
+		
+		String s= new String();
+		List<String> ls= new ArrayList<>();
+		List<Integer> ns=new ArrayList<>();
+		String destination=new String();
+		for(Trip t:trip) {
+			int n = 0 ;
+			for(Trip tr:trip) {
+				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
+					n++;
+					s =t.getDestination()+" est visité "+n+" fois";
+				}
+				
+			}
+				
+			
+			if(ls.contains(s))
+			{
+				log.info("traitement en cours");
+			}else {
+				ls.add(s);
+			}
+			
+		}
+	
+		
+		
+		
+		
+		return ls;
+	}
 	
 	
 		
