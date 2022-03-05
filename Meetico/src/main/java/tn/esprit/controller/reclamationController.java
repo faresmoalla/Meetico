@@ -100,7 +100,20 @@ public class reclamationController {
 	
 	
 	}
+	@PutMapping("/verifReclamation/{idReclamation}")
+	@ApiOperation(value = "verif Reclamation")
+	@ResponseBody
+	public Boolean verifReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
+		return reclamationservice.verif(idReclamation);
+	}
 	
+	
+	@GetMapping("/stat/{type}/{priority}")
+	@ApiOperation(value = "stat ")
+	@ResponseBody
+	public 	float stat(@PathVariable(name="type") reclamationType type ,@PathVariable(name="priority") reclamationPriority priority) throws ParseException {
+		return reclamationservice.statWatingReclamation(type, priority);
+	}
 	
 }
 	

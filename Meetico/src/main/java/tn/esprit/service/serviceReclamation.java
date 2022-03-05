@@ -102,9 +102,13 @@ public class serviceReclamation implements Ireclamation {
 
 
 	@Override
-	public boolean verif(Reclamation reclamation) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean verif(Integer idReclamation) {
+		Reclamation f=retrieveReclamation( idReclamation);
+		if(f.getStatus() == false) {
+		f.setStatus(true);
+		}
+		reclamationrepository.save(f);
+		return f.getStatus();
 	}
 
 	@Override
@@ -112,6 +116,43 @@ public class serviceReclamation implements Ireclamation {
 		
 		return reclamationrepository.getAllReclamationsClient(userId);
 	}
+
+	@Override
+	public float statWatingReclamation(reclamationType type ,reclamationPriority priority) {
+		int n =0,tn;
+		float P;
+		if(type==null && priority==null )
+		 n = reclamationrepository.nbrWaitingReclamation();
+		if((type.equals("SOFTWER") ||
+				type.equals("USER")||
+				type.equals("TRIP")|| 
+				type.equals("OTHER")) && 
+				(priority.equals("NORMAL") || 
+				 priority.equals("IMPORTANT") ||
+				 priority.equals("URGENTE")) ) {
+			
+			n=reclamationrepository.nbrWaitingReclamationByPriorityAndType(priority, type);
+		}
+	/*	if((type.contains("SOFTWER") ||
+				type.contains("SOFTWER")||
+				type.contains("SOFTWER")||
+				type.contains("SOFTWER")) && priority==null) {
+			n=reclamationrepository.nbrWaitingReclamationByType(type);
+		}
+		if(type==null  &&(priority.contains("NORMAL") || 
+						priority.contains("IMPORTANT") ||
+						priority.contains("URGENTE"))) {
+			n=reclamationrepository.nbrWaitingReclamationByPriority(priority);
+		}*/
+		
+		tn=(int) reclamationrepository.count();
+		
+		P=(n*100)/tn;
+		
+		return P;
+	}
+	
+	
 
 	
 
