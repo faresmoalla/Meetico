@@ -186,13 +186,13 @@ public class TripController {
 		return tripService.affichTrip();
 		
 	}
-	@GetMapping("/get-utilisateurbymatching/{destination}/{startdate}/{city}")
+	@GetMapping("/get-utilisateur-by-matching/{destination}/{startdate}/{city}")
 	public List<User> afficherutilisateurbymatching(@PathVariable("destination") String destination,@PathVariable("startdate") java.sql.Date startdate,@PathVariable("city") String city) {
 		
 	
 		return tripService.afficherutilisateurbymatching(destination.toUpperCase(),startdate,city.toUpperCase());
 	}
-	@PutMapping("/delete-userfromtrip/{id-trip}/{userid}")
+	@PutMapping("/delete-user-from-trip/{id-trip}/{userid}")
 	@ResponseBody
 	public void deleteutilisateurfromtrip( @PathVariable("id-trip") Integer idtrip,@PathVariable("userid") List<Long> idusers){
 		
@@ -211,15 +211,20 @@ public class TripController {
 		return tripService.listUserByVoyage(idtrip);
 		
 	}
-	@GetMapping("/get-user-pour-chaque-voyage")
+	@GetMapping("/nbr-user-pour-chaque-voyage")
 	@ResponseBody
 	public List<String> nbruserpourchaquevoyage( ){
 		return tripService.nbrUserPourChaqueVoyage();
 		
 	}
-	@GetMapping("/meilleurdestination")
+	@GetMapping("/meilleur-destination")
 	@ResponseBody
 	public String meilleurdestination(){
 		return tripService.meilleurDestination();
+	}
+	@GetMapping("/nbr-de-trip-pour-chaque-utilisateur")
+	@ResponseBody
+	public List<String> litsdetrippourchaqueutilisateur(){
+		return tripService.nbrDeVoyagePourChaqueUser();
 	}
 }

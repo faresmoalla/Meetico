@@ -1,7 +1,9 @@
 package tn.esprit.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,5 +27,6 @@ public interface ITripService {
 	public int listUserByVoyage(Integer idTrip);
 	public List<String> nbrUserPourChaqueVoyage();
 	public String meilleurDestination();
+	public List<String> nbrDeVoyagePourChaqueUser();
 
 }

@@ -1,6 +1,7 @@
 package tn.esprit.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -218,6 +219,48 @@ public class TripServiceUmpl implements ITripService{
 			//ls.add(s);
 		}
 		s="la destination la plus visitée est :"+destination+" "+max_value+" fois";
+		
+		
+		
+		return s;
+	}
+
+	@Override
+	public List<String> nbrDeVoyagePourChaqueUser() {
+		List<User> users =tripRepo.listdesutilisateurinscritdansvoyage();
+		ArrayList<Set<Trip>> listOfTrip = new ArrayList<Set<Trip>>();
+		 //ArrayList<Trip>> trips =new ArrayList<>();
+		
+		List<String> s = new ArrayList<>();
+		
+		for(User u :users){
+			//for(Set<Trip> t:listOfTrip) {
+				//listOfTrip.add(u.getTrips());
+				Long i= u.getUserId();
+				
+				List<String> si=tripRepo.destinationdechaqueutilisateur(u.getUserId());
+				String sii ="";
+				String destination = "";
+				
+				for(String d:si ) {
+					int n =0;
+					for(String ds :si) {
+						if(d.equalsIgnoreCase(ds)) {
+							n++;
+						    destination =d;	
+						}
+						
+					}
+					 
+					sii ="user :" +i+" est voyager au "+destination+" "+n+" fois"  ;
+				}
+				if(s.contains(sii)){
+					log.info("traiement encours ");
+				}else {
+					s.add(sii);
+				}
+				
+			}
 		
 		
 		

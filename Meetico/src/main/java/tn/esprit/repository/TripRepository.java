@@ -31,6 +31,11 @@ public interface TripRepository extends JpaRepository<Trip, Integer>{
 	int nbduserbyvoyage(@Param("id") Integer id);
 	@Query("Select count(*) FROM User r join r.trips ")
 	int nombretotatldevoyageur();
+	@Query("Select t.destination FROM User r join r.trips t where r.userId=:userId  ")
+	List<String> destinationdechaqueutilisateur(@Param("userId") Long useId);
+	
+	@Query("Select r FROM User r join r.trips ")
+	List<User> listdesutilisateurinscritdansvoyage();
 	
 	
 }
