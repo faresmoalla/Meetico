@@ -15,4 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	@Query("Select c from Comment c where c.publications.idPublication=:idPublication order by c.date desc")
 	List<Comment> listcommentsByPublication(@Param("idPublication") Long idPublication) ;
+	
+	
+	
 }

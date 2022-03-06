@@ -2,6 +2,8 @@ package tn.esprit.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import tn.esprit.config.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.entity.Comment;
-
+import tn.esprit.entity.SmsRequest;
 import tn.esprit.service.CommentServiceImpl;
+import tn.esprit.service.SmsService;
 
 @RestController
 @RequestMapping("/comment")
@@ -24,9 +27,18 @@ public class CommentController {
 CommentServiceImpl commentService;
 	
 	
+
+@GetMapping("/ListCommentsAdmin/{field}")
+public Paginator<List<Comment>> listCommentsAdminPub(@PathVariable String field){
+	List<Comment> listcomm = commentService.ListAllCommentsAdmin(field);
 	
+	return new Paginator<>(listcomm.size(), listcomm) ;
+}
+
+
+
 	
-	@GetMapping("/ListCommentsByPub/{idPublication}")
+	@GetMapping("/ListCommentsByPub/{idPublication}/{field}")
 	@ResponseBody
 	public List<Comment> listComments(@PathVariable("idPublication") Long idPublication){
 		return commentService.listCommentsByPublication(idPublication);
@@ -38,6 +50,7 @@ CommentServiceImpl commentService;
 	public void addComment(@RequestBody Comment f,@PathVariable("idPublication") Long idPublication,@PathVariable("idUtilisateur") Long idUtilisateur)
 	{
 		 commentService.addcomments(f,idPublication,idUtilisateur);
+		
 
 	}	
 	
@@ -46,7 +59,7 @@ CommentServiceImpl commentService;
 	public void updateComment(@PathVariable("idComment") Long idComment,@PathVariable("idPublication") Long idPublication,@PathVariable("idUtilisateur") Long idUtilisateur)
 	{
 		 commentService.updateComment(idComment,idPublication,idUtilisateur);
-
+		
 	}
 	
 }

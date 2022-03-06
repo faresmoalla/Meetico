@@ -42,6 +42,12 @@ DislikeRepository dislikeRepo;
 
 
 
+
+public Publication getPub(Long idPublication) {
+	Publication  publication=publicationrepo.findById(idPublication).orElse(null);	
+	return publication;
+}
+
 @Override
 public void addPublication(Publication publication,Long idUser) {
 
@@ -58,7 +64,7 @@ User  user=utiRepo.findById(idUser).orElse(null);
 		publicationrepo.save(publication);
 
 		//System.out.println("sending email ...");
-
+/*
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		
 		simpleMailMessage.setFrom("9ariniphoenix@gmail.com");
@@ -66,7 +72,7 @@ User  user=utiRepo.findById(idUser).orElse(null);
 		simpleMailMessage.setSubject("test");
 		simpleMailMessage.setText("test" );
 
-		javaMailSender.send(simpleMailMessage);
+		javaMailSender.send(simpleMailMessage);*/
 		//System.out.println("sent email ...");
 		
 		

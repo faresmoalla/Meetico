@@ -61,4 +61,13 @@ public class Publication implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="publication")
 	@JsonIgnore
 	private Set<PostDislike> dislikes;
+	
+	
+	
+	@OneToMany(mappedBy="publication",cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Set<FileDB> files;
+	
+	
+	
 }

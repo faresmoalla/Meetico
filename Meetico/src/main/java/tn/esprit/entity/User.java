@@ -99,6 +99,14 @@ public class User implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Event> events;
 	
+	
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="utilis")
+	@JsonIgnore
+		private Set<Alert> alerts;
+	
+	
 //	@Enumerated(EnumType.STRING)
 //	private Role role;
 	
@@ -107,6 +115,8 @@ public class User implements Serializable {
 	private String username;
 	
 	private Integer zipCode;
+	
+	private String tel;
 	
 }
 
