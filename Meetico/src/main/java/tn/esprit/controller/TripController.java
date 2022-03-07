@@ -91,49 +91,12 @@ public class TripController {
 	@ResponseBody
 	public void addTripetaffecterutilisateur(@RequestBody Trip t, @PathVariable("id-user") List<Long> iduser, @PathVariable("idEnt") Long idEnt) throws SendFailedException{
 		tripService.addTrip(t, iduser,idEnt);
-		User entrepreneur =t.getUser();
-		List <User> ustrip =(List<User>) userRepo.findAllById(iduser);
-		List<User> users =tripService.afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
-		int day =t.getStartDate().getDate();
-		int month =t.getStartDate().getMonth()+1;
-		int year =t.getStartDate().getYear()+1900;
-		if(users.size() !=0) {
-			for(User us :users) {
-				for(User u: users) {
-					emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
-							+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
-							+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ "  "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
-			}
 		
-			}
-		
-		}else {
-			log.info("we have no match");
-		}
 	}
 	@PutMapping("/affecter-utilisateur/{id-trip}/{user}")
 	@ResponseBody
 	public void affecterutilisateur(@PathVariable("user") List<Long> user,@PathVariable("id-trip") Integer idtrip) throws SendFailedException{
 		tripService.affecterlisteutilisateurautrip(user, idtrip);
-		Trip t =tripRepo.findById(idtrip).orElse(null);
-		User entrepreneur =t.getUser();
-		Set <User> ustrip =t.getUsers();
-		List<User> users =tripService.afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
-		int day =t.getStartDate().getDate();
-		int month =t.getStartDate().getMonth()+1;
-		int year =t.getStartDate().getYear()+1900;
-		if(users.size()!=0) {
-			for(User us :users) {
-				for(User u: users) {
-					emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
-							+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
-							+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ " "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
-				}
-			}
-		}else {
-			log.info("we have no match");
-		}
-		
 		
 	}
 		

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.mail.SendFailedException;
+
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.FileDB;
+import tn.esprit.entity.Gender;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 import tn.esprit.repository.FileDBRepository;
@@ -37,6 +40,8 @@ public class TripServiceUmpl implements ITripService{
 	TripRepository tripRepo;
 	@Autowired
 	FileDBRepository fileRepo;
+	@Autowired
+	EmailServiceImpl emailsend;
 	
 
 	@Override
@@ -46,6 +51,30 @@ public class TripServiceUmpl implements ITripService{
 			User u =userRepo.findById(iduser).orElse(null);
 			u.getTrips().add(t);
 			userRepo.save(u);
+		}
+		User entrepreneur =t.getUser();
+		List <User> ustrip =(List<User>) userRepo.findAllById(idUsers);
+		List<User> users =afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
+		int day =t.getStartDate().getDate();
+		int month =t.getStartDate().getMonth()+1;
+		int year =t.getStartDate().getYear()+1900;
+		if(users.size() !=0) {
+			for(User us :users) {
+				for(User u: users) {
+					try {
+						emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
+								+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
+								+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ "  "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
+					} catch (SendFailedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		
+			}
+		
+		}else {
+			log.info("we have no match");
 		}
 		
 	}
@@ -101,6 +130,30 @@ public class TripServiceUmpl implements ITripService{
 			u.getTrips().add(t);
 			userRepo.save(u);
 		}
+		User entrepreneur =t.getUser();
+		Set <User> ustrip =t.getUsers();
+		List<User> users =afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
+		int day =t.getStartDate().getDate();
+		int month =t.getStartDate().getMonth()+1;
+		int year =t.getStartDate().getYear()+1900;
+		if(users.size()!=0) {
+			for(User us :users) {
+				for(User u: users) {
+					try {
+						emailsend.sendEmail(u.getEmail(), "JOIN us ", (u.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ")
+								+ u.getFirstName() + ", \n we have a trip to "+t.getDestination()+" with our employee "+(us.getGender().equals(Gender.MALE) ? " Mr. " : " Ms. ")+us.getFirstName()+" "+us.getLastName()
+								+"  "+"from the city "+u.getCity()+"at the date "+day+"/"+month+"/"+year+ " "+entrepreneur.getUsername().substring(0, 1).toUpperCase() + entrepreneur.getUsername().substring(1) + " Group. \nThe Meetico Team.");
+					} catch (SendFailedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}else {
+			log.info("we have no match");
+		}
+		
+		
 		
 	}
 
