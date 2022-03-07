@@ -270,7 +270,7 @@ public class TripServiceUmpl implements ITripService{
 	@Override
 	public List<String> nbrdevisitepourchaquedestination() {
 		// TODO Auto-generated method stub
-List<Trip> trip =tripRepo.findAll();
+		List<Trip> trip =tripRepo.findAll();
 		
 		String s= new String();
 		List<String> ls= new ArrayList<>();

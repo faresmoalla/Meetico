@@ -3,6 +3,7 @@ package tn.esprit.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Trip;
+import tn.esprit.entity.User;
 import tn.esprit.message.ResponseFile;
 import tn.esprit.message.ResponseMessage;
 import tn.esprit.repository.TripRepository;
@@ -35,6 +38,8 @@ import tn.esprit.service.FileStorageService;
 public class FileController {
   @Autowired
   private FileStorageService storageService;
+  @Autowired
+  TripRepository tripRepo;
   @PostMapping("/upload")
   public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
     String message = "";
@@ -47,6 +52,11 @@ public class FileController {
       return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
     }
   }
+  	@DeleteMapping("/delete-file/{id-file}")
+	@ResponseBody
+	public void deletetrip( @PathVariable("id-file") Long idfile){
+		storageService.deletefile(idfile);
+  	}
   @GetMapping("/files")
   public ResponseEntity<List<ResponseFile>> getListFiles() {
     List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
@@ -130,5 +140,21 @@ public class FileController {
 	  }
 	  return b;
 }
+  @GetMapping("/filesByTRipppp/{id}")
+  @ResponseBody
+  public ResponseEntity<List<byte[]>> getFileBytripppp(@PathVariable Integer id) {
+	  
+	  
+	    List<FileDB> fileDB = storageService.getFileByTrip(id);
+	    List<byte[]> b = new ArrayList<byte[]>() ;
+	    		//new ArrayList(ResponseEntity<byte[]>);
+	    for(FileDB f :fileDB) {
+	    	byte[] s=f.getData();
+	    	b.add(s);	
+	    }
+	    return  ResponseEntity.ok()
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
+		        .body(b) ;
+	  }
   
 }

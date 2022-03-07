@@ -24,6 +24,9 @@ public class FileStorageService {
     FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes());
     return fileDBRepository.save(FileDB);
   }
+  public void deletefile(Long idfile) {
+	  fileDBRepository.deleteById(idfile);
+  }
   public FileDB getFile(Long id) {
     return fileDBRepository.findById(id).orElse(null);
   }
