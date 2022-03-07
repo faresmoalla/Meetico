@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -172,8 +173,8 @@ public class TripServiceUmpl implements ITripService{
 		List<Trip> t =tripRepo.findAll();
 		int nombre_total_voyage=t.size();
 		int nombre_total_voygeur=tripRepo.nombretotatldevoyageur();
-		Trip tr;
-		List<Integer> n=new ArrayList<>();
+		//Trip tr;
+		//List<Integer> n=new ArrayList<>();
 		List<String> ls= new ArrayList<>();
 		
 		int nbr;
@@ -190,13 +191,13 @@ public class TripServiceUmpl implements ITripService{
 		
 		
 	}
-
+	@Scheduled(cron = "*/20 * * * * *")
 	@Override
 	public String meilleurDestination() {
 		List<Trip> trip =tripRepo.findAll();
 		
 		String s= new String();
-		List<String> ls= new ArrayList<>();
+		//List<String> ls= new ArrayList<>();
 		List<Integer> ns=new ArrayList<>();
 		String destination=new String();
 		int max_value = 0;
@@ -220,7 +221,7 @@ public class TripServiceUmpl implements ITripService{
 		}
 		s="la destination la plus visitée est :"+destination+" "+max_value+" fois";
 		
-		
+		log.info(s);
 		
 		return s;
 	}
@@ -228,7 +229,7 @@ public class TripServiceUmpl implements ITripService{
 	@Override
 	public List<String> nbrDeVoyagePourChaqueUser() {
 		List<User> users =tripRepo.listdesutilisateurinscritdansvoyage();
-		ArrayList<Set<Trip>> listOfTrip = new ArrayList<Set<Trip>>();
+		//ArrayList<Set<Trip>> listOfTrip = new ArrayList<Set<Trip>>();
 		 //ArrayList<Trip>> trips =new ArrayList<>();
 		
 		List<String> s = new ArrayList<>();
@@ -266,7 +267,7 @@ public class TripServiceUmpl implements ITripService{
 		
 		return s;
 	}
-
+	@Scheduled(cron = "*/10 * * * * *")
 	@Override
 	public List<String> nbrdevisitepourchaquedestination() {
 		// TODO Auto-generated method stub
@@ -274,8 +275,8 @@ public class TripServiceUmpl implements ITripService{
 		
 		String s= new String();
 		List<String> ls= new ArrayList<>();
-		List<Integer> ns=new ArrayList<>();
-		String destination=new String();
+		//List<Integer> ns=new ArrayList<>();
+		//String destination=new String();
 		for(Trip t:trip) {
 			int n = 0 ;
 			for(Trip tr:trip) {
@@ -291,12 +292,11 @@ public class TripServiceUmpl implements ITripService{
 			{
 				log.info("traitement en cours");
 			}else {
+				log.info(s);
 				ls.add(s);
 			}
 			
 		}
-	
-		
 		
 		
 		
