@@ -125,15 +125,6 @@ public class TripController {
 	@DeleteMapping("/delete-trip/{id-trip}")
 	@ResponseBody
 	public void deletetrip( @PathVariable("id-trip") Integer idtrip){
-		Trip t=tripRepo.findById(idtrip).orElse(null);
-		Set<User> user=t.getUsers();
-		List<Long> id = new ArrayList<>() ;
-		for(User u:user) {
-			
-			id.add(u.getUserId());
-			
-		}
-		tripService.deleteutilisateurdetrip(idtrip, id);
 		tripService.deleteTrip(idtrip);
 		
 	}

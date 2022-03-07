@@ -94,7 +94,15 @@ public class TripServiceUmpl implements ITripService{
 
 	@Override
 	public void deleteTrip(Integer idTrip) {
-	
+		Trip t=tripRepo.findById(idTrip).orElse(null);
+		Set<User> user=t.getUsers();
+		List<Long> id = new ArrayList<>() ;
+		for(User u:user) {
+			
+			id.add(u.getUserId());
+			
+		}
+		deleteutilisateurdetrip(idTrip, id);
 		tripRepo.deleteById(idTrip);
 		
 	}
