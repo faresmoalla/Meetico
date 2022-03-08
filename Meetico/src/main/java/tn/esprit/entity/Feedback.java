@@ -1,28 +1,19 @@
 package tn.esprit.entity;
 
-
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 
 @Entity
 @Getter
@@ -44,8 +35,6 @@ public class Feedback implements Serializable   {
 	@Temporal(TemporalType.DATE)
 	private Date lastModificationDate;
 	private Integer stars;
-	
-	
 	@ManyToOne
     private User user;
 	

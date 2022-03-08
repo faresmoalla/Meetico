@@ -23,7 +23,7 @@ public class EmailServiceImpl {
 			helper.setSubject(subject);
 			helper.setText("<html><body>" + message + "</html></body>", true);
 			FileSystemResource file = new FileSystemResource(attachment);
-			helper.addInline(attachment.getName(), file);
+			helper.addAttachment(attachment.getName(), file);
 			javaMailSender.send(mimeMessage);
 		} catch (Exception ex) {
 			ex.printStackTrace();

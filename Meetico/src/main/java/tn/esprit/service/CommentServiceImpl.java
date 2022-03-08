@@ -3,17 +3,10 @@ package tn.esprit.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.Module;
-
-import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.Comment;
 import tn.esprit.entity.DictionnaireBadWords;
-import tn.esprit.entity.PostLike;
 import tn.esprit.entity.Publication;
 import tn.esprit.entity.User;
 import tn.esprit.repository.CommentRepository;
@@ -21,54 +14,46 @@ import tn.esprit.repository.DictionnaireRepository;
 import tn.esprit.repository.PublicationRepository;
 import tn.esprit.repository.UserRepository;
 
-
-
 @Service
 public class CommentServiceImpl implements ICommentService {
-	@Autowired
-	CommentRepository commentRepo;
-	@Autowired
-	PublicationRepository publciationRepo;
-	@Autowired
-	DictionnaireRepository badwordsRepo;
-	@Autowired
-	UserRepository userRepo;
 
-	
+	@Autowired
+	private CommentRepository commentRepo;
+
+	@Autowired
+	private PublicationRepository publciationRepo;
+
+	@Autowired
+	private DictionnaireRepository badwordsRepo;
+
+	@Autowired
+	private UserRepository userRepo;
+
 	/////////////// Partie Back Admin////////
 	@Override
 	public List<Comment> ListAllCommentsAdmin(Long idPublicaiton) {
 		return commentRepo.findAll();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//////////////////////Partie Front Client/////////////////
+
+	////////////////////// Partie Front Client/////////////////
 	@Override
 	public boolean verif(Comment c) {
 
 		for (DictionnaireBadWords d : badwordsRepo.findAll()) {
 
-			if (c.getContents().toLowerCase().contains(d.getWord().toLowerCase()) &&c.getContents()==null && c.getContents().length() == 0) {
+			if (c.getContents().toLowerCase().contains(d.getWord().toLowerCase()) && c.getContents() == null
+					&& c.getContents().length() == 0) {
 				return false;
 			}
 
 		}
 		return true;
 	}
-	
-	
-	
-@Override
-	public void addcomments(Comment comment , Long idpub,Long idUser ) {
-	Publication  pub=publciationRepo.findById(idpub).orElse(null);	
-	User  user=userRepo.findById(idUser).orElse(null);
+
+	@Override
+	public void addcomments(Comment comment, Long idpub, Long idUser) {
+		Publication pub = publciationRepo.findById(idpub).orElse(null);
+		User user = userRepo.findById(idUser).orElse(null);
 		String commentWords = comment.getContents();
 		List<String> badwords1 = new ArrayList<String>();
 		Date currentSqlDate = new Date(System.currentTimeMillis());
@@ -79,7 +64,7 @@ public class CommentServiceImpl implements ICommentService {
 		for (DictionnaireBadWords bd : badwords) {
 			badwords1.add(bd.getWord());
 		}
-		if (verif(comment)) {	
+		if (verif(comment)) {
 			commentRepo.save(comment);
 		} else {
 			comment.setContents("*****");
@@ -89,24 +74,20 @@ public class CommentServiceImpl implements ICommentService {
 
 	}
 
-	
-	
-	// a corriger
-@Override
-	public void updateComment(Long idComment, Long idpub,Long idUser ) {
-		Comment  com=commentRepo.findById(idComment).orElse(null);
-		Publication  pub=publciationRepo.findById(idpub).orElse(null);	
-		User  user=userRepo.findById(idUser).orElse(null);
-		
-	
-		
+	// Incorrect
+	@Override
+	public void updateComment(Long idComment, Long idpub, Long idUser) {
+		Comment com = commentRepo.findById(idComment).orElse(null);
+		Publication pub = publciationRepo.findById(idpub).orElse(null);
+		User user = userRepo.findById(idUser).orElse(null);
+
 		Date currentSqlDate = new Date(System.currentTimeMillis());
-		
+
 		com.setDate(currentSqlDate);
 		com.setPublications(pub);
 		com.setUser(user);
-		
-		if (verif(com)) {	
+
+		if (verif(com)) {
 			commentRepo.save(com);
 		} else {
 			com.setContents("*****");
@@ -115,18 +96,16 @@ public class CommentServiceImpl implements ICommentService {
 		}
 
 	}
-	
-@Override
+
+	@Override
 	public void deleteComment(Long idComment) {
 		commentRepo.deleteById(idComment);
 	}
 
-@Override
+	@Override
 	public List<Comment> listCommentsByPublication(Long idPublicaiton) {
 		Publication publication = publciationRepo.findById(idPublicaiton).orElse(null);
-
 		List<Comment> listComments = commentRepo.listcommentsByPublication(idPublicaiton);
-
 		return listComments;
 	}
 

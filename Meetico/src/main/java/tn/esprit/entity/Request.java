@@ -12,10 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Builder
@@ -23,6 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 
 public class Request implements Serializable {
@@ -33,16 +39,27 @@ public class Request implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	private Long requestId;
-		
+	
+	@NonNull
+	private Boolean converted;
+	
+	@NonNull
 	private String email;
 	
+	@NonNull	
 	private String firstName;
 	
+	@NonNull
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 		
+	@NonNull
 	private String lastName;
 	
+	@NonNull
+	private Long nic;
+	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private User sender;
 	

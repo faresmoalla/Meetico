@@ -24,22 +24,16 @@ public class PostLike implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idLike;
 	
-	
-	
-	
 	@ManyToOne
 	@JsonIgnore
 	Comment comment;
-	
 	
 	@ManyToOne
 	@JsonIgnore
 	Publication publication;
 	
-	
 	@ManyToOne
 	@JsonIgnore
 	User utilis;
-	
 	
 }
