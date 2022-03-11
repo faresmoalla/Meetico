@@ -2,6 +2,10 @@ package tn.esprit.service;
 
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -9,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import tn.esprit.entity.Picture;
 import tn.esprit.entity.Reclamation;
 import tn.esprit.entity.User;
 import tn.esprit.entity.reclamationPriority;
 import tn.esprit.entity.reclamationType;
+import tn.esprit.repository.PictureRepository;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.repository.reclamationRepository;
 
@@ -30,11 +36,18 @@ public class serviceReclamation implements Ireclamation {
 	@Autowired
 	UserRepository userrepository;
 	
+	@Autowired
+	CloudinaryService cloudinartservice; 
+	@Autowired
+	PictureRepository  picturerepository;
+	
 
 	@Override
-	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId) {
+	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId,Integer idPicture) {
 		User user = userrepository.findById(userId).orElse(null);
+		Picture P= picturerepository.findById(idPicture).orElse(null);
 		reclamation.setUser(user);
+		reclamation.setPicture(P);
 		return reclamationrepository.save(reclamation);
 	}
 
@@ -44,18 +57,25 @@ public class serviceReclamation implements Ireclamation {
 		return reclamationrepository.findById(idReclamation).orElse(null);
 	}
 	@Override
-	public void updateReclamation(Reclamation reclamation) {
+	public void updateReclamation(Reclamation reclamation) throws ParseException {
+		
+		
+		
 		
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
 		R.setDescription(reclamation.getDescription());
-		R.setFile(reclamation.getFile());
 		R.setLastModificationDate(reclamation.getLastModificationDate());
 		R.setPicture(reclamation.getPicture());
 		R.setPriority(reclamation.getPriority());
 		R.setType(reclamation.getType());
+		R.setLastModificationDate(new Date(string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
 		reclamationrepository.save(R);	
 	}
-
+	
+	public Long string2Date(String date) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss");
+		return simpleDateFormat.parse(date).getTime();
+	}
 
 	@Override
 	public void deleteReclamation(Integer idReclamation) {
@@ -101,6 +121,9 @@ public class serviceReclamation implements Ireclamation {
 	}
 
 
+	
+	
+	
 	@Override
 	public boolean verif(Integer idReclamation) {
 		Reclamation f=retrieveReclamation( idReclamation);
@@ -111,6 +134,9 @@ public class serviceReclamation implements Ireclamation {
 		return f.getStatus();
 	}
 
+	
+	
+	
 	@Override
 	public List<Reclamation> ListAllReclamationsClient(Long userId) {
 		
@@ -118,33 +144,11 @@ public class serviceReclamation implements Ireclamation {
 	}
 
 	@Override
-	public float statWatingReclamation(reclamationType type ,reclamationPriority priority) {
-		int n =0,tn;
+	public float statWatingReclamationByPriorityAndType(reclamationType type ,reclamationPriority priority) {
+		Integer n=0 ,tn;
 		float P;
-		if(type==null && priority==null )
-		 n = reclamationrepository.nbrWaitingReclamation();
-		if((type.equals("SOFTWER") ||
-				type.equals("USER")||
-				type.equals("TRIP")|| 
-				type.equals("OTHER")) && 
-				(priority.equals("NORMAL") || 
-				 priority.equals("IMPORTANT") ||
-				 priority.equals("URGENTE")) ) {
-			
-			n=reclamationrepository.nbrWaitingReclamationByPriorityAndType(priority, type);
-		}
-	/*	if((type.contains("SOFTWER") ||
-				type.contains("SOFTWER")||
-				type.contains("SOFTWER")||
-				type.contains("SOFTWER")) && priority==null) {
-			n=reclamationrepository.nbrWaitingReclamationByType(type);
-		}
-		if(type==null  &&(priority.contains("NORMAL") || 
-						priority.contains("IMPORTANT") ||
-						priority.contains("URGENTE"))) {
-			n=reclamationrepository.nbrWaitingReclamationByPriority(priority);
-		}*/
 		
+			n=reclamationrepository.nbrWaitingReclamationByPriorityAndType(priority, type);
 		tn=(int) reclamationrepository.count();
 		
 		P=(n*100)/tn;
@@ -152,8 +156,48 @@ public class serviceReclamation implements Ireclamation {
 		return P;
 	}
 	
+	public float statWatingReclamation() {
+		Integer n=0 ,tn;
+		float P;
+		 n = reclamationrepository.nbrWaitingReclamation();
+		 tn=(int) reclamationrepository.count();
+			
+			P=(n*100)/tn;
+			
+			return P;
+	}
 	
+	public float statWatingReclamationByType(reclamationType type ) 
+	{Integer n=0 ,tn;
+	float P;
+	 n = reclamationrepository.nbrWaitingReclamationByType(type);
+	 tn=(int) reclamationrepository.count();
+		
+		P=(n*100)/tn;
+		
+		return P;
+		
+	}
 
+	public float statWatingReclamationByType(reclamationPriority priority ) 
+	{Integer n=0 ,tn;
+	float P;
+	 n = reclamationrepository.nbrWaitingReclamationByPriority(priority);
+	 tn=(int) reclamationrepository.count();
+		P=(n*100)/tn;
+		return P;
+	}
+
+	@Override
+	public void answerAdmin(Reclamation reclamation) throws ParseException {
+		
+
+		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
+		R.setAnswerAdmin(reclamation.getAnswerAdmin());
+		R.setAnswerDate(new Date(string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
+		reclamationrepository.save(R);	
+		verif(reclamation.getIdReclamation());
+	}
 	
 
 

@@ -7,8 +7,8 @@ import tn.esprit.entity.Feedback;
 
 
 public interface IFeedback {
-	public Feedback addFeedback(Feedback feedback,Long idUSer);
-	public void AddAndAffectFeedbackusers(Feedback f , List<Long> idUsers,Long idUs);
+	public Feedback addFeedback(Feedback feedback,Long idUSer,Integer idTrip);
+	public void AddAndAffectFeedbackUsersTrip(Feedback feed , List<Long> idUsers, Long idUs,Integer idTrip);
 	public Feedback retrieveFeedback(Integer idfeedback);
 	public Feedback UpdateFeedback(Feedback f, List<Long> usersId);
 	public void deleteFeedback(Integer idfeedback);
@@ -16,14 +16,6 @@ public interface IFeedback {
 	public List<Feedback> ListAllFeedbackAdmin();
 	public Set<Feedback> ListFeedbacksByUser(Long idUser);
 	public Set<Feedback> ListFeedbacksByTAG(Long idUser);
-	
-	
-	
-	
-	
-	
-	
- 
 	
 	
 

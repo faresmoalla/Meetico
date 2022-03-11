@@ -15,6 +15,7 @@ import tn.esprit.entity.User;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.repository.reclamationRepository;
 import tn.esprit.service.EmailServiceImpl;
+import tn.esprit.service.EmailServiceImplBatch;
 
 @Slf4j
 public class ReclamationProcessor implements ItemProcessor<User, User> {
@@ -26,31 +27,27 @@ public class ReclamationProcessor implements ItemProcessor<User, User> {
 	reclamationRepository reclamationRepository;
 	
 	@Autowired
-	EmailServiceImpl emailServiceImpl;
+	EmailServiceImplBatch emailServiceImplBatch;
 
 	@Override
 	
 	public User process(User user) throws Exception {
 	
 
-	try {
-		//User user = userRepository.findById().orElse(null);
-		 List<Reclamation> r =reclamationRepository.getAllReclamationsClient(user.getUserId());
+	//User user = userRepository.findById().orElse(null);
+	 List<Reclamation> r =reclamationRepository.getAllReclamationsClient(user.getUserId());
+
 	
 		
-			
-				emailServiceImpl.sendEmail(user.getEmail(), "JOIN ProtectHer", " ");
-				//user.setUser(user);
-				for(Reclamation rr:r) {
-					if(rr.getStatus()==false)
-						rr.setStatus(true);
-				}
-				
-			
-		
-	} catch (SendFailedException sendFailedException) {
-		log.debug("error: ", sendFailedException.getMessage());
-	}
+			emailServiceImplBatch.sendEmail(user.getEmail(), "JOIN ProtectHer", " Dear user\r\n"
+					+ " We were unable to answer your Reclamation,\r\n"
+					+ "If it is important, please resend.\r\n"
+					+ "Cordialement");
+			//user.setUser(user);
+			for(Reclamation rr:r) {
+				if(rr.getStatus()==false)
+					rr.setStatus(true);
+			}
 	return user;
 }
 	

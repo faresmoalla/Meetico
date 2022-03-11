@@ -2,10 +2,13 @@ package tn.esprit.controller;
 
 
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itextpdf.text.pdf.qrcode.WriterException;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.entity.Reclamation;
 import tn.esprit.entity.reclamationPriority;
 import tn.esprit.entity.reclamationType;
+import tn.esprit.service.EmailServiceImpl;
 import tn.esprit.service.Ireclamation;
+import tn.esprit.service.ReclamationExporter;
 
 
 
@@ -40,17 +47,24 @@ public class reclamationController {
 	@Autowired
 	Ireclamation reclamationservice;
 	
-	@PostMapping("/AddAffectReclamationUser/{userId}")
+	@Autowired
+	ReclamationExporter ex;
+	
+	@Autowired
+	EmailServiceImpl emailServiceImpl;
+	
+	
+	@PostMapping("/AddAffectReclamationUser/{userId}/{idPicture}")
 	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
 	@ResponseBody
-	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,@PathVariable(name="userId") Long userId){
-		return reclamationservice.addAffectReclamationUser(reclamation, userId);
+	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,@PathVariable(name="userId") Long userId,@PathVariable(name="idPicture")Integer idPicture){
+		return reclamationservice.addAffectReclamationUser(reclamation, userId, idPicture);
 	}
 	
 	@PutMapping("/UpdateReclamation")
 	@ApiOperation(value = "Update reclamation")
 	@ResponseBody
-	public void updateReclamation(@RequestBody Reclamation reclamation) {
+	public void updateReclamation(@RequestBody Reclamation reclamation) throws ParseException {
 		reclamationservice.updateReclamation(reclamation);
 	}
 	@DeleteMapping("/DeleteReclamation/{idReclamation}")
@@ -65,6 +79,12 @@ public class reclamationController {
 	public Reclamation retrieveReclamation(@PathVariable(name="idReclamation") Integer idReclamation) {
 		return reclamationservice.retrieveReclamation(idReclamation);
 	}
+	
+	
+	
+	
+	
+	
 	
 	@GetMapping("/getReclamationByType/{typeReclamation}")
 	@ApiOperation(value = "get reclamation by type ")
@@ -100,20 +120,78 @@ public class reclamationController {
 	
 	
 	}
-	@PutMapping("/verifReclamation/{idReclamation}")
-	@ApiOperation(value = "verif Reclamation")
+	
+	
+	
+	
+	
+	
+	
+	
+	@GetMapping("/statWatingReclamationbytypeandpriority/{type}/{priority}")
+	@ApiOperation(value = "stat Wating Reclamation by type and priority ")
 	@ResponseBody
-	public Boolean verifReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
-		return reclamationservice.verif(idReclamation);
+	public 	float statWatingReclamationbytypeandpriority(@PathVariable(name="type") reclamationType type ,@PathVariable(name="priority") reclamationPriority priority) throws ParseException {
+		return reclamationservice.statWatingReclamationByPriorityAndType(type , priority);
+	}
+	@GetMapping("/statWatingReclamation")
+	@ApiOperation(value = "stat Wating Reclamation ")
+	@ResponseBody
+	public 	float statWatingReclamation() throws ParseException {
+		return reclamationservice.statWatingReclamation();
+	}
+	@GetMapping("/statWatingReclamationByType/{type}")
+	@ApiOperation(value = "stat Wating Reclamation By Type ")
+	@ResponseBody
+	public 	float statWatingReclamationByType(@PathVariable(name="type") reclamationType type ) throws ParseException {
+		return reclamationservice.statWatingReclamationByType(type);
+	}
+	@GetMapping("/statWatingReclamationByPriority/{priority}")
+	@ApiOperation(value = "percentage of Reclamation By priority ")
+	@ResponseBody
+	public 	float statWatingReclamationByPriority(@PathVariable(name="priority") reclamationPriority priority) throws ParseException {
+		return reclamationservice.statWatingReclamationByType(priority);
 	}
 	
 	
-	@GetMapping("/stat/{type}/{priority}")
-	@ApiOperation(value = "stat ")
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@PutMapping("/SendMailReclamation/{idReclamation}")
+	@ApiOperation(value = "SendMailReclamation")
 	@ResponseBody
-	public 	float stat(@PathVariable(name="type") reclamationType type ,@PathVariable(name="priority") reclamationPriority priority) throws ParseException {
-		return reclamationservice.statWatingReclamation(type, priority);
+	public void SendMailReclamation(@PathVariable(name="idReclamation") Integer idReclamation) throws ParseException, WriterException, IOException, DocumentException, com.itextpdf.text.DocumentException {
+		Reclamation r= reclamationservice.retrieveReclamation(idReclamation);
+		
+		if(r.getType().equals(reclamationType.SOFTWER)||r.getType().equals(reclamationType.OTHER)) {
+		ex.generatePdfReport(idReclamation);
+		
+		String Email="mohamedaminebenfredj1k99@gmail.com";
+		
+		emailServiceImpl.sendEmail(Email, "JOIN MEETICO", 
+				"Dear programmer\r\n"
+				+ " We have sent you this reclamation to see if you can work on it and develop it\r\n"
+				+ "Cordialement " + " Group. <br>The Meetico Team.", new File("C:/PDFMeetico/" + r.getTitle()+ ".pdf"));
+		reclamationservice.verif(idReclamation);
+		}
 	}
+	
+	
+	@PutMapping("/answerAdmin")
+	@ApiOperation(value = "answer Admin")
+	@ResponseBody
+	public void answerAdmin(@RequestBody Reclamation reclamation) throws ParseException {
+		if(reclamation.getType().equals(reclamationType.TRIP)||reclamation.getType().equals(reclamationType.OTHER)||reclamation.getType().equals(reclamationType.USER)) {
+		reclamationservice.answerAdmin(reclamation);
+		}
+	}
+	
 	
 }
 	

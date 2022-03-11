@@ -9,9 +9,9 @@ import tn.esprit.entity.reclamationPriority;
 import tn.esprit.entity.reclamationType;
 
 public interface Ireclamation {
-	public Reclamation addAffectReclamationUser(Reclamation reclamation,Long userId);
+	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId,Integer idPicture);
 	public Reclamation retrieveReclamation(Integer idReclamation);
-	void updateReclamation(Reclamation reclamation);
+	void updateReclamation(Reclamation reclamation)throws ParseException;
 	public void deleteReclamation(Integer idReclamation);
 	public List<Reclamation> ListAllReclamationsAdmin();
 	public Set<Reclamation> listReclamationByPriorityAdmin(reclamationPriority pr) throws ParseException;
@@ -20,7 +20,11 @@ public interface Ireclamation {
 	public List<Reclamation> ListAllReclamationsClient(Long userId);
 	public Set<Reclamation> ListReclamationByStatusClient(Long userId);
 	public boolean verif(Integer idReclamation);
-	public float statWatingReclamation(reclamationType type ,reclamationPriority priority);
+	void answerAdmin(Reclamation reclamation)throws ParseException; 
+	public float statWatingReclamationByPriorityAndType(reclamationType type ,reclamationPriority priority);
+	public float statWatingReclamation();
+	public float statWatingReclamationByType(reclamationType type );
+	public float statWatingReclamationByType(reclamationPriority priority );
 	
 	
 	

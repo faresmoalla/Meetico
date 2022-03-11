@@ -35,20 +35,6 @@ public class ReclamationMapper implements RowMapper<User> {
 	                .build();
 	    	
 	    	
-	    	/*return Reclamation
-	                .builder()
-	                .idReclamation(rs.getInt("id_reclamation"))
-	                .type(reclamationType.valueOf(rs.getString("type")))
-	                .description(rs.getString("description"))
-	                .picture(rs.getString("picture"))
-	                .file(rs.getString("file"))
-	                .sendingDate(rs.getDate("sending_date"))
-	                .lastModificationDate(rs.getDate("last_modification_date"))
-	                .priority(reclamationPriority.valueOf(rs.getString("priority")))
-	                .answerDate(rs.getDate("answer_date"))
-	                .status(rs.getBoolean("status"))
-	                .user(rs.getLong("user"))
-	                .build();*/
 	           
 
 }

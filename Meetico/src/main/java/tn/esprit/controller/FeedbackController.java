@@ -42,11 +42,11 @@ public class FeedbackController {
 	@Autowired
 	IFeedback feedbackservice;
 	
-	@PostMapping("/AddAffectFeedbackUsers/{usersId}/{Us}")
-	@ApiOperation(value = "Ajouter et affecter des utilisateur a un feedback")
+	@PostMapping("/AddAffectFeedbackUsers/{usersId}/{Us}/{idTrip}")
+	@ApiOperation(value = "Ajouter et affecter des utilisateur et le voyage  a un feedback")
 	@ResponseBody
-	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,@PathVariable(name="usersId") List<Long> usersId,@PathVariable(name="Us") Long Us){
-		feedbackservice.AddAndAffectFeedbackusers(feedback, usersId, Us);
+	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,@PathVariable(name="usersId") List<Long> usersId,@PathVariable(name="Us") Long Us,@PathVariable(name="idTrip") Integer idTrip){
+		feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, usersId, Us,idTrip);
 	}
 	
 	@PutMapping("/updateFeedback/{idUsers}")

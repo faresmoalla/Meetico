@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import tn.esprit.entity.Feedback;
+import tn.esprit.entity.User;
 
 
 public interface feedbackRepository extends JpaRepository<Feedback,Integer>{
@@ -15,5 +16,7 @@ public interface feedbackRepository extends JpaRepository<Feedback,Integer>{
 	 Set<Feedback> getAllFeedbacksClient(@Param(value = "userId") Long userId);
 	@Query("SELECT f FROM Feedback f join f.users u WHERE u.userId = :userId")
 	Set<Feedback> getFeedbacksClientTAG(@Param(value = "userId") Long userId);
+	@Query("SELECT f FROM Feedback f join f.users u WHERE u.userId = :userId")
+	Set<Integer> top3UsersWithHighestNumberOfFeedbacks(@Param(value = "userId") Long userId);
 }
 

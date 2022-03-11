@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 import tn.esprit.entity.Feedback;
+import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
+import tn.esprit.repository.TripRepository;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.repository.feedbackRepository;
 
@@ -23,11 +25,14 @@ public class serviceFeedback implements IFeedback {
 	feedbackRepository feedbackrepository; 
 	@Autowired
 	UserRepository userrepository;
+	@Autowired
+	TripRepository tripRepository;
 	
 	@Override
 	@Transactional
-	public void AddAndAffectFeedbackusers(Feedback feed , List<Long> idUsers, Long idUs) {
-		Feedback f =addFeedback(feed, idUs);
+	public void AddAndAffectFeedbackUsersTrip(Feedback feed , List<Long> idUsers, Long idUs,Integer idTrip) {
+		Feedback f =addFeedback(feed, idUs,idTrip);
+		
 		for (Long idUser : idUsers) {
 			User U = userrepository.findById(idUser).orElse(null);
 			U.getFeedbacks().add(f);
@@ -36,9 +41,11 @@ public class serviceFeedback implements IFeedback {
 		
 	}
 		@Override
-		public Feedback addFeedback(Feedback feedback, Long idUSer) {
+		public Feedback addFeedback(Feedback feedback, Long idUSer,Integer idTrip) {
 			User u = userrepository.findById(idUSer).orElse(null);
+			Trip t= tripRepository.findById(idTrip).orElse(null);
 			feedback.setUser(u);
+			feedback.setTrip(t);
 			return feedbackrepository.save(feedback);
 		}
 		@Override
@@ -100,4 +107,5 @@ public class serviceFeedback implements IFeedback {
 			
 			return feedbackrepository.getFeedbacksClientTAG(idUser);
 		}
+		
 }

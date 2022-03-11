@@ -34,8 +34,10 @@ public interface reclamationRepository extends JpaRepository<Reclamation,Integer
 	 Integer nbrWaitingReclamation();
 	@Query("SELECT count(*) FROM Reclamation r WHERE r.status = false and r.type= :type")
 	 Integer nbrWaitingReclamationByType(@Param(value ="type") reclamationType type );
+	
 	@Query("SELECT count(*) FROM Reclamation r WHERE r.status = false and r.priority= :priority")
 	 Integer nbrWaitingReclamationByPriority(@Param(value ="priority") reclamationPriority priority);
+	
 	@Query("SELECT count(*) FROM Reclamation r WHERE r.status = false and r.priority= :priority and r.type= :type ")
 	 Integer nbrWaitingReclamationByPriorityAndType(@Param(value ="priority")reclamationPriority priority,reclamationType type );
 	
