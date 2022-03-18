@@ -1,17 +1,21 @@
 package tn.esprit.service;
 
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+
+
 
 import tn.esprit.entity.Reclamation;
 import tn.esprit.entity.reclamationPriority;
 import tn.esprit.entity.reclamationType;
 
 public interface Ireclamation {
-	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId,Integer idPicture);
+
+	public Reclamation addAffectReclamationUser(Reclamation reclamation,Long userId,Integer idPicture);
 	public Reclamation retrieveReclamation(Integer idReclamation);
-	void updateReclamation(Reclamation reclamation)throws ParseException;
+	public void updateReclamation(Reclamation reclamation)throws ParseException ;
 	public void deleteReclamation(Integer idReclamation);
 	public List<Reclamation> ListAllReclamationsAdmin();
 	public Set<Reclamation> listReclamationByPriorityAdmin(reclamationPriority pr) throws ParseException;
@@ -25,6 +29,9 @@ public interface Ireclamation {
 	public float statWatingReclamation();
 	public float statWatingReclamationByType(reclamationType type );
 	public float statWatingReclamationByType(reclamationPriority priority );
+	public void answerReclamation(String answer,Integer idReclamation);
+	public float statReclamationsTreterNonTreter();
+
 	
 	
 	

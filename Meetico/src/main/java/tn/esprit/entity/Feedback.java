@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -14,13 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,27 +43,41 @@ public class Feedback implements Serializable   {
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column(name="idFeedback")  
 	private Integer idFeedback;
-	//@NotBlank(message="The title must be written\"")
-	//@Size(max=50)
+
+	@NotBlank(message="The title must be written\"")
+	@Size(max=50)
 	private String title;
-	//@NotBlank(message="The description must be written")
-	//@Size(max=4000 , message="The total number of characters cannot be exceeded")
+	
+
+	
+
+	
+	@NotBlank(message="The description must be written")
+	@Size(max=4000 , message="The total number of characters cannot be exceeded")
+
 	private String description;
+	
+	
 	@Temporal(TemporalType.DATE)
-	//@DateTimeFormat(pattern = "yyy-MM-dd")
-	//@NotNull(message = "Please provide a date.")
+
+	@DateTimeFormat(pattern = "yyy-MM-dd")
 	private Date sendingDate;
+	
+	
 	@Temporal(TemporalType.DATE)
-	//@DateTimeFormat(pattern = "yyy-MM-dd")
-	//@NotNull(message = "Please provide a date.")
+	@DateTimeFormat(pattern = "yyy-MM-dd")
 	private Date lastModificationDate;
-	//@Min(value = 1, message = " should not be less than 1")
-    //@Max(value = 5, message = " should not be greater than 5")
+	
+
+	
+	@Min(value = 1, message = " should not be less than 1")
+    @Max(value = 5, message = " should not be greater than 5")
 	private Integer stars;
 	
 	@ManyToOne

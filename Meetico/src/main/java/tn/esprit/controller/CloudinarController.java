@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import tn.esprit.dto.Message;
 import tn.esprit.entity.Picture;
 import tn.esprit.service.CloudinaryService;
 import tn.esprit.service.PictureService;
-import tn.esprit.tdo.Message;
+
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -42,7 +43,9 @@ public class CloudinarController {
 	        BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
 	     
 	        if(bi == null){
-	            return new ResponseEntity(new Message("invalid image"), HttpStatus.BAD_REQUEST);
+
+	            return new ResponseEntity(new Message("imagen no válida"), HttpStatus.BAD_REQUEST);
+
 	        }
 	        Map result = cloudinaryService.upload(multipartFile);
 	        Picture picture =
@@ -50,18 +53,22 @@ public class CloudinarController {
 	                        (String)result.get("url"),
 	                        (String)result.get("public_id"));
 	        pictureService.save(picture);
+
 	        return new ResponseEntity( new Message("add successfully"), HttpStatus.OK);
+
 	    }
 	    
 
 	    @DeleteMapping("/delete/{id}")
 	    public ResponseEntity<?> delete(@PathVariable("id") int id)throws IOException {
 	        if(!pictureService.exists(id))
+
 	            return new ResponseEntity(new Message("does not exist"), HttpStatus.NOT_FOUND);
 	        Picture picture = pictureService.getOne(id).get();
 	        Map result = cloudinaryService.delete(picture.getPictureId());
 	        pictureService.delete(id);
 	        return new ResponseEntity(new Message("deleted image"), HttpStatus.OK);
+
 	    }
 
 }

@@ -2,7 +2,9 @@ package tn.esprit.controller;
 
 
 
+
 import java.io.File;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +23,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.itextpdf.text.pdf.qrcode.WriterException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.entity.Reclamation;
+
 import tn.esprit.entity.reclamationPriority;
 import tn.esprit.entity.reclamationType;
+
 import tn.esprit.service.EmailServiceImpl;
+
+
+
 import tn.esprit.service.Ireclamation;
 import tn.esprit.service.ReclamationExporter;
 
@@ -42,11 +51,15 @@ import tn.esprit.service.ReclamationExporter;
 @RestController
 @Api(tags = "Gestion reclamation")
 @RequestMapping("/Reclamation")
+@CrossOrigin
 public class reclamationController {
+	
+	
 	
 	@Autowired
 	Ireclamation reclamationservice;
 	
+
 	@Autowired
 	ReclamationExporter ex;
 	
@@ -54,12 +67,17 @@ public class reclamationController {
 	EmailServiceImpl emailServiceImpl;
 	
 	
-	@PostMapping("/AddAffectReclamationUser/{userId}/{idPicture}")
+
+	@PostMapping("/AddAffectReclamationUser/{userId}/{pictureId}")
 	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
 	@ResponseBody
-	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,@PathVariable(name="userId") Long userId,@PathVariable(name="idPicture")Integer idPicture){
-		return reclamationservice.addAffectReclamationUser(reclamation, userId, idPicture);
+	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation, @PathVariable(name="userId") Long userId,@PathVariable(name="pictureId") Integer pictureId){
+		
+		
+		return reclamationservice.addAffectReclamationUser(reclamation, userId, pictureId);
+
 	}
+	
 	
 	@PutMapping("/UpdateReclamation")
 	@ApiOperation(value = "Update reclamation")
@@ -191,7 +209,21 @@ public class reclamationController {
 		reclamationservice.answerAdmin(reclamation);
 		}
 	}
+	@PutMapping("/answerReclamation/{repence}/{idReclamation}")
+	@ApiOperation(value = "answer reclamation")
+	@ResponseBody
+	public void answerReclamation(@PathVariable(name = "repence") String repence,@PathVariable(name = "idReclamation") Integer idReclamation) {
+		reclamationservice.answerReclamation(repence, idReclamation);
+	}
 	
 	
+	
+	@GetMapping("/get")
+	@ApiOperation(value = "get")
+	@ResponseBody
+	public 	float getReclamationsByPriorityAndType(){
+		return reclamationservice.statReclamationsTreterNonTreter();
+
+	}
 }
 	

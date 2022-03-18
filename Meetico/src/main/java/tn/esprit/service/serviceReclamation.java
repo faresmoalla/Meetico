@@ -1,16 +1,23 @@
 package tn.esprit.service;
 
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
 import java.util.List;
 import java.util.Set;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.Picture;
@@ -30,20 +37,22 @@ import tn.esprit.repository.reclamationRepository;
 
 @Service
 @Slf4j
+@CrossOrigin
 public class serviceReclamation implements Ireclamation {
 	@Autowired
 	reclamationRepository reclamationrepository;
 	@Autowired
 	UserRepository userrepository;
-	
+
 	@Autowired
 	CloudinaryService cloudinartservice; 
 	@Autowired
 	PictureRepository  picturerepository;
-	
+
 
 	@Override
-	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId,Integer idPicture) {
+	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId,Integer idPicture){
+
 		User user = userrepository.findById(userId).orElse(null);
 		Picture P= picturerepository.findById(idPicture).orElse(null);
 		reclamation.setUser(user);
@@ -51,6 +60,8 @@ public class serviceReclamation implements Ireclamation {
 		return reclamationrepository.save(reclamation);
 	}
 
+
+	
 	@Override
 	public Reclamation retrieveReclamation(Integer idReclamation) {
 		
@@ -65,10 +76,12 @@ public class serviceReclamation implements Ireclamation {
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
 		R.setDescription(reclamation.getDescription());
 		R.setLastModificationDate(reclamation.getLastModificationDate());
-		R.setPicture(reclamation.getPicture());
 		R.setPriority(reclamation.getPriority());
 		R.setType(reclamation.getType());
+
 		R.setLastModificationDate(new Date(string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
+		R.setPicture(reclamation.getPicture());
+
 		reclamationrepository.save(R);	
 	}
 	
@@ -144,6 +157,7 @@ public class serviceReclamation implements Ireclamation {
 	}
 
 	@Override
+
 	public float statWatingReclamationByPriorityAndType(reclamationType type ,reclamationPriority priority) {
 		Integer n=0 ,tn;
 		float P;
@@ -200,9 +214,36 @@ public class serviceReclamation implements Ireclamation {
 	}
 	
 
+	public void answerReclamation(String answer, Integer idReclamation) {
+		Reclamation r=retrieveReclamation(idReclamation);
+		r.setAnswerAdmin(answer);
+		//r.setAnswerDate();
+		if(r.getStatus() == false) {
+			r.setStatus(true);
+			}
+			reclamationrepository.save(r);
+	}
 
 
+
+
+	@Override
+	public float statReclamationsTreterNonTreter() {
+		Integer f= reclamationrepository.countAllReclamationFalse();
+		Integer r=(int) reclamationrepository.count();
+			float	total=(f*r)/100;
+		return total;
+	}
 	
+	
+	
+	
+	
+
+	   
+
+	 
+	    
 
 	
 

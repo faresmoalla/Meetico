@@ -28,6 +28,7 @@ public interface reclamationRepository extends JpaRepository<Reclamation,Integer
 	 List<Reclamation> getAllReclamationsClient(@Param(value = "userId") Long userId);
 	@Query("SELECT r FROM Reclamation r join r.user u WHERE u.userId = :userId and r.status =1")
 	 Set<Reclamation> getAllReclamationsClientByStatus(@Param(value ="userId") Long userId);
+
 	
 	
 	@Query("SELECT count(*) FROM Reclamation r WHERE r.status = false")
@@ -42,6 +43,11 @@ public interface reclamationRepository extends JpaRepository<Reclamation,Integer
 	 Integer nbrWaitingReclamationByPriorityAndType(@Param(value ="priority")reclamationPriority priority,reclamationType type );
 	
 	
+
+	@Query("SELECT count(*) FROM Reclamation r WHERE r.status=false")
+	 Integer countAllReclamationFalse();
+	
+
 	
 	
 	

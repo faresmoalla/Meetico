@@ -76,6 +76,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	private Set<Feedback> feedbackss;
 	
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Set<Feedback> feedbacks;
