@@ -19,5 +19,9 @@ public interface LikeRepository extends JpaRepository<PostLike, Long> {
 			)
 	PostLike GetLike(@Param("userId") Long idUser,@Param("idPublication") Long idPub) ;
 	
+
+	
+	
+	
 	
 }

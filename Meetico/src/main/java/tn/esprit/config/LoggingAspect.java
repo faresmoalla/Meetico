@@ -16,7 +16,9 @@ public class LoggingAspect {
 	//@Before("execution(* tn.esprit.service.UserService.*(..))")
 	// @Before("execution(* tn.esprit.service.*.*(..))")
 	
-	@Before("execution(* tn.esprit.service.*.ajouter*(..))")
+	
+	////////////Before
+	@Before("execution(* tn.esprit.service.*.add*(..))")
 	public void logMethodExit(JoinPoint joinPoint) {
 	String name = joinPoint.getSignature().getName();
 	log.info("/////////////////////////Début Execution " + name + " : ");

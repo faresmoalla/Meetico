@@ -63,6 +63,8 @@ public class FileController {
     }).collect(Collectors.toList());
     return ResponseEntity.status(HttpStatus.OK).body(files);
   }
+  
+  
   @GetMapping("/files/{id}")
   public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
     FileDB fileDB = storageService.getFile(id);

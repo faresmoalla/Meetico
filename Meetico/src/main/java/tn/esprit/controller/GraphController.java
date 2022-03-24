@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import tn.esprit.entity.Comment;
 import tn.esprit.entity.Publication;
@@ -17,6 +18,7 @@ import tn.esprit.repository.PublicationRepository;
 import tn.esprit.service.PublicationServiceImpl;
 
 @Controller
+
 public class GraphController {
 
 	@Autowired
@@ -24,7 +26,7 @@ public class GraphController {
 	@Autowired
 	PublicationRepository pubrepo;
 	
-
+/*
 	
 	@GetMapping("/displayBarGraph")
 	public String barGraph(Model model) {
@@ -39,8 +41,18 @@ public class GraphController {
 		 static int nombre = p1.getComments().size();*/
 		/*for (Publication publication : pub) {
 			surveyMap.put("test",publication.getComments().size());
-		}*/
+		}
 		surveyMap.put("Java", 20);
+		surveyMap.put("Dev oops", 25);
+		surveyMap.put("Python", 20);
+		surveyMap.put(".Net", 15);
+		model.addAttribute("surveyMap", surveyMap);
+		return "barGraph";
+	}*/
+	@GetMapping("/displayBarGraph")
+	public String barGraph(Model model) {
+		Map<String, Integer> surveyMap = new LinkedHashMap<>();
+		surveyMap.put("Java", 40);
 		surveyMap.put("Dev oops", 25);
 		surveyMap.put("Python", 20);
 		surveyMap.put(".Net", 15);

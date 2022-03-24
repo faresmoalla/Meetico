@@ -1,38 +1,47 @@
 package tn.esprit.PDFGenerator;
-/*
+
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import tn.esprit.entity.Publication;
+import tn.esprit.repository.PublicationRepository;
 
 
-import tn.esprit.PDFGenerator.*;
 
-@Controller
+
+
+@RestController
+
 public class PDFExportController {
+@Autowired
+PublicationRepository pubRepo;
+   
 
-    private final PDFGeneratorService pdfGeneratorService;
+    @GetMapping(value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> DriverReport() throws IOException {
+        List<Publication>drivers = (List<Publication>) pubRepo.findAll();
 
-    public PDFExportController(PDFGeneratorService pdfGeneratorService) {
-        this.pdfGeneratorService = pdfGeneratorService;
-    }
+        ByteArrayInputStream bis = PDFGeneratorService.customerPDFReport(drivers);
 
-    @GetMapping("/pdf/generate")
-    public void generatePDF(HttpServletResponse response) throws IOException {
-        response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=customers.pdf");
 
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-        response.setHeader(headerKey, headerValue);
-
-        this.pdfGeneratorService.export(response);
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
     }
 }
-*/

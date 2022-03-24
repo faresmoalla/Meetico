@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -79,11 +81,11 @@ public class User implements Serializable {
 	private Set<Trip> trips;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy="user")
 	@JsonIgnore
 	private Set<Comment> comments;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="userr")
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy="userr")
 	@JsonIgnore
 	private Set<Publication> publications ;
 
