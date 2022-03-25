@@ -4,6 +4,7 @@ package tn.esprit.service;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -147,18 +148,22 @@ import tn.esprit.entity.Trip;
 	        addRows(table);
 	         
 	        document.add(table);
-	        /*
+	        
 	        List<FileDB> files =trip.getFiles();
 	        for(FileDB f : files) {
 	        	byte[] byt =f.getData();
 	        	//ImageIcon imageIcon = new ImageIcon(byt);
 	        	//imageIcon.getImage();
+	        	
 	        	ByteArrayInputStream bais = new ByteArrayInputStream(byt);
-	        	BufferedImage img = ImageIO.read(bais);
-	        	Image image = img;
-					document.add( image);
+	        	BufferedImage img = ImageIO.read(bais);	  
+	        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        	ImageIO.write(img, "png", baos);
+	        	Image iTextImage = Image.getInstance(baos.toByteArray());
+	  			document.add( iTextImage);
+	        	
 				
-	        }*/
+	        }
 	        document.close();
 	         
 	    
