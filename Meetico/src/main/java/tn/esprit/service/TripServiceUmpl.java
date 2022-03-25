@@ -1,14 +1,19 @@
 package tn.esprit.service;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +24,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Gender;
+import tn.esprit.entity.Note;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 import tn.esprit.repository.FileDBRepository;
@@ -42,6 +57,8 @@ public class TripServiceUmpl implements ITripService{
 	FileDBRepository fileRepo;
 	@Autowired
 	EmailServiceImpl emailsend;
+	@Autowired
+	FirebaseMessagingService firebasemessaging;
 	
 
 	@Override
@@ -122,12 +139,31 @@ public class TripServiceUmpl implements ITripService{
 
 	@Override
 	public Trip ajouttrip(Trip trip,Long idUSer) {
+		List<User> users = userRepo.findAll();
 		String d=trip.getDestination();
 		String dm=d.toUpperCase();
 		trip.setDestination(dm);
 		User u = userRepo.findById(idUSer).orElse(null);
 		trip.setUser(u);
-		return tripRepo.save(trip);		
+		HashMap<String,String> data =new HashMap();
+		data.put("key1", "value1");
+		data.put("key2", "value2");
+		data.put("key3", "value3");
+		data.put("key4", "value4");
+		Note note =new Note("voyage ajouté","le voyage vers :"+trip.getDestination(),data);
+		 tripRepo.save(trip);
+		 try {
+			 //for (User us : users) {
+				 String token = "all";
+				firebasemessaging.sendNotification(note,token);
+			 //}
+			
+		} catch (FirebaseMessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		 return trip;
 	}
 
 	@Override
@@ -252,7 +288,7 @@ public class TripServiceUmpl implements ITripService{
 		
 		
 	}
-	@Scheduled(cron = "*/20 * * * * *")
+	@Scheduled(cron = "*/60 * * * * *")
 	@Override
 	public String meilleurDestination() {
 		List<Trip> trip =tripRepo.findAll();
@@ -328,7 +364,7 @@ public class TripServiceUmpl implements ITripService{
 		
 		return s;
 	}
-	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "*/60 * * * * *")
 	@Override
 	public List<String> nbrdevisitepourchaquedestination() {
 		// TODO Auto-generated method stub
@@ -363,6 +399,53 @@ public class TripServiceUmpl implements ITripService{
 		
 		return ls;
 	}
+
+	@Override
+	public void exporttripToPdf(HttpServletResponse response, Integer idtrip) {
+		// TODO Auto-generated method stub
+		Trip trip =tripRepo.findById(idtrip).orElse(null);
+		// TODO Auto-generated method stub
+		Document document = new Document();
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream("trip.pdf"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String id ="ID trip :"+trip.getIdTrip().toString();
+		String destination ="destination : "+trip.getDestination();
+		String startdate="start date: "+trip.getStartDate().toString();
+		String enddate="End Date : "+trip.getEndDate().toString();
+		String objet = "objet : "+trip.getObject();
+		String entrepreneur="Entrepreneur : "+trip.getUser().getEmail();
+		document.open();
+		Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+		Chunk chunk1 = new Chunk(id, font);
+		Chunk chunk2 = new Chunk(destination, font);
+		Chunk chunk3 = new Chunk(startdate, font);
+		Chunk chunk4 = new Chunk(enddate, font);
+		Chunk chunk5 = new Chunk(objet, font);
+		Chunk chunk6 = new Chunk(entrepreneur, font);
+
+		try {
+			document.add(chunk1);
+			document.add(chunk2);
+			document.add(chunk3);
+			document.add(chunk4);
+			document.add(chunk5);
+			document.add(chunk6);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		document.close();
+		
+	}
+
+	
 	
 	
 		

@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.itextpdf.text.Document;
 
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
@@ -15,6 +19,7 @@ import tn.esprit.entity.User;
 
 public interface ITripService {
 	public Trip ajouttrip(Trip trip,Long idUser);
+	public void exporttripToPdf(HttpServletResponse response,Integer idtrip);
 	public void affecterlisteutilisateurautrip(List<Long> idutilisateurs,Integer idtrip);
 	public void addTrip(Trip trip,List<Long> idUser, Long idEnt);
 	public void updateTrip(Trip trip,Integer idTrip);
@@ -29,5 +34,6 @@ public interface ITripService {
 	public String meilleurDestination();
 	public List<String> nbrDeVoyagePourChaqueUser();
 	public List<String> nbrdevisitepourchaquedestination();
+	
 
 }

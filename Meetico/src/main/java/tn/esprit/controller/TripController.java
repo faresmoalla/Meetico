@@ -4,13 +4,17 @@ package tn.esprit.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +37,8 @@ import tn.esprit.repository.TripRepository;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.service.EmailServiceImpl;
 import tn.esprit.service.ITripService;
+import tn.esprit.service.TripPDF;
+import tn.esprit.service.TripPDFExporter;
 import tn.esprit.service.TripServiceUmpl;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +60,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.entity.FileDB;
@@ -186,4 +195,42 @@ public class TripController {
 	public List<String> nbrvisitepourchaquedestination(){
 		return tripService.nbrdevisitepourchaquedestination();
 	}
+	
+	
+	@GetMapping("/list-trip-to-pdf")
+		  
+	public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+		        response.setContentType("application/pdf");
+		        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		        String currentDateTime = dateFormatter.format(new Date());
+		         
+		        String headerKey = "Content-Disposition";
+		        String headerValue = "attachment; filename=" + currentDateTime + ".pdf";
+		        response.setHeader(headerKey, headerValue);
+		         
+		        List<Trip> listUsers = tripService.affichTrip();
+		         
+		        TripPDFExporter exporter = new TripPDFExporter(listUsers);
+		        exporter.export(response);
+		         
+ }
+	@GetMapping("/trip-to-pdf/{idtrip}")
+	  
+	public void exporttrpToPDF(HttpServletResponse response, @PathVariable("idtrip") Integer idtrip) throws DocumentException, IOException, URISyntaxException {
+		        response.setContentType("application/pdf");
+		        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		        String currentDateTime = dateFormatter.format(new Date());
+		         
+		        String headerKey = "Content-Disposition";
+		        String headerValue = "attachment; filename=" + currentDateTime + ".pdf";
+		        response.setHeader(headerKey, headerValue);
+		        Trip trip =tripService.affichDetailTrip(idtrip);
+		         
+		        TripPDF exporter = new TripPDF(trip);
+		        exporter.export(response);
+		         
+		        
+		        
+		         
+ }
 }

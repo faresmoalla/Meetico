@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.itextpdf.text.Image;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class FileDB {
   private byte[] data;
   @ManyToOne
   private Trip trip;
+ 
   public FileDB() {
   }
   public FileDB(String name, String type, byte[] data) {
