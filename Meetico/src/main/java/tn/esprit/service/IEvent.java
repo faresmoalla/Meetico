@@ -14,7 +14,7 @@ public interface IEvent {
 	boolean deleteEvent(int idEvent);
 
 	Event getEvent(int idEvent);
-	
+	public float stat(Integer idEvent) ;
 	Event updateEvent(int idEvent,Event event);
 	public void assignUserEvent(Long userId,Integer idEvent);
 	public void deletUserFromEvent (Long userId,int  idEvent) ;

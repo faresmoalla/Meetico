@@ -99,7 +99,8 @@ public class User implements Serializable {
 	@ManyToMany(mappedBy="users" , cascade = CascadeType.ALL)
 	private Set<Event> events;
 	
-	
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy="user")
+//	private Set<Notification> notifications;
 	
 	
 	

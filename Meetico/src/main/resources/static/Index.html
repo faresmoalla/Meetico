@@ -1,53 +1,60 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-      <title>Welcome to Spring Boot Chat Application</title>
-      <link rel="stylesheet" href="/css/main.css" />
-  </head>
-  <body>
-    <noscript>
-      <h2>Sorry! Your browser doesn't support Javascript</h2>
-    </noscript>
-
-    <div id="username-page">
-        <div class="username-page-container">
-            <h1 class="title">Enter your username</h1>
-            <form id="usernameForm" name="usernameForm">
-                <div class="form-group">
-                    <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="accent username-submit">Start Chatting</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="chat-page" class="hidden">
-        <div class="chat-container">
-            <div class="chat-header">
-                <h2>Welcome to Spring Boot Chat Application</h2>
-            </div>
-            <div class="connecting">
-                Connecting...
-            </div>
-            <ul id="messageArea">
-
-            </ul>
-            <form id="messageForm" name="messageForm">
-                <div class="form-group">
-                    <div class="input-group clearfix">
-                        <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
-                        <button type="submit" class="primary">Send</button>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello WS</title>
+     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
+     <script src="/webjars/jquery/jquery.min.js"></script> 
+     <script src="/webjars/sockjs-client/sockjs.min.js"></script> 
+     <script src="/webjars/stomp-websocket/stomp.min.js"></script> 
+    <script src="/scripts.js"></script>
+</head>
+<body>
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <input type="text" id="message" class="form-control" placeholder="Enter your message here...">
                     </div>
-                </div>
-            </form>
+                    <button id="send" class="btn btn-default" type="button">Send</button>
+                </form>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-12">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="private-message">Private Message</label>
+                        <input type="text" id="private-message" class="form-control" placeholder="Enter your message here...">
+                    </div>
+                    <button id="send-private" class="btn btn-default" type="button">Send Private Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="message-history" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Messages
+                            <span
+                                    id="notifications"
+                                    style="
+                                    color: white;
+                                    background-color: red;
+                                    padding-left: 15px;
+                                    padding-right: 15px;">
+                            </span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="messages">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="/js/main.js"></script>
-  </body>
+</body>
 </html>
