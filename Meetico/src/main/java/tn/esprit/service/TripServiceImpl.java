@@ -1,30 +1,9 @@
 package tn.esprit.service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -32,8 +11,25 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.vonage.client.VonageClient;
+import com.vonage.client.sms.SmsSubmissionResponse;
+import com.vonage.client.sms.messages.TextMessage;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import org.springframework.stereotype.Service;
 import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Gender;
 import tn.esprit.entity.Note;
@@ -43,24 +39,39 @@ import tn.esprit.repository.FileDBRepository;
 import tn.esprit.repository.TripRepository;
 import tn.esprit.repository.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-
+import com.vonage.client.VonageClient;
+import com.vonage.client.sms.MessageStatus;
+import com.vonage.client.sms.SmsSubmissionResponse;
+import com.vonage.client.sms.messages.TextMessage;
 
 @Service
 @Slf4j
-public class TripServiceUmpl implements ITripService{
-	@Autowired
-	UserRepository userRepo;
-	@Autowired
-	TripRepository tripRepo;
-	@Autowired
-	FileDBRepository fileRepo;
-	@Autowired
-	EmailServiceImpl emailsend;
-	@Autowired
-	FirebaseMessagingService firebasemessaging;
+@SuppressWarnings("deprecation")
+public class TripServiceImpl implements ITripService{
 	
 
+	
+	@Autowired
+	private UserRepository userRepo;
+	
+	@Autowired
+	private TripRepository tripRepo;
+	
+	@Autowired
+	private FileDBRepository fileRepo;
+	
+	@Autowired
+	private EmailServiceImpl emailsend;
+	/*
+	@Autowired
+	private FirebaseMessagingService firebasemessaging;
+	*/
 	@Override
 	public void addTrip(Trip trip, List<Long> idUsers,Long idEnt) {
 		Trip t = ajouttrip(trip, idEnt);					
@@ -70,7 +81,7 @@ public class TripServiceUmpl implements ITripService{
 			userRepo.save(u);
 		}
 		User entrepreneur =t.getUser();
-		List <User> ustrip =(List<User>) userRepo.findAllById(idUsers);
+//		List <User> ustrip =(List<User>) userRepo.findAllById(idUsers);
 		List<User> users =afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
 		int day =t.getStartDate().getDate();
 		int month =t.getStartDate().getMonth()+1;
@@ -145,24 +156,55 @@ public class TripServiceUmpl implements ITripService{
 		trip.setDestination(dm);
 		User u = userRepo.findById(idUSer).orElse(null);
 		trip.setUser(u);
-		HashMap<String,String> data =new HashMap();
+		tripRepo.save(trip);
+		/*
+		Notification notification
+		= Notification
+                .builder()
+                .setTitle("voyage ajouté")
+                .setBody("le voyage est vers :"+trip.getDestination())
+                .build();*/
+		/*
+		for(User ur :users) {
+			String number ="+216"+String.valueOf(ur.getPhoneNumber());
+			log.info(number);
+			VonageClient client = VonageClient.builder().apiKey("03bc878e").apiSecret("wUYDWlKJhsWr8Mt2").build();
+			
+			TextMessage message = new TextMessage("Meetico", number,
+					"un voayge a été ajouté vers "+trip.getDestination()+"de la part de l'entrepreneur"+u.getEmail());
+
+			SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
+
+			if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
+				log.info("Message sent successfully.");
+			} else {
+				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
+			}
+		}*/
+		
+		
+
+			// Send a message to devices subscribed to the combination of topics
+			// specified by the provided condition.
+			
+		/*HashMap<String,String> data =new HashMap<String, String>();
 		data.put("key1", "value1");
 		data.put("key2", "value2");
 		data.put("key3", "value3");
 		data.put("key4", "value4");
 		Note note =new Note("voyage ajouté","le voyage vers :"+trip.getDestination(),data);
-		 tripRepo.save(trip);
-		 try {
+		tripRepo.save(trip);
+		try {
 			 //for (User us : users) {
-				 String token = "all";
+			 /*UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                     .getPrincipal();
+			 	String username = userDetails.getUsername();
 				firebasemessaging.sendNotification(note,token);
-			 //}
-			
+			 }
 		} catch (FirebaseMessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		 
+		}*/
 		 return trip;
 	}
 
@@ -175,7 +217,7 @@ public class TripServiceUmpl implements ITripService{
 			userRepo.save(u);
 		}
 		User entrepreneur =t.getUser();
-		Set <User> ustrip =t.getUsers();
+//		Set <User> ustrip =t.getUsers();
 		List<User> users =afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
 		int day =t.getStartDate().getDate();
 		int month =t.getStartDate().getMonth()+1;
@@ -202,9 +244,8 @@ public class TripServiceUmpl implements ITripService{
 	}
 
 	@Override
-	public List<User> afficherutilisateurbymatching(String destination,Date startdate,String city) {
-		
-		return tripRepo.matchingutilisateur(destination,startdate,city);
+	public List<User> afficherutilisateurbymatching(String destination, Date startdate, String city) {
+		return tripRepo.matchingutilisateur(destination, startdate, city);
 	}
 
 	@Override
@@ -288,7 +329,40 @@ public class TripServiceUmpl implements ITripService{
 		
 		
 	}
-	@Scheduled(cron = "*/60 * * * * *")
+	@Scheduled(fixedRate = 3600000)
+	@Override
+	public String favoriteDestination() {
+		List<Trip> trip =tripRepo.findAll();
+		
+		String s= new String();
+		//List<String> ls= new ArrayList<>();
+		List<Integer> ns=new ArrayList<>();
+		String destination=new String();
+		int max_value = 0;
+		for(Trip t:trip) {
+			int n = 0 ;
+			for(Trip tr:trip) {
+				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
+					n++;
+				}
+				ns.add(n);
+				max_value= Collections.max(ns);
+				if(n==max_value) {
+					destination=t.getDestination();
+					}
+				
+			};
+				
+			
+			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
+			//ls.add(s);
+		}
+		s="The favorite destination was " + destination + " with " + max_value + " visit(s).";
+		
+		log.info(s);
+		
+		return s;
+	}
 	@Override
 	public String meilleurDestination() {
 		List<Trip> trip =tripRepo.findAll();
@@ -316,15 +390,15 @@ public class TripServiceUmpl implements ITripService{
 			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
 			//ls.add(s);
 		}
-		s="la destination la plus visitée est :"+destination+" "+max_value+" fois";
+		s="The favorite destination was " + destination + " with " + max_value + " visit(s).";
 		
 		log.info(s);
 		
-		return s;
+		return destination;
 	}
 
 	@Override
-	public List<String> nbrDeVoyagePourChaqueUser() {
+	public List<String> userDestionationsVisitsCount() {
 		List<User> users =tripRepo.listdesutilisateurinscritdansvoyage();
 		//ArrayList<Set<Trip>> listOfTrip = new ArrayList<Set<Trip>>();
 		 //ArrayList<Trip>> trips =new ArrayList<>();
@@ -353,7 +427,7 @@ public class TripServiceUmpl implements ITripService{
 					sii ="user :" +i+" est voyager au "+destination+" "+n+" fois"  ;
 				}
 				if(s.contains(sii)){
-					log.info("traiement encours ");
+//					log.info("traiement encours ");
 				}else {
 					s.add(sii);
 				}
@@ -364,9 +438,9 @@ public class TripServiceUmpl implements ITripService{
 		
 		return s;
 	}
-	@Scheduled(cron = "*/60 * * * * *")
+	@Scheduled(fixedRate = 3600000)
 	@Override
-	public List<String> nbrdevisitepourchaquedestination() {
+	public List<String> destionationVisitorsCount() {
 		// TODO Auto-generated method stub
 		List<Trip> trip =tripRepo.findAll();
 		
@@ -379,7 +453,7 @@ public class TripServiceUmpl implements ITripService{
 			for(Trip tr:trip) {
 				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
 					n++;
-					s =t.getDestination()+" est visité "+n+" fois";
+					s = t.getDestination() + " was visited " + n + " time(s).";
 				}
 				
 			}
@@ -387,7 +461,7 @@ public class TripServiceUmpl implements ITripService{
 			
 			if(ls.contains(s))
 			{
-				log.info("traitement en cours");
+//				log.info("traitement en cours");
 			}else {
 				log.info(s);
 				ls.add(s);
@@ -399,7 +473,7 @@ public class TripServiceUmpl implements ITripService{
 		
 		return ls;
 	}
-
+/*
 	@Override
 	public void exporttripToPdf(HttpServletResponse response, Integer idtrip) {
 		// TODO Auto-generated method stub
@@ -444,15 +518,5 @@ public class TripServiceUmpl implements ITripService{
 		document.close();
 		
 	}
-
-	
-	
-	
-		
-	
-
-	
-
-	
-
+*/
 }
