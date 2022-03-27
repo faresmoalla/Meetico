@@ -2,6 +2,7 @@ package tn.esprit.meetico.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import tn.esprit.meetico.config.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Comment;
 import tn.esprit.meetico.entity.Publication;
 import tn.esprit.meetico.entity.SmsRequest;
+import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.PublicationRepository;
+import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.SmsService;
 
@@ -31,19 +34,24 @@ import tn.esprit.meetico.service.SmsService;
 public class CommentController {
 	@Autowired
 	CommentServiceImpl commentService;
-
+@Autowired
+UserRepository userRepo;
 	@ApiOperation(value = "Ajouter Commentaire")
-	@PostMapping("/add-comment/{idPublication}/{idUtilisateur}")
+	@PostMapping("/add-comment/{idPublication}")
 	public void addComment(@RequestBody Comment f, @PathVariable("idPublication") Long idPublication,
-			@PathVariable("idUtilisateur") Long idUtilisateur) {
-		commentService.addcomments(f, idPublication, idUtilisateur);
+			HttpServletRequest request) {
+	    String username = request.getUserPrincipal().getName();
+        User user = userRepo.findByUsername(username);
+		commentService.addcomments(f, idPublication, user);
 	}
 
 	@ApiOperation(value = "Update Commentaire")
-	@PutMapping("/{idComment}/{idPublication}/{idUtilisateur}")
+	@PutMapping("/{idComment}/{idPublication}")
 	public void updateComment(@RequestBody Comment f, @PathVariable("idComment") Long idComment,
-			@PathVariable("idUtilisateur") Long idUtilisateur) {
-		commentService.updateComment(f, idComment, idUtilisateur);
+			HttpServletRequest request) {
+		 String username = request.getUserPrincipal().getName();
+	        User user = userRepo.findByUsername(username);
+		commentService.updateComment(f, idComment, user);
 
 	}
 

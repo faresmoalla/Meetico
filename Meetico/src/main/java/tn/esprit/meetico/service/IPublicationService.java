@@ -7,8 +7,8 @@ public interface IPublicationService {
 	public void addPublication(Publication publication,  User user);
 	public void deletePublication(Long idUser, Long idPublication) ;
 	public void updatePublication(Long idUser, Long idPublication);
-	public void addLike(Long idPublicaiton, Long idUser);
-	public void addDislike(Long idPublicaiton, Long idUser);
+	public void addLike(Long idPublicaiton,User user);
+	public void addDislike(Long idPublicaiton, User user);
 	public int nbrLikeByPub(Long idPublicaiton);
 	public int nbrDisLikeByPub(Long idPublicaiton);
 	public int nbrCommentsByPu(Long idPublicaiton);

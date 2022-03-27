@@ -70,10 +70,10 @@ public class CommentServiceImpl implements ICommentService {
 
 	////////////////////// Ajouter Commentaire
 	@Override
-	public void addcomments(Comment comment, Long idpub, Long idUser) {
+	public void addcomments(Comment comment, Long idpub, User user) {
 		Publication pub = publciationRepo.findById(idpub).orElse(null);
 		
-		User user = userRepo.findById(idUser).orElse(null);
+	//	User user = userRepo.findById(idUser).orElse(null);
 		
 		String commentWords = comment.getContents();
 		List<String> badwords1 = new ArrayList<String>();
@@ -92,7 +92,7 @@ public class CommentServiceImpl implements ICommentService {
 			comment.setContents(encodedPass);
 			// comment.setContents("*****");
 			commentRepo.save(comment);
-			sendsms(user.getPhoneNumber(), 0);
+			sendsms(user.getTel(), 0);
 			Alert a1 = new Alert();
 			a1.setUtilis(user);
 			alertrepo.save(a1);
@@ -105,17 +105,17 @@ public class CommentServiceImpl implements ICommentService {
 		simpleMailMessage.setText(comment.getContents());
 		javaMailSender.send(simpleMailMessage);
 		if (user.getAlerts().size() >= 3) {
-			sendsms2(user.getPhoneNumber(), 0);
+			sendsms2(user.getTel(), 0);
 			userRepo.delete(user);
 		}
 	}
 
 	///////////////////// Modifier Commentaire ///////////////
 	@Override
-	public void updateComment(Comment comment, Long idComment, Long idUser) {
+	public void updateComment(Comment comment, Long idComment, User user) {
 		Date currentSqlDate = new Date(System.currentTimeMillis());
 		Comment com = commentRepo.findById(idComment).orElse(null);
-		User user = userRepo.findById(idUser).orElse(null);
+		//User user = userRepo.findById(idUser).orElse(null);
 		com.setIdComment(idComment);
 		com.setDate(currentSqlDate);
 		com.setUser(user);
@@ -132,14 +132,14 @@ public class CommentServiceImpl implements ICommentService {
 			com.setContents(encodedPass);
 
 			commentRepo.save(com);
-			sendsms(user.getPhoneNumber(), 0);
+			sendsms(user.getTel(), 0);
 			Alert a1 = new Alert();
 			a1.setUtilis(user);
 			alertrepo.save(a1);
 			log.warn("Bad  Word");
 		}
 		if (user.getAlerts().size() >= 3) {
-			sendsms2(user.getPhoneNumber(), 0);
+			sendsms2(user.getTel(), 0);
 			userRepo.delete(user);
 		}
 	}
@@ -183,7 +183,7 @@ public class CommentServiceImpl implements ICommentService {
 
 	//////////////////////////// Api et métiers/////////////
 	@Override
-	public void sendsms(long str, int body) {
+	public void sendsms(String str, int body) {
 		Twilio.init("AC1031db4af6517ccd09f33ef47e73e278", "cf4632728e95b7aedd1b953468ce63b4");
 		try {
 			com.twilio.rest.api.v2010.account.Message message = com.twilio.rest.api.v2010.account.Message
@@ -197,7 +197,7 @@ public class CommentServiceImpl implements ICommentService {
 
 	}
 	@Override
-	public void sendsms2(long str, int body) {
+	public void sendsms2(String str, int body) {
 		Twilio.init("AC1031db4af6517ccd09f33ef47e73e278", "cf4632728e95b7aedd1b953468ce63b4");
 		try {
 			com.twilio.rest.api.v2010.account.Message message = com.twilio.rest.api.v2010.account.Message

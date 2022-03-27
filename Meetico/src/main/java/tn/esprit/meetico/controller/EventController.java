@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Event;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.EventRepo;
+import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.EmailServiceImpl;
 import tn.esprit.meetico.service.IEvent;
 
@@ -45,13 +47,17 @@ IEvent Ievent ;
 EventRepo eventRep ; 
 @Autowired
 EmailServiceImpl e;
-
+@Autowired
+UserRepository userRepo ; 
 @PostMapping("/add-event")
 @ResponseBody
-public void adddEvent(@Valid @RequestBody Event event) throws SendFailedException
+public void adddEvent( @RequestBody Event event , HttpServletRequest request) throws SendFailedException
 {
 	String Email ="yahia006@hotmail.fr";
-	Ievent.addEvent(event) ;
+	String username = request.getUserPrincipal().getName();
+    User user = userRepo.findByUsername(username);
+	Ievent.addEvent(event, user) ;
+	
 	e.sendEmail(Email, "New event", "new event added by ");
 
 }

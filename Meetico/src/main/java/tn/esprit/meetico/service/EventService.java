@@ -36,9 +36,9 @@ public class EventService implements IEvent {
 	
 	
 	@Override
-	public Event addEvent(Event event) {
-		
-		return eventrepo.save(event) ;
+	public void addEvent(Event event, User user) {
+	     event.getUsers().add(user) ;
+		 eventrepo.save(event) ;
 	}
 	
 	

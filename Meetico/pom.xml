@@ -249,5 +249,6 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>spring-docker-demo</finalName>
 	</build>
 </project>

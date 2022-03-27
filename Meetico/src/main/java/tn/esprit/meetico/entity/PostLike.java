@@ -27,9 +27,7 @@ public class PostLike implements Serializable {
 	
 	
 	
-	@ManyToOne
-	@JsonIgnore
-	Comment comment;
+
 	
 	
 	@ManyToOne

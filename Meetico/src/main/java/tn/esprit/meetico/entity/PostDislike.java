@@ -29,9 +29,7 @@ public class PostDislike implements Serializable {
 	private Long idDislike;
 	
 	
-	@ManyToOne
-	@JsonIgnore
-	Comment commentt;
+	
 	
 	@ManyToOne
 	@JsonIgnore

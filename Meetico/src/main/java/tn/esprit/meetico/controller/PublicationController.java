@@ -39,7 +39,7 @@ public class PublicationController {
 	UserRepository userRepo;
 
 	@ApiOperation(value = "Ajouter Publication")
-	@PostMapping("/add-publication/{idUtilisateur}")
+	@PostMapping("/add-publication")
 	public void addPublication(HttpServletRequest request, @RequestBody Publication f) {
         String username = request.getUserPrincipal().getName();
         User user = userRepo.findByUsername(username);
@@ -56,17 +56,22 @@ public class PublicationController {
 		pubService.deletePublication(idUtilisateur, idPublicaiton);
 
 	}
+	
 
 	@ApiOperation(value = " Ajouter ou Supprimer Like Sur Publication")
-	@PutMapping("/addLike/{idPublicaiton}/{idUser}")
-	public void addLike(@PathVariable("idPublicaiton") Long idPublicaiton, @PathVariable("idUser") Long idUser) {
-		pubService.addLike(idPublicaiton, idUser);
+	@PutMapping("/addLike/{idPublicaiton}")
+	public void addLike(@PathVariable("idPublicaiton") Long idPublicaiton, HttpServletRequest request) {
+		 String username = request.getUserPrincipal().getName();
+	        User user = userRepo.findByUsername(username);
+		pubService.addLike(idPublicaiton, user);
 	}
 
 	@ApiOperation(value = "Ajouter Ou Supprimer Dislike Sur Publication")
-	@PutMapping("/addDislike/{idPublicaiton}/{idUser}")
-	public void addDislike(@PathVariable("idPublicaiton") Long idPublicaiton, @PathVariable("idUser") Long idUser) {
-		pubService.addDislike(idPublicaiton, idUser);
+	@PutMapping("/addDislike/{idPublicaiton}")
+	public void addDislike(@PathVariable("idPublicaiton") Long idPublicaiton, HttpServletRequest request) {
+		 String username = request.getUserPrincipal().getName();
+	        User user = userRepo.findByUsername(username);
+		pubService.addDislike(idPublicaiton, user);
 	}
 
 	@ApiOperation(value = "Nombre de Commentaires Sur Publication")

@@ -54,14 +54,9 @@ public class Comment implements Serializable {
 	@JsonIgnore
 	User user;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="comment")
-	@JsonIgnore
-	private Set<PostLike> likes;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="commentt")
-	@JsonIgnore
-	private Set<PostDislike> dislikes;
+	
 
 	@ManyToOne
 	@JsonIgnore

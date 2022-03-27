@@ -8,7 +8,7 @@ import tn.esprit.meetico.entity.User;
 
 
 public interface IEvent {
-	public Event addEvent (Event event) ;
+	public void addEvent(Event event, User user) ; 
 	List<Event> getEvets();
 
 	boolean deleteEvent(int idEvent);

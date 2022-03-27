@@ -65,14 +65,14 @@ public class PublicationServiceImpl implements IPublicationService {
 			publication.setContents(encodedPass);
 			// comment.setContents("*****");
 			publicationrepo.save(publication);
-			commService.sendsms(user.getPhoneNumber(), 0);
+			commService.sendsms(user.getTel(), 0);
 			Alert a1 = new Alert();
 			a1.setUtilis(user);
 			alertrepo.save(a1);
 			log.warn("Bad  Word");
 		}
 		if (user.getAlerts().size() >= 3) {
-			commService.sendsms2(user.getPhoneNumber(), 0);
+			commService.sendsms2(user.getTel(), 0);
 			utiRepo.delete(user);
 		}
 	}
@@ -105,12 +105,12 @@ public class PublicationServiceImpl implements IPublicationService {
 
 ///////////// Like & Dislike//////////
 	@Override
-	public void addLike(Long idPublicaiton, Long idUser) {
+	public void addLike(Long idPublicaiton,User user) {
 		PostLike lk = new PostLike();
 		Publication publication = publicationrepo.findById(idPublicaiton).orElse(null);
-		User user = utiRepo.findById(idUser).orElse(null);
-		PostLike like = likeRepo.GetLike(idPublicaiton, idUser);
-		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton, idUser);
+		//User user = utiRepo.findById(idUser).orElse(null);
+		PostLike like = likeRepo.GetLike(idPublicaiton, user.getUserId());
+		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton,user.getUserId());
 		lk.setPublication(publication);
 		lk.setUtilis(user);
 		if (like == null && dislike == null) {
@@ -125,12 +125,12 @@ public class PublicationServiceImpl implements IPublicationService {
 	}
 
 	@Override
-	public void addDislike(Long idPublicaiton, Long idUser) {
+	public void addDislike(Long idPublicaiton, User user) {
 		PostDislike lk = new PostDislike();
 		Publication publication = publicationrepo.findById(idPublicaiton).orElse(null);
-		User user = utiRepo.findById(idUser).orElse(null);
-		PostLike like = likeRepo.GetLike(idPublicaiton, idUser);
-		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton, idUser);
+		//User user = utiRepo.findById(idUser).orElse(null);
+		PostLike like = likeRepo.GetLike(idPublicaiton, user.getUserId());
+		PostDislike dislike = dislikeRepo.GetDislike(idPublicaiton, user.getUserId());
 		lk.setPublication(publication);
 		lk.setUtilis(user);
 		if (like == null && dislike == null) {
