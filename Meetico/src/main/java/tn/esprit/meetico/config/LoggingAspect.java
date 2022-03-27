@@ -11,26 +11,21 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Aspect
 public class LoggingAspect {
-	// private static final Logger logger =
-	// LogManager.getLogger(LoggingAspect.class);
-	// @Before("execution(* tn.esprit.service.UserService.addUser(..))")
-	// @Before("execution(* tn.esprit.service.UserService.*(..))")
+	//private static final Logger logger = LogManager.getLogger(LoggingAspect.class);
+	//@Before("execution(* tn.esprit.service.UserService.addUser(..))")
+	//@Before("execution(* tn.esprit.service.UserService.*(..))")
 	// @Before("execution(* tn.esprit.service.*.*(..))")
-
-	@Before("execution(* tn.esprit.service.*.add*(..))")
+	
+	
+	////////////Before
+	@Before("execution(* tn.esprit.meetico.service.*.add*(..))")
 	public void logMethodExit(JoinPoint joinPoint) {
 	String name = joinPoint.getSignature().getName();
 	log.info("/////////////////////////Début Execution " + name + " : ");
 	
 
 	}
-
-	@Before("execution(* tn.esprit.service.*.add*(..))")
-	public void logMethodExit2(JoinPoint joinPoint) {
-		String name = joinPoint.getSignature().getName();
-		log.info("/////////////////////////Début Execution " + name + " : ");
-
-	}
+	
 
 	/*
 	 * "execution(Modifiers-pattern? Ret-type-pattern Declaring-type-pattern?Name-
