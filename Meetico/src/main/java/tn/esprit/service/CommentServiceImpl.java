@@ -205,4 +205,11 @@ public class CommentServiceImpl implements ICommentService {
 
 	}
 
+
+	@Override
+	public List<Comment> ListAllCommentsAdmin(Long idPublicaiton, String field) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
