@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,11 +41,11 @@ public class Comment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idComment;
 		
-	//@Size(max = 50 )
+	@Size(min=5)
 	 @NotEmpty(message = "the content field is required")
      private String contents;
 	
-	@NotNull
+	//@NotNull
 	@Temporal(TemporalType.DATE)
 	//@NotEmpty(message = "the content field is required")
 	private Date date ;

@@ -45,7 +45,7 @@ public class Publication implements Serializable {
 	@Temporal(TemporalType.DATE)
 	//@NotEmpty(message = "the content field is required")
 	private Date date ;
-	private int nbrLikes;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="publications")
 	@JsonIgnore
 	private Set<Comment> comments;
