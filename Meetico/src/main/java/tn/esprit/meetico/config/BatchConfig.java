@@ -15,10 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-
-import tn.esprit.meetico.batch.PublicationMapper;
-import tn.esprit.meetico.batch.PublicationProcessor;
-import tn.esprit.meetico.batch.PublicationWriter;
 import tn.esprit.meetico.batch.ReclamationMapper;
 import tn.esprit.meetico.batch.ReclamationProcessor;
 import tn.esprit.meetico.batch.ReclamationWriter;
@@ -40,14 +36,14 @@ public class BatchConfig {
 
 	@Autowired
 	private StepBuilderFactory stepBuilderFactory;
-
+	
 	@Bean
 	public ItemReader<Request> requestItemReader() {
 		String sql = "SELECT * FROM request WHERE status = 'UNSENT'";
 		return new JdbcCursorItemReaderBuilder<Request>().name("requestItemReader").sql(sql).dataSource(dataSource)
 				.rowMapper(new RequestMapper()).build();
 	}
-
+	
 	@Bean
 	public ItemProcessor<Request, Request> requestItemProcessor() {
 		return new RequestProcessor();
@@ -57,18 +53,17 @@ public class BatchConfig {
 	public ItemWriter<Request> requestItemWriter() {
 		return new RequestWriter();
 	}
-
+	
 	@Bean
 	public Step requestEmailSenderStep() {
 		return this.stepBuilderFactory.get("emailSenderStep").<Request, Request>chunk(100).reader(requestItemReader())
 				.processor(requestItemProcessor()).writer(requestItemWriter()).build();
 	}
-
+	
 	@Bean
 	@Primary
 	public Job requestEmailSenderJob() {
-		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(requestEmailSenderStep())
-				.build();
+		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(requestEmailSenderStep()).build();
 	}
 
 	@Bean
@@ -77,7 +72,7 @@ public class BatchConfig {
 		return new JdbcCursorItemReaderBuilder<User>().name("reclamationItemReader").sql(sql).dataSource(dataSource)
 				.rowMapper(new ReclamationMapper()).build();
 	}
-
+	
 	@Bean
 	public ItemProcessor<User, User> reclamationItemProcessor() {
 		return new ReclamationProcessor();
@@ -87,53 +82,16 @@ public class BatchConfig {
 	public ItemWriter<User> reclamationItemWriter() {
 		return new ReclamationWriter();
 	}
-
+	
 	@Bean
 	public Step reclamationEmailSenderStep() {
 		return this.stepBuilderFactory.get("emailSenderStep").<User, User>chunk(100).reader(reclamationItemReader())
 				.processor(reclamationItemProcessor()).writer(reclamationItemWriter()).build();
 	}
-
+	
 	@Bean
 	public Job reclamationEmailSenderJob() {
-		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(reclamationEmailSenderStep())
-				.build();
+		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(reclamationEmailSenderStep()).build();
 	}
-
-	//////////// Fares//////////
-
-	@Bean
-	public ItemReader<User> PublicationReader() {
-		String sql = "SELECT * FROM user";
-		return new JdbcCursorItemReaderBuilder<User>().name("PublicationReader").sql(sql).dataSource(dataSource)
-				.rowMapper(new PublicationMapper()).build();
-	}
-
-	@Bean
-	public ItemProcessor<User, User> PublicationItemProcessor() {
-		return (ItemProcessor<User, User>) new PublicationProcessor();
-	}
-
-	@Bean
-	public ItemWriter<User> PublicationWriter() {
-		return new PublicationWriter();
-	}
-
-	@Bean
-	public Step PublicationemailSenderStep() {
-
-		return this.stepBuilderFactory.get("emailSenderStep").<User, User>chunk(100).reader(PublicationReader())
-				.processor(PublicationItemProcessor()).writer(PublicationWriter()).build();
-	}
-	
-	
-	@Bean
-	public Job PublicationEmailSenderJob() {
-		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(PublicationemailSenderStep())
-				.build();
-	}
-	
-	
-	
 
 }
