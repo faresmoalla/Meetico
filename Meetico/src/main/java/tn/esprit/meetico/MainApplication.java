@@ -1,9 +1,5 @@
 package tn.esprit.meetico;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.IOException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -29,15 +25,6 @@ public class MainApplication {
 
 	@Autowired
 	Job job;
-
-	@Bean
-	FirebaseMessaging firebaseMessaging() throws IOException {
-		GoogleCredentials googleCredentials = GoogleCredentials
-				.fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
-		FirebaseOptions firebaseOptions = FirebaseOptions.builder().setCredentials(googleCredentials).build();
-		FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "meetico");
-		return FirebaseMessaging.getInstance(app);
-	}
 
 	@Scheduled(cron = "0 */1 * * * ?")
 	// @Scheduled(cron = "0 0 */1 * * ?")

@@ -37,8 +37,6 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private JWTUtils jwtUtils;
 	
-	@Autowired
-	FirebaseMessagingService FirebaseMessagingService;
 
 	@Autowired
 	private PasswordEncoder encoder;
