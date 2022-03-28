@@ -15,7 +15,7 @@ public interface LikeRepository extends JpaRepository<PostLike, Long> {
 
 	//SELECT * from post_like where post_like.utilis_user_id= 1  AND post_like.publication_id_publication=1
 	
-	@Query("SELECT l from PostLike l where l.utilis.userId= :userId  AND l.publication.idPublication= :idPublication"
+	@Query("SELECT l from PostLike l where l.utilis.userId= :userId  AND l.publication.idPublication= :idPublication "
 			)
 	PostLike GetLike(@Param("userId") Long idUser,@Param("idPublication") Long idPub) ;
 	

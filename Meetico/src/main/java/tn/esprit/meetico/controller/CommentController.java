@@ -60,7 +60,7 @@ UserRepository userRepo;
 	public void deleteComment(@PathVariable("idComment") Long idComment) {
 		commentService.deleteComment(idComment);
 	}
-
+	@ApiOperation(value = "Lister commentaire trié")
 	@GetMapping("/ListCommentsAdmin/{field}")
 	public Paginator<List<Comment>> listCommentsAdminPub(@PathVariable String field) {
 		List<Comment> listcomm = commentService.ListAllCommentsAdmin(field);
