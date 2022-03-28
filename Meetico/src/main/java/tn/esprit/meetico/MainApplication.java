@@ -34,6 +34,8 @@ public class MainApplication {
 		jobLauncher.run(job, params);
 	}
 	
+
+	
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/home").setViewName("home");
 	}

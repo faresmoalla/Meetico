@@ -27,15 +27,19 @@ public class PublicationProcessor implements ItemProcessor<User, User> {
 	public User process(User user) throws Exception {
 		
 		//List<Reclamation> r = reclamationRepository.getAllReclamationsClient(user.getUserId());
-//List<Publication> list = pubRepo.findAll();
-		emailServiceImpl.sendEmail(user.getEmail(), "JOIN Test",
-				" Test\r\n" + " Test///////////"
-						);
+List<Publication> list = pubRepo.findAll();
+		
 		// user.setUser(user);
-		/*for (Publication pub : list ) {
+		for (Publication pub : list ) {
 			
-			if(pub.getContents().contains("@ALL"))
-		}*/
+			if(pub.getContents().contains("@all") || pub.getContents().contains("@ALL") ||pub.getContents().contains("@all")  ) {
+				emailServiceImpl.sendEmail(user.getEmail(), "Dear Users",
+						" Une Nouvelle mise a jour \r\n" + ""
+								);
+				
+			}
+				
+		}
 		
 		return user;
 	

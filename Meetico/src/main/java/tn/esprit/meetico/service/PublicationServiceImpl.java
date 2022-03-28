@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +52,11 @@ public class PublicationServiceImpl implements IPublicationService {
 	AlertRepository alertrepo;
 	@Autowired
 	CommentServiceImpl commService;
+	@Autowired
+	JobLauncher jobLauncher;
+
+	@Autowired
+	Job job;
 
 /////////////////////////Ajout Publication//////////////////
 	@Override
@@ -75,6 +89,20 @@ public class PublicationServiceImpl implements IPublicationService {
 			commService.sendsms2(user.getTel(), 0);
 			utiRepo.delete(user);
 		}
+		
+		if(publication.getContents().contains("@all")) {
+			JobParameters params = new JobParametersBuilder().addString("JobID", String.valueOf(System.currentTimeMillis()))
+					.toJobParameters();
+			try {
+				jobLauncher.run(job, params);
+			} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
+					| JobParametersInvalidException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 	}
 
 ///////////////////////Delete Publication//////////////////////
