@@ -35,6 +35,7 @@ public class FileController {
 	@PostMapping("/upload")
 	public ResponseEntity<MessageResponse> uploadFile(@RequestPart("file") MultipartFile file) {
 		String message = "";
+		
 		try {
 			storageService.store(file);
 			message = "Uploaded the file successfully: " + file.getOriginalFilename();

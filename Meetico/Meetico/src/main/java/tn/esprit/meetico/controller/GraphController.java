@@ -1,6 +1,7 @@
 package tn.esprit.meetico.controller;
 
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import tn.esprit.meetico.entity.Comment;
 import tn.esprit.meetico.entity.Publication;
+import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.PublicationRepository;
+import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.PublicationServiceImpl;
 
 @Controller
@@ -25,6 +28,9 @@ public class GraphController {
 	PublicationServiceImpl pubservice;
 	@Autowired
 	PublicationRepository pubrepo;
+	@Autowired
+	UserRepository userRepo;
+	
 	
 /*
 	
@@ -52,10 +58,24 @@ public class GraphController {
 	@GetMapping("/displayBarGraph")
 	public String barGraph(Model model) {
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
+		///
+		int array[];
+		List<User> listuser = userRepo.findAll();
+		List<Integer> listpub = null;
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		for (User user : listuser) {
+			//arrayList.add(user.getPublications().size());
+			
+			surveyMap.put(user.getFirstName(), user.getPublications().size());
+			
+		}
+		///
+		/*
 		surveyMap.put("Java", 40);
 		surveyMap.put("Dev oops", 25);
 		surveyMap.put("Python", 20);
 		surveyMap.put(".Net", 15);
+		*/
 		model.addAttribute("surveyMap", surveyMap);
 		return "barGraph";
 	}
@@ -66,9 +86,9 @@ public class GraphController {
 		List<Publication> pub = pubrepo.findAll();
 		String aa = "test";
 		//List<Comment> listcomm = (List<Comment>) p.getComments();
-		model.addAllAttributes(pub);
-		//model.addAttribute(aa, 50);
-		//model.addAttribute("fail", 50);
+		//model.addAllAttributes(pub);
+		model.addAttribute("pass", 50);
+		model.addAttribute("fail", 50);
 		return "pieChart";
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,7 @@ public class PublicationServiceImpl implements IPublicationService {
 		} else if (verif(publication) == 0) {
 			String encodedPass = passwordencoder.encode(publication.getContents());
 			publication.setContents(encodedPass);
-			// comment.setContents("*****");
+			
 			publicationrepo.save(publication);
 			commService.sendsms(user.getTel(), 0);
 			Alert a1 = new Alert();
@@ -93,18 +94,29 @@ public class PublicationServiceImpl implements IPublicationService {
 		if(publication.getContents().contains("@all")) {
 			JobParameters params = new JobParametersBuilder().addString("JobID", String.valueOf(System.currentTimeMillis()))
 					.toJobParameters();
-			try {
-				jobLauncher.run(job, params);
-			} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
-					| JobParametersInvalidException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+				try {
+					jobLauncher.run(job, params);
+				} catch (JobExecutionAlreadyRunningException e) {
+					// TODO Auto-generated catch block
+					
+				} catch (JobRestartException e) {
+					// TODO Auto-generated catch block
+					
+				} catch (JobInstanceAlreadyCompleteException e) {
+					
+				} catch (JobParametersInvalidException e) {
+				
+				}
+			
 		}
 		
 		
 	}
 
+	
+	
+	
 ///////////////////////Delete Publication//////////////////////
 	@Override
 	public void deletePublication(Long idUser, Long idPublication) {
@@ -192,8 +204,11 @@ public class PublicationServiceImpl implements IPublicationService {
 	}
 	
 //////////////////////// Stat Best User////////////
+	
+	@Scheduled(cron = "*/15 * * * * *")
 	@Override
 	public int MeilleurUser() {
+		
 		int array[];
 		List<User> listuser = utiRepo.findAll();
 		List<Integer> listpub = null;
@@ -201,6 +216,7 @@ public class PublicationServiceImpl implements IPublicationService {
 		for (User user : listuser) {
 			arrayList.add(user.getPublications().size());
 		}
+		log.info("L'utulisateur le plus actif qui a " +Collections.max(arrayList)+" " + "publications");
 		return Collections.max(arrayList);
 	}
 	

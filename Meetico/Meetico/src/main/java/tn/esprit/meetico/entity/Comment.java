@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,8 +15,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,43 +35,34 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Publication implements Serializable {
+public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private Long idPublication;
-	// @NotEmpty(message = "the content field is required")
-	@NotBlank
-	@Size(max = 100 , message="max akber 100")
+	private Long idComment;
+		
+	@Size(min=5)
+	 @NotEmpty(message = "the content field is required")
      private String contents;
 	
+	//@NotNull
 	@Temporal(TemporalType.DATE)
 	//@NotEmpty(message = "the content field is required")
 	private Date date ;
-	private int nbrLikes;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="publications")
-	@JsonIgnore
-	private Set<Comment> comments;
+	
+	
 	
 	@ManyToOne
 	@JsonIgnore
-	User userr;
+	User user;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="publication")
+	
+	
+
+	@ManyToOne
 	@JsonIgnore
-	private Set<PostLike> likes;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="publication")
-	@JsonIgnore
-	private Set<PostDislike> dislikes;
-	
-	
-	
-	@OneToMany(mappedBy="publication",cascade = CascadeType.ALL)
-	@JsonIgnore
-	private Set<FileDB> files;
-	
+	Publication publications;
 	
 	
 }
