@@ -3,6 +3,9 @@ package tn.esprit.meetico.controller;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Feedback;
+import tn.esprit.meetico.entity.User;
+import tn.esprit.meetico.repository.UserRepository;
+import tn.esprit.meetico.service.FeedbackServiceImpl;
 import tn.esprit.meetico.service.IFeedbackService;
 
 @RestController
@@ -24,13 +30,17 @@ import tn.esprit.meetico.service.IFeedbackService;
 public class FeedbackController {
 	
 	@Autowired
-	IFeedbackService feedbackservice;
+	FeedbackServiceImpl feedbackservice;
+	@Autowired
+	UserRepository Urepo;
 	
-	@PostMapping("/AddAffectFeedbackUsers/{usersId}/{Us}/{idTrip}")
+	@PostMapping("/AddAffectFeedbackUsers/{ListUsers}/{idTrip}")
 	@ApiOperation(value = "Ajouter et affecter des utilisateur et le voyage  a un feedback")
 	@ResponseBody
-	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,@PathVariable(name="usersId") List<Long> usersId,@PathVariable(name="Us") Long Us,@PathVariable(name="idTrip") Integer idTrip){
-		feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, usersId, Us,idTrip);
+	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,HttpServletRequest request,@PathVariable(name="ListUsers") List<Long> ListUsers,@PathVariable(name="idTrip") Integer idTrip){
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, ListUsers,user, idTrip);
 	}
 	
 	@PutMapping("/updateFeedback/{idUsers}")
@@ -71,6 +81,18 @@ public class FeedbackController {
 	public 	Set<Feedback> getFeedbackByClientTAG(@PathVariable(name="idUser") Long idUser) throws ParseException {
 		return feedbackservice.ListFeedbacksByTAG(idUser);
 	}
+	@GetMapping("/Statistique")
+	@ApiOperation(value = "Pourcentage Stars by ")
+	@ResponseBody
+	public 	List<Float> statFeedbackByStars(HttpServletRequest request) throws ParseException {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		return feedbackservice.StatFeedbacksBystars(user);
+	}
+	
+	
+	
+	
 	
 	/*
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")

@@ -35,9 +35,9 @@ public class ReclamationServiceImpl implements IReclamationService {
 	PictureRepository picturerepository;
 
 	@Override
-	public Reclamation addAffectReclamationUser(Reclamation reclamation, Long userId, Integer idPicture) {
+	public Reclamation addAffectReclamationUser(Reclamation reclamation, User user, Integer idPicture) {
 
-		User user = userrepository.findById(userId).orElse(null);
+		//User user = userrepository.findById(userId).orElse(null);
 		Picture P = picturerepository.findById(idPicture).orElse(null);
 		reclamation.setUser(user);
 		reclamation.setPicture(P);
@@ -51,9 +51,11 @@ public class ReclamationServiceImpl implements IReclamationService {
 	}
 
 	@Override
-	public void updateReclamation(Reclamation reclamation) throws ParseException {
+	public void updateReclamation(Reclamation reclamation/*,User user*/) throws ParseException {
+	
 
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
+		/*if(R.getUser().getUserId()==user.getUserId()) {*/
 		R.setDescription(reclamation.getDescription());
 		R.setLastModificationDate(reclamation.getLastModificationDate());
 		R.setPriority(reclamation.getPriority());
@@ -62,8 +64,9 @@ public class ReclamationServiceImpl implements IReclamationService {
 		R.setLastModificationDate(new Date(
 				string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
 		R.setPicture(reclamation.getPicture());
-
+		
 		reclamationRepository.save(R);
+		//}	
 	}
 
 	public Long string2Date(String date) throws ParseException {
@@ -72,10 +75,11 @@ public class ReclamationServiceImpl implements IReclamationService {
 	}
 
 	@Override
-	public void deleteReclamation(Integer idReclamation) {
-
+	public void deleteReclamation(Integer idReclamation/*, User user */) {
+		//Reclamation R = retrieveReclamation(idReclamation);
+		//if(R.getUser().getUserId()==user.getUserId()) {
 		reclamationRepository.deleteById(idReclamation);
-
+		//}
 	}
 
 	@Override
@@ -172,17 +176,19 @@ public class ReclamationServiceImpl implements IReclamationService {
 	}
 
 	@Override
-	public void answerAdmin(Reclamation reclamation) throws ParseException {
+	public void answerAdmin(Reclamation reclamation,User user) throws ParseException {
 
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
+		if(R.getUser().getUserId()== user.getUserId()) {
 		R.setAnswerAdmin(reclamation.getAnswerAdmin());
 		R.setAnswerDate(new Date(
 				string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
 		reclamationRepository.save(R);
 		verif(reclamation.getIdReclamation());
+		}
 	}
 
-	public void answerReclamation(String answer, Integer idReclamation) {
+	/*public void answerReclamation(String answer, Integer idReclamation) {
 		Reclamation r = retrieveReclamation(idReclamation);
 		r.setAnswerAdmin(answer);
 		// r.setAnswerDate();
@@ -190,7 +196,7 @@ public class ReclamationServiceImpl implements IReclamationService {
 			r.setStatus(true);
 		}
 		reclamationRepository.save(r);
-	}
+	}*/
 
 	@Override
 	public float statReclamationsTreterNonTreter() {

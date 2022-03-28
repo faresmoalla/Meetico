@@ -14,5 +14,9 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer>{
 	Set<Feedback> getFeedbacksClientTAG(@Param(value = "userId") Long userId);
 	@Query("SELECT f FROM Feedback f join f.users u WHERE u.userId = :userId")
 	Set<Integer> top3UsersWithHighestNumberOfFeedbacks(@Param(value = "userId") Long userId);
+	
+	@Query("SELECT count(*) FROM Feedback f WHERE f.stars=:star")
+	Integer nbrFeedbackbystars(@Param(value = "star") Integer s);
+	
 }
 

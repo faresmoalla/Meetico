@@ -1,5 +1,6 @@
 package tn.esprit.meetico.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +27,8 @@ public class FeedbackServiceImpl implements IFeedbackService {
 	
 	@Override
 	@Transactional
-	public void AddAndAffectFeedbackUsersTrip(Feedback feed , List<Long> idUsers, Long idUs,Integer idTrip) {
-		Feedback f =addFeedback(feed, idUs,idTrip);
+	public void AddAndAffectFeedbackUsersTrip(Feedback feed , List<Long> idUsers, User user,Integer idTrip) {
+		Feedback f =addFeedback(feed, user,idTrip);
 		
 		for (Long idUser : idUsers) {
 			User U = userrepository.findById(idUser).orElse(null);
@@ -37,10 +38,11 @@ public class FeedbackServiceImpl implements IFeedbackService {
 		
 	}
 		@Override
-		public Feedback addFeedback(Feedback feedback, Long idUSer,Integer idTrip) {
-			User u = userrepository.findById(idUSer).orElse(null);
+		public Feedback addFeedback(Feedback feedback, User user,Integer idTrip) {
+			
+			//User u = userrepository.findById(idUSer).orElse(null);
 			Trip t= tripRepository.findById(idTrip).orElse(null);
-			feedback.setUser(u);
+			feedback.setUser(user);
 			feedback.setTrip(t);
 			return feedbackrepository.save(feedback);
 		}
@@ -98,10 +100,47 @@ public class FeedbackServiceImpl implements IFeedbackService {
 		
 			return feedbackrepository.getAllFeedbacksClient(idUser);
 		}
+		
 		@Override
 		public Set<Feedback> ListFeedbacksByTAG(Long idUser) {
 			
 			return feedbackrepository.getFeedbacksClientTAG(idUser);
+			
 		}
-		
+		@Override
+		public List<Float> StatFeedbacksBystars(User user) {
+			float d=0;
+			List<Float> statTotale = new ArrayList();
+			Integer sss;
+			Integer nbrFeedback =user.getFeedbacks().size();
+			for(Integer star=1; star<=5; star++) {
+				sss=feedbackrepository.nbrFeedbackbystars(star);
+				d=sss*100/nbrFeedback;
+				statTotale.add(d);
+				sss=0;
+				d=0;
+			}
+			
+			return statTotale;
+		}
+		@Override
+		public void StatFeedbacksBystars1(User user) {
+			float d=0;
+			List<Float> statTotale = new ArrayList();
+			Integer sss;
+			Integer nbrFeedback =user.getFeedbacks().size();
+			
+				sss=feedbackrepository.nbrFeedbackbystars(1);
+				d=sss*100/nbrFeedback;
+				if(d>50) {
+					
+				}
+			
+			
+			
+		}
 }
+		
+	
+		
+

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,8 +24,11 @@ import com.itextpdf.text.pdf.qrcode.WriterException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Reclamation;
+import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.entity.reclamationPriority;
 import tn.esprit.meetico.entity.reclamationType;
+import tn.esprit.meetico.repository.ReclamationRepository;
+import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.EmailServiceImpl;
 import tn.esprit.meetico.service.IReclamationService;
 import tn.esprit.meetico.service.ReclamationExporter;
@@ -32,6 +38,9 @@ import tn.esprit.meetico.service.ReclamationExporter;
 @RequestMapping("/Reclamation")
 @CrossOrigin
 public class ReclamationController {
+	
+	@Autowired
+	UserRepository Urepo;
 
 	@Autowired
 	IReclamationService reclamationservice;
@@ -42,28 +51,33 @@ public class ReclamationController {
 	@Autowired
 	EmailServiceImpl emailServiceImpl;
 
-	@PostMapping("/AddAffectReclamationUser/{userId}/{pictureId}")
+	@PostMapping("/AddAffectReclamationUser/{pictureId}")
 	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
 	@ResponseBody
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,
-			@PathVariable(name = "userId") Long userId, @PathVariable(name = "pictureId") Integer pictureId) {
-
-		return reclamationservice.addAffectReclamationUser(reclamation, userId, pictureId);
+			HttpServletRequest request, @PathVariable(name = "pictureId") Integer pictureId) {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		return reclamationservice.addAffectReclamationUser(reclamation, user, pictureId);
 
 	}
 
 	@PutMapping("/UpdateReclamation")
 	@ApiOperation(value = "Update reclamation")
 	@ResponseBody
-	public void updateReclamation(@RequestBody Reclamation reclamation) throws ParseException {
-		reclamationservice.updateReclamation(reclamation);
+	public void updateReclamation(@RequestBody Reclamation reclamation /*,HttpServletRequest request*/) throws ParseException {
+		/*String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);*/
+		reclamationservice.updateReclamation(reclamation/*,user*/);
 	}
 
 	@DeleteMapping("/DeleteReclamation/{idReclamation}")
 	@ApiOperation(value = "Delete reclamation")
 	@ResponseBody
-	public void deleteReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
-		reclamationservice.deleteReclamation(idReclamation);
+	public void deleteReclamation(@PathVariable(name = "idReclamation") Integer idReclamation/*,HttpServletRequest request*/) {
+		/*String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);*/
+		reclamationservice.deleteReclamation(idReclamation/*,user*/);
 	}
 
 	@GetMapping("/retrieveReclamation/{idReclamation}")
@@ -169,20 +183,22 @@ public class ReclamationController {
 	@PutMapping("/answerAdmin")
 	@ApiOperation(value = "answer Admin")
 	@ResponseBody
-	public void answerAdmin(@RequestBody Reclamation reclamation) throws ParseException {
+	public void answerAdmin(@RequestBody Reclamation reclamation,HttpServletRequest request) throws ParseException {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
 		if (reclamation.getType().equals(reclamationType.TRIP) || reclamation.getType().equals(reclamationType.OTHER)
 				|| reclamation.getType().equals(reclamationType.USER)) {
-			reclamationservice.answerAdmin(reclamation);
+			reclamationservice.answerAdmin(reclamation,user);
 		}
 	}
 
-	@PutMapping("/answerReclamation/{repence}/{idReclamation}")
+	/*@PutMapping("/answerReclamation/{repence}/{idReclamation}")
 	@ApiOperation(value = "answer reclamation")
 	@ResponseBody
 	public void answerReclamation(@PathVariable(name = "repence") String repence,
 			@PathVariable(name = "idReclamation") Integer idReclamation) {
 		reclamationservice.answerReclamation(repence, idReclamation);
-	}
+	}*/
 
 	@GetMapping("/get")
 	@ApiOperation(value = "get")
