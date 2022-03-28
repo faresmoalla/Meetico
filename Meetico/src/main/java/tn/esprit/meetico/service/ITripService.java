@@ -43,11 +43,14 @@ public interface ITripService {
 	public List<String> destionationVisitorsCount();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	public String meilleurDestination();
 	
 	public List<StatMeilleurDesitnation> listmeilleurdestination();
 =======
+=======
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
 >>>>>>> parent of b1947fe (INTEGRATION ZIED)
 

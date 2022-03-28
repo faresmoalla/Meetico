@@ -25,8 +25,11 @@ import tn.esprit.meetico.entity.FileDB;
 import tn.esprit.meetico.entity.Gender;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import tn.esprit.meetico.entity.Note;
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
+=======
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
 >>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
@@ -56,12 +59,16 @@ public class TripServiceImpl implements ITripService{
 	private EmailServiceImpl emailsend;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@Autowired
 	StatMeilleurDesitnationRepository srepo;
 	/*
 	@Autowired
 	private FirebaseMessagingService firebasemessaging;
 	*/
+=======
+	
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
 	
 >>>>>>> parent of b1947fe (INTEGRATION ZIED)
@@ -173,6 +180,7 @@ public class TripServiceImpl implements ITripService{
 		trip.setUser(u);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		tripRepo.save(trip);
 	
 		/*
@@ -193,6 +201,8 @@ public class TripServiceImpl implements ITripService{
 			}
 		}*/
 		
+=======
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
 >>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
@@ -520,6 +530,7 @@ public class TripServiceImpl implements ITripService{
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 */
 
 	@Override
@@ -527,6 +538,9 @@ public class TripServiceImpl implements ITripService{
 		// TODO Auto-generated method stub
 		return srepo.findAll();
 	}
+=======
+
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 =======
 
 >>>>>>> parent of b1947fe (INTEGRATION ZIED)
