@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.TripRepository;
@@ -193,5 +195,10 @@ public class TripController {
 		TripPDF exporter = new TripPDF(trip, listuser);
 		exporter.export(response);
 
+	}@GetMapping("/list-de-meilleur-destination")
+	@ResponseBody
+	public List<StatMeilleurDesitnation> listmeilleurdestination() {
+		return tripService.listmeilleurdestination();
 	}
+
 }

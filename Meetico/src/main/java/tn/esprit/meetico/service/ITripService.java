@@ -3,6 +3,8 @@ package tn.esprit.meetico.service;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 
@@ -41,5 +43,6 @@ public interface ITripService {
 	public List<String> destionationVisitorsCount();
 	
 	public String meilleurDestination();
-
+	
+	public List<StatMeilleurDesitnation> listmeilleurdestination();
 }

@@ -34,9 +34,11 @@ import org.springframework.stereotype.Service;
 import tn.esprit.meetico.entity.FileDB;
 import tn.esprit.meetico.entity.Gender;
 import tn.esprit.meetico.entity.Note;
+import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.FileDBRepository;
+import tn.esprit.meetico.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.meetico.repository.TripRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.security.JWTUtils;
@@ -70,6 +72,8 @@ public class TripServiceImpl implements ITripService{
 	
 	@Autowired
 	private EmailServiceImpl emailsend;
+	@Autowired
+	StatMeilleurDesitnationRepository srepo;
 	/*
 	@Autowired
 	private FirebaseMessagingService firebasemessaging;
@@ -521,4 +525,10 @@ public class TripServiceImpl implements ITripService{
 		
 	}
 */
+
+	@Override
+	public List<StatMeilleurDesitnation> listmeilleurdestination() {
+		// TODO Auto-generated method stub
+		return srepo.findAll();
+	}
 }
