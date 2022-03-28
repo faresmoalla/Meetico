@@ -16,7 +16,7 @@ public interface IEvent {
 	Event getEvent(int idEvent);
 	public float stat(Integer idEvent) ;
 	Event updateEvent(int idEvent,Event event);
-	public void assignUserEvent(Long userId,Integer idEvent);
+	public void assignUserEvent(User user,Integer idEvent) ;
 	public void deletUserFromEvent (Long userId,int  idEvent) ;
 	public Set <User> getUserInEvent (int  idEvent) ;
 }

@@ -58,7 +58,7 @@ public void adddEvent( @RequestBody Event event , HttpServletRequest request) th
     User user = userRepo.findByUsername(username);
 	Ievent.addEvent(event, user) ;
 	
-	e.sendEmail(Email, "New event", "new event added by ");
+	 e.sendEmail(Email, "New event", "new event added by ");
 
 }
 
@@ -92,13 +92,16 @@ public ResponseEntity<Event> updateEvent(@Valid @PathVariable("id-event") int id
 	return new ResponseEntity<Event>(e, HttpStatus.OK);
 }
 
+
 @ApiOperation(value="assign user to event")
-@PostMapping("/add-user-to-event/{userId}/{idEvent}")
+@PostMapping("/add-user-to-event/{idEvent}")
 @ResponseBody
-public void assignUserToEvent (@PathVariable("userId")Long userId,@PathVariable("idEvent")Integer idEvent)
+public void assignUserToEvent ( HttpServletRequest request,@PathVariable("idEvent")Integer idEvent)
 {
-	Ievent.assignUserEvent(userId, idEvent);
-	
+String username = request.getUserPrincipal().getName();
+    User user = userRepo.findByUsername(username);
+Ievent.assignUserEvent(user, idEvent);
+
 }
 
 @GetMapping("all-Events")

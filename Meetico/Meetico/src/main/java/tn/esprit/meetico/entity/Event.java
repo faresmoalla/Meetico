@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -62,6 +63,9 @@ public class Event implements Serializable  {
 		return idEvent;
 	}
 
+	@ManyToOne
+	@JsonIgnore
+	private User user;
 	
 
 	@ManyToMany(cascade = CascadeType.ALL)

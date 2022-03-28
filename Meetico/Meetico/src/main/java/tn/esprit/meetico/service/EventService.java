@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.meetico.entity.Event;
@@ -37,7 +38,8 @@ public class EventService implements IEvent {
 	
 	@Override
 	public void addEvent(Event event, User user) {
-	     event.getUsers().add(user) ;
+	     event.setUser(user);
+	   //  user.getEvents().add(event);
 		 eventrepo.save(event) ;
 	}
 	
@@ -90,18 +92,18 @@ public class EventService implements IEvent {
 	
 	
 	@Override
-public void assignUserEvent(Long userId,Integer idEvent) {
-		
-		User u = userrepo.findById(userId).orElse(null) ;
-		Event e = eventrepo.findById(idEvent).orElse(null) ; 
-		if(e.getUsers().size() < e.getCapacity() ) {
-		
-			
-			e.getUsers().add(u);
-		eventrepo.save(e);
-		}
+	public void assignUserEvent(User user,Integer idEvent) {
+
+	//User u = userrepo.findById(userId).orElse(null) ;
+	Event e = eventrepo.findById(idEvent).orElse(null) ;
+	if(e.getUsers().size() < e.getCapacity() ) {
+
+
+	e.getUsers().add(user);
+	eventrepo.save(e);
+	}
 	else {
-			System.out.println("number of participant "+ " " + e.getUsers().size()+" "+"is greater than" + " "+e.getCapacity());
+	System.out.println("number of participant "+ " " + e.getUsers().size()+" "+"is greater than" + " "+e.getCapacity());
 	}
 	}
 	
@@ -136,8 +138,14 @@ public void deletUserFromEvent (Long userId,int  idEvent) {
 		  
 	}
 	
-	
-	
+	@Scheduled(fixedRate = 36000)
+
+	public int nbrParticipant() {
+		Event e = eventrepo.findById(1).orElse(null);
+		
+		System.out.println("+++++++++++++++++++++++"+e.getUsers().size()+"+++++++++++++++++++++++++++++++++");
+		return e.getUsers().size();
+	}
 	
 	
 	public float stat(Integer idEvent) {
@@ -152,30 +160,10 @@ public void deletUserFromEvent (Long userId,int  idEvent) {
 			
 			return P;
 	}
-//	public void affecterFileToEvent(Long idFiles, Integer idEvent) {
-//		Event t=eventrepo.findById(idEvent).orElse(null);
-//		FileDb f=fileDBRepository.findById(idFiles).orElse(null);
-//	     t.setFile(f);
-//		
-//		
-//	}
-//	public FileDb  store(MultipartFile file) throws IOException {
-//	    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//	    FileDb FileDB = new FileDb(fileName, file.getContentType(), file.getBytes());
-//	    return fileDBRepository.save(FileDB);
-//	  }
+
 	
 	
 	
 	
-//	  public FileDb getFile(Long id) {
-//	    return fileDBRepository.findById(id).orElse(null);
-//	  }
-//	  public Stream<FileDb> getAllFiles() {
-//	    return fileDBRepository.findAll().stream();
-//	  }
-//	  public FileDb getFileByEvent(Integer id) {
-//		  Event e =eventrepo.findById(id).orElse(null);
-//		    return e.getFile() ; 
-//		  }
+
 }
