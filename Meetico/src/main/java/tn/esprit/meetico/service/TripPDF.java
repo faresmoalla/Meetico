@@ -19,23 +19,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.pdfbox.pdmodel.PDPage;
-
 import lombok.AllArgsConstructor;
 import tn.esprit.meetico.entity.FileDB;
 import tn.esprit.meetico.entity.Trip;
-import tn.esprit.meetico.entity.User;
 
 @AllArgsConstructor
 public class TripPDF {
 
 	private Trip trip;
-	private Set<User> listuser;
 
 	private void addTableHeader(PdfPTable table) {
 		Stream.of(" ", "Data").forEach(columnTitle -> {
@@ -97,44 +91,6 @@ public class TripPDF {
 		 * PdfPCell imageCell = new PdfPCell(img); table.addCell(imageCell);
 		 */
 	}
-	
-
-	private void writeTableHeader(PdfPTable table) {
-		PdfPCell cell = new PdfPCell();
-
-		cell.setPadding(5);
-
-		Font font = FontFactory.getFont(FontFactory.HELVETICA);
-
-		cell.setPhrase(new Phrase("first name", font));
-
-		table.addCell(cell);
-
-		cell.setPhrase(new Phrase("last name", font));
-		table.addCell(cell);
-
-		cell.setPhrase(new Phrase("gender", font));
-		table.addCell(cell);
-
-		cell.setPhrase(new Phrase("email", font));
-		table.addCell(cell);
-
-		cell.setPhrase(new Phrase("city", font));
-		table.addCell(cell);
-
-		
-	}
-	private void writeTableData(PdfPTable table) {
-		for (User user : listuser) {
-			table.addCell(user.getFirstName());
-			table.addCell(user.getLastName());
-			table.addCell(user.getGender().toString());
-			table.addCell(user.getEmail());
-			table.addCell(user.getCity());
-			
-		}
-	}
-
 
 	public void export(HttpServletResponse response) throws DocumentException, IOException, URISyntaxException {
 		Document document = new Document(PageSize.A4);
@@ -161,22 +117,7 @@ public class TripPDF {
 		document.add(table);
 
 		List<FileDB> files = trip.getFiles();
-		PdfPTable table3 = new PdfPTable(files.size());
-		
-		PdfPTable table1 = new PdfPTable(5);
-		table1.setWidthPercentage(100f);
-		table1.setWidths(new float[] { 1.5f, 3.5f, 3.0f, 3.0f, 1.5f });
-		table1.setSpacingBefore(10);
-
-		writeTableHeader(table1);
-		writeTableData(table1);
-
-		document.add(table1);
-		
-		
-		
 		for (FileDB f : files) {
-			
 			byte[] byt = f.getData();
 			// ImageIcon imageIcon = new ImageIcon(byt);
 			// imageIcon.getImage();
@@ -186,11 +127,7 @@ public class TripPDF {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(img, "png", baos);
 			Image iTextImage = Image.getInstance(baos.toByteArray());
-			iTextImage.scaleAbsolute(100, 100);
 			document.add(iTextImage);
-			
-			
-			
 
 		}
 		document.close();

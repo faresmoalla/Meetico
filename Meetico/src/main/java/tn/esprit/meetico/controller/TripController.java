@@ -8,8 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,9 +188,8 @@ public class TripController {
 		String headerValue = "attachment; filename=" + currentDateTime + ".pdf";
 		response.setHeader(headerKey, headerValue);
 		Trip trip = tripService.affichDetailTrip(idtrip);
-		Set<User> listuser =trip.getUsers();
 
-		TripPDF exporter = new TripPDF(trip, listuser);
+		TripPDF exporter = new TripPDF(trip);
 		exporter.export(response);
 
 	}@GetMapping("/list-de-meilleur-destination")

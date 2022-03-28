@@ -8,16 +8,11 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.vonage.client.VonageClient;
-import com.vonage.client.sms.SmsSubmissionResponse;
-import com.vonage.client.sms.messages.TextMessage;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import javax.mail.SendFailedException;
@@ -25,38 +20,25 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import tn.esprit.meetico.entity.FileDB;
 import tn.esprit.meetico.entity.Gender;
+<<<<<<< HEAD
 import tn.esprit.meetico.entity.Note;
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
+=======
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.FileDBRepository;
 import tn.esprit.meetico.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.meetico.repository.TripRepository;
 import tn.esprit.meetico.repository.UserRepository;
-import tn.esprit.meetico.security.JWTUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.vonage.client.VonageClient;
-import com.vonage.client.sms.MessageStatus;
-import com.vonage.client.sms.SmsSubmissionResponse;
-import com.vonage.client.sms.messages.TextMessage;
 
 @Service
 @Slf4j
 @SuppressWarnings("deprecation")
 public class TripServiceImpl implements ITripService{
-	
-	@Autowired
-	private JWTUtils jwutil;
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -69,12 +51,16 @@ public class TripServiceImpl implements ITripService{
 	
 	@Autowired
 	private EmailServiceImpl emailsend;
+<<<<<<< HEAD
 	@Autowired
 	StatMeilleurDesitnationRepository srepo;
 	/*
 	@Autowired
 	private FirebaseMessagingService firebasemessaging;
 	*/
+=======
+	
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 	@Override
 	public void addTrip(Trip trip, List<Long> idUsers,Long idEnt) {
 		Trip t = ajouttrip(trip, idEnt);					
@@ -172,12 +158,13 @@ public class TripServiceImpl implements ITripService{
 
 	@Override
 	public Trip ajouttrip(Trip trip,Long idUSer) {
-		List<User> users = userRepo.findAll();
+//		List<User> users = userRepo.findAll();
 		String d=trip.getDestination();
 		String dm=d.toUpperCase();
 		trip.setDestination(dm);
 		User u = userRepo.findById(idUSer).orElse(null);
 		trip.setUser(u);
+<<<<<<< HEAD
 		tripRepo.save(trip);
 	
 		/*
@@ -198,9 +185,49 @@ public class TripServiceImpl implements ITripService{
 			}
 		}*/
 		
+=======
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 		
+		String condition="";
+		Message message = Message.builder()
+			    .setNotification(Notification.builder()
+			        .setTitle("voyage ajouté")
+			        .setBody("le voyage vers :"+trip.getDestination())
+			        .build())
+			    .setCondition(condition)
+			    .build();
 
+<<<<<<< HEAD
 			
+=======
+			// Send a message to devices subscribed to the combination of topics
+			// specified by the provided condition.
+			try {
+				//String response = 
+				FirebaseMessaging.getInstance().send(message);
+			} catch (FirebaseMessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		/*HashMap<String,String> data =new HashMap<String, String>();
+		data.put("key1", "value1");
+		data.put("key2", "value2");
+		data.put("key3", "value3");
+		data.put("key4", "value4");
+		Note note =new Note("voyage ajouté","le voyage vers :"+trip.getDestination(),data);
+		tripRepo.save(trip);
+		try {
+			 //for (User us : users) {
+			 /*UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                     .getPrincipal();
+			 	String username = userDetails.getUsername();
+				firebasemessaging.sendNotification(note,token);
+			 }
+		} catch (FirebaseMessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 		 return trip;
 	}
 
@@ -359,39 +386,6 @@ public class TripServiceImpl implements ITripService{
 		
 		return s;
 	}
-	@Override
-	public String meilleurDestination() {
-		List<Trip> trip =tripRepo.findAll();
-		
-		String s= new String();
-		//List<String> ls= new ArrayList<>();
-		List<Integer> ns=new ArrayList<>();
-		String destination=new String();
-		int max_value = 0;
-		for(Trip t:trip) {
-			int n = 0 ;
-			for(Trip tr:trip) {
-				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
-					n++;
-				}
-				ns.add(n);
-				max_value= Collections.max(ns);
-				if(n==max_value) {
-					destination=t.getDestination();
-					}
-				
-			};
-				
-			
-			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
-			//ls.add(s);
-		}
-		s="The favorite destination was " + destination + " with " + max_value + " visit(s).";
-		
-		log.info(s);
-		
-		return destination;
-	}
 
 	@Override
 	public List<String> userDestionationsVisitsCount() {
@@ -469,7 +463,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return ls;
 	}
-/*
+
 	@Override
 	public void exporttripToPdf(HttpServletResponse response, Integer idtrip) {
 		// TODO Auto-generated method stub
@@ -514,6 +508,7 @@ public class TripServiceImpl implements ITripService{
 		document.close();
 		
 	}
+<<<<<<< HEAD
 */
 
 	@Override
@@ -521,4 +516,7 @@ public class TripServiceImpl implements ITripService{
 		// TODO Auto-generated method stub
 		return srepo.findAll();
 	}
+=======
+
+>>>>>>> parent of b1947fe (INTEGRATION ZIED)
 }
