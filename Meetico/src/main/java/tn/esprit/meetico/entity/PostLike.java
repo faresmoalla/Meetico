@@ -25,11 +25,6 @@ public class PostLike implements Serializable {
 	private Long idLike;
 	
 	
-	
-	
-
-	
-	
 	@ManyToOne
 	@JsonIgnore
 	Publication publication;

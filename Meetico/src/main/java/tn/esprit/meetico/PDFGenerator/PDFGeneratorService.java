@@ -43,8 +43,9 @@ public class PDFGeneratorService {
 	public static PublicationRepository pubRepo;
 	
 	private static Logger logger = LoggerFactory.getLogger(PDFGeneratorService.class);
-	
-	static String  logoImgPath ="C:\\Users\\Aminous\\Documents\\Workspace STS 4.13.0\\Meetico-Backend-Amine-Zied-Radhwen\\src\\main\\resources\\static\\meetico.png";
+	static String  logoImgPath ="C:\\Users\\fares\\Desktop\\Meetico\\Meetico\\src\\main\\resources\\static\\meetico.png";
+
+	//static String  logoImgPath ="C:\\Users\\Aminous\\Documents\\Workspace STS 4.13.0\\Meetico-Backend-Amine-Zied-Radhwen\\src\\main\\resources\\static\\meetico.png";
 
 	private static void addLogo(Document document) throws DocumentException, com.itextpdf.text.DocumentException {
 		try {
