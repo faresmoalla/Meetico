@@ -11,11 +11,16 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.vonage.client.VonageClient;
+import com.vonage.client.sms.SmsSubmissionResponse;
+import com.vonage.client.sms.messages.TextMessage;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import javax.mail.SendFailedException;
@@ -23,19 +28,36 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import tn.esprit.meetico.entity.FileDB;
 import tn.esprit.meetico.entity.Gender;
+import tn.esprit.meetico.entity.Note;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.FileDBRepository;
 import tn.esprit.meetico.repository.TripRepository;
 import tn.esprit.meetico.repository.UserRepository;
+import tn.esprit.meetico.security.JWTUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.vonage.client.VonageClient;
+import com.vonage.client.sms.MessageStatus;
+import com.vonage.client.sms.SmsSubmissionResponse;
+import com.vonage.client.sms.messages.TextMessage;
 
 @Service
 @Slf4j
 @SuppressWarnings("deprecation")
 public class TripServiceImpl implements ITripService{
+	
+	@Autowired
+	private JWTUtils jwutil;
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -48,7 +70,10 @@ public class TripServiceImpl implements ITripService{
 	
 	@Autowired
 	private EmailServiceImpl emailsend;
-	
+	/*
+	@Autowired
+	private FirebaseMessagingService firebasemessaging;
+	*/
 	@Override
 	public void addTrip(Trip trip, List<Long> idUsers,Long idEnt) {
 		Trip t = ajouttrip(trip, idEnt);					
@@ -127,31 +152,43 @@ public class TripServiceImpl implements ITripService{
 
 	@Override
 	public Trip ajouttrip(Trip trip,Long idUSer) {
-//		List<User> users = userRepo.findAll();
+		List<User> users = userRepo.findAll();
 		String d=trip.getDestination();
 		String dm=d.toUpperCase();
 		trip.setDestination(dm);
 		User u = userRepo.findById(idUSer).orElse(null);
 		trip.setUser(u);
+		tripRepo.save(trip);
+		/*
+		Notification notification
+		= Notification
+                .builder()
+                .setTitle("voyage ajouté")
+                .setBody("le voyage est vers :"+trip.getDestination())
+                .build();*/
+		/*
+		for(User ur :users) {
+			String number ="+216"+String.valueOf(ur.getPhoneNumber());
+			log.info(number);
+			VonageClient client = VonageClient.builder().apiKey("03bc878e").apiSecret("wUYDWlKJhsWr8Mt2").build();
+			
+			TextMessage message = new TextMessage("Meetico", number,
+					"un voayge a été ajouté vers "+trip.getDestination()+"de la part de l'entrepreneur"+u.getEmail());
+
+			SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
+
+			if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
+				log.info("Message sent successfully.");
+			} else {
+				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
+			}
+		}*/
 		
-		String condition="";
-		Message message = Message.builder()
-			    .setNotification(Notification.builder()
-			        .setTitle("voyage ajouté")
-			        .setBody("le voyage vers :"+trip.getDestination())
-			        .build())
-			    .setCondition(condition)
-			    .build();
+		
 
 			// Send a message to devices subscribed to the combination of topics
 			// specified by the provided condition.
-			try {
-				//String response = 
-				FirebaseMessaging.getInstance().send(message);
-			} catch (FirebaseMessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 		/*HashMap<String,String> data =new HashMap<String, String>();
 		data.put("key1", "value1");
 		data.put("key2", "value2");
@@ -328,6 +365,39 @@ public class TripServiceImpl implements ITripService{
 		
 		return s;
 	}
+	@Override
+	public String meilleurDestination() {
+		List<Trip> trip =tripRepo.findAll();
+		
+		String s= new String();
+		//List<String> ls= new ArrayList<>();
+		List<Integer> ns=new ArrayList<>();
+		String destination=new String();
+		int max_value = 0;
+		for(Trip t:trip) {
+			int n = 0 ;
+			for(Trip tr:trip) {
+				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
+					n++;
+				}
+				ns.add(n);
+				max_value= Collections.max(ns);
+				if(n==max_value) {
+					destination=t.getDestination();
+					}
+				
+			};
+				
+			
+			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
+			//ls.add(s);
+		}
+		s="The favorite destination was " + destination + " with " + max_value + " visit(s).";
+		
+		log.info(s);
+		
+		return destination;
+	}
 
 	@Override
 	public List<String> userDestionationsVisitsCount() {
@@ -405,7 +475,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return ls;
 	}
-
+/*
 	@Override
 	public void exporttripToPdf(HttpServletResponse response, Integer idtrip) {
 		// TODO Auto-generated method stub
@@ -450,5 +520,5 @@ public class TripServiceImpl implements ITripService{
 		document.close();
 		
 	}
-
+*/
 }
