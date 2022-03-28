@@ -12,7 +12,7 @@ public interface ITripService {
 	
 	public Trip ajouttrip(Trip trip, Long idUser);
 
-	public void exporttripToPdf(HttpServletResponse response, Integer idtrip);
+	//public void exporttripToPdf(HttpServletResponse response, Integer idtrip);
 
 	public void affecterlisteutilisateurautrip(List<Long> idutilisateurs, Integer idtrip);
 
@@ -41,18 +41,8 @@ public interface ITripService {
 	public List<String> userDestionationsVisitsCount();
 
 	public List<String> destionationVisitorsCount();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 	
 	public String meilleurDestination();
 	
 	public List<StatMeilleurDesitnation> listmeilleurdestination();
-=======
-=======
->>>>>>> parent of b1947fe (INTEGRATION ZIED)
-=======
->>>>>>> parent of b1947fe (INTEGRATION ZIED)
-
->>>>>>> parent of b1947fe (INTEGRATION ZIED)
 }
