@@ -292,14 +292,14 @@ public class TripServiceImpl implements ITripService{
 		}
 		
 	}
-
+/////////list de voyageur par voyage
 	@Override
 	public int listUserByVoyage(Integer idTrip) {
 		
 		int n = tripRepo.nbduserbyvoyage(idTrip);
 		return n;
 	}
-
+///////////nombre de user pour chaque voyage
 	@Override
 	public List<String> nbrUserPourChaqueVoyage() {
 		
@@ -325,6 +325,7 @@ public class TripServiceImpl implements ITripService{
 		
 		
 	}
+	/////////////meilleur destination
 	@Scheduled(fixedRate = 3600000)
 	@Override
 	public String favoriteDestination() {
@@ -392,7 +393,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return destination;
 	}
-
+////////////nombre de trip pour chaque utilisateur
 	@Override
 	public List<String> userDestionationsVisitsCount() {
 		List<User> users =tripRepo.listdesutilisateurinscritdansvoyage();
@@ -434,6 +435,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return s;
 	}
+	///////////////nombre de visit pour chaque destination
 	@Scheduled(fixedRate = 3600000)
 	@Override
 	public List<String> destionationVisitorsCount() {
