@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 @EnableScheduling
 @SpringBootApplication
 public class MainApplication {
-///test
+
 	@Autowired
 	JobLauncher jobLauncher;
 
