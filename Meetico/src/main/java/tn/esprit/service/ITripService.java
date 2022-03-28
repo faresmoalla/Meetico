@@ -3,6 +3,8 @@ package tn.esprit.service;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import tn.esprit.entity.StatMeilleurDesitnation;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 
@@ -41,5 +43,6 @@ public interface ITripService {
 	public List<String> destionationVisitorsCount();
 	
 	public String meilleurDestination();
-
+	
+	public List<StatMeilleurDesitnation> listmeilleurdestination();
 }

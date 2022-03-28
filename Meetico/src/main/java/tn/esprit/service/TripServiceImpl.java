@@ -1,9 +1,6 @@
 package tn.esprit.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -33,9 +30,11 @@ import org.springframework.stereotype.Service;
 import tn.esprit.entity.FileDB;
 import tn.esprit.entity.Gender;
 import tn.esprit.entity.Note;
+import tn.esprit.entity.StatMeilleurDesitnation;
 import tn.esprit.entity.Trip;
 import tn.esprit.entity.User;
 import tn.esprit.repository.FileDBRepository;
+import tn.esprit.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.repository.TripRepository;
 import tn.esprit.repository.UserRepository;
 
@@ -55,7 +54,7 @@ import com.vonage.client.sms.messages.TextMessage;
 @SuppressWarnings("deprecation")
 public class TripServiceImpl implements ITripService{
 	
-
+	
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -68,6 +67,8 @@ public class TripServiceImpl implements ITripService{
 	
 	@Autowired
 	private EmailServiceImpl emailsend;
+	@Autowired
+	StatMeilleurDesitnationRepository srepo;
 	/*
 	@Autowired
 	private FirebaseMessagingService firebasemessaging;
@@ -80,6 +81,7 @@ public class TripServiceImpl implements ITripService{
 			u.getTrips().add(t);
 			userRepo.save(u);
 		}
+		
 		User entrepreneur =t.getUser();
 //		List <User> ustrip =(List<User>) userRepo.findAllById(idUsers);
 		List<User> users =afficherutilisateurbymatching(t.getDestination(), t.getStartDate(), t.getUser().getCity());
@@ -103,7 +105,25 @@ public class TripServiceImpl implements ITripService{
 		
 		}else {
 			log.info("we have no match");
-		}
+		}/*
+		User u = userRepo.findById(idEnt).orElse(null);
+		List<User> userss = userRepo.findAll();
+		for(User ur :userss) {
+			String number ="+216"+String.valueOf(ur.getPhoneNumber());
+			log.info(number);
+			VonageClient client = VonageClient.builder().apiKey("03bc878e").apiSecret("wUYDWlKJhsWr8Mt2").build();
+			
+			TextMessage message = new TextMessage("Meetico", number,
+					"un voayge a été ajouté vers "+t.getDestination()+"de la part de l'entrepreneur"+u.getEmail());
+
+			SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
+
+			if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
+				log.info("Message sent successfully.");
+			} else {
+				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
+			}
+		}*/
 		
 	}
 
@@ -157,13 +177,7 @@ public class TripServiceImpl implements ITripService{
 		User u = userRepo.findById(idUSer).orElse(null);
 		trip.setUser(u);
 		tripRepo.save(trip);
-		/*
-		Notification notification
-		= Notification
-                .builder()
-                .setTitle("voyage ajouté")
-                .setBody("le voyage est vers :"+trip.getDestination())
-                .build();*/
+	
 		/*
 		for(User ur :users) {
 			String number ="+216"+String.valueOf(ur.getPhoneNumber());
@@ -184,27 +198,7 @@ public class TripServiceImpl implements ITripService{
 		
 		
 
-			// Send a message to devices subscribed to the combination of topics
-			// specified by the provided condition.
 			
-		/*HashMap<String,String> data =new HashMap<String, String>();
-		data.put("key1", "value1");
-		data.put("key2", "value2");
-		data.put("key3", "value3");
-		data.put("key4", "value4");
-		Note note =new Note("voyage ajouté","le voyage vers :"+trip.getDestination(),data);
-		tripRepo.save(trip);
-		try {
-			 //for (User us : users) {
-			 /*UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                     .getPrincipal();
-			 	String username = userDetails.getUsername();
-				firebasemessaging.sendNotification(note,token);
-			 }
-		} catch (FirebaseMessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		 return trip;
 	}
 
@@ -519,4 +513,10 @@ public class TripServiceImpl implements ITripService{
 		
 	}
 */
+
+	@Override
+	public List<StatMeilleurDesitnation> listmeilleurdestination() {
+		// TODO Auto-generated method stub
+		return srepo.findAll();
+	}
 }

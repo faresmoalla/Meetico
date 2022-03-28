@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +42,7 @@ public class FileController {
   @Autowired
   TripRepository tripRepo;
   @PostMapping("/upload")
-  public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<ResponseMessage> uploadFile(@RequestPart("file") MultipartFile file) {
     String message = "";
     try {
       storageService.store(file);
