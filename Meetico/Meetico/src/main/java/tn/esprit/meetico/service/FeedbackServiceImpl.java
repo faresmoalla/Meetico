@@ -112,10 +112,13 @@ public class FeedbackServiceImpl implements IFeedbackService {
 			float d=0;
 			List<Float> statTotale = new ArrayList();
 			Integer sss;
-			Integer nbrFeedback =user.getFeedbacks().size();
+			//Integer nbrFeedback =user.getFeedbacks().size();
+			Integer nbrFeedback= feedbackrepository.nbrFeedbacks(user.getUserId());
 			for(Integer star=1; star<=5; star++) {
 				sss=feedbackrepository.nbrFeedbackbystars(star);
+				System.out.println("//////////////////////"+sss+"//////////////////////");
 				d=sss*100/nbrFeedback;
+				System.out.println("****************"+nbrFeedback+"********************");
 				statTotale.add(d);
 				sss=0;
 				d=0;
@@ -123,22 +126,7 @@ public class FeedbackServiceImpl implements IFeedbackService {
 			
 			return statTotale;
 		}
-		@Override
-		public void StatFeedbacksBystars1(User user) {
-			float d=0;
-			List<Float> statTotale = new ArrayList();
-			Integer sss;
-			Integer nbrFeedback =user.getFeedbacks().size();
-			
-				sss=feedbackrepository.nbrFeedbackbystars(1);
-				d=sss*100/nbrFeedback;
-				if(d>50) {
-					
-				}
-			
-			
-			
-		}
+	
 }
 		
 	

@@ -18,5 +18,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer>{
 	@Query("SELECT count(*) FROM Feedback f WHERE f.stars=:star")
 	Integer nbrFeedbackbystars(@Param(value = "star") Integer s);
 	
+	@Query("SELECT count(*) FROM Feedback f join f.users u WHERE u.userId = :userId ")
+	Integer nbrFeedbacks(@Param(value = "userId") Long userId);
 }
 

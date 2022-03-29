@@ -52,7 +52,7 @@ public class Reclamation implements Serializable   {
 	private Integer idReclamation; 
 
 	@NotBlank(message="The title must be written")
-	@Size(max=50)
+	@Size(max=50 ,message="should not be greater than 50")
 	private String title;
 	
 	@NotBlank(message="The description must be written")
@@ -66,18 +66,18 @@ public class Reclamation implements Serializable   {
 	private reclamationPriority priority;
 	
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date sendingDate;
 	
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date lastModificationDate;
 	
 	@Size(max=4000 , message="The total number of characters cannot be exceeded")
 	private String answerAdmin;
 
 	@Temporal(TemporalType.DATE)
-	//@DateTimeFormat(pattern = "yyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date answerDate;
 	
 	private Boolean status;

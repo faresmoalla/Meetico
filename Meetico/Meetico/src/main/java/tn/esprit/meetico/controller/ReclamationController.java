@@ -24,6 +24,7 @@ import com.itextpdf.text.pdf.qrcode.WriterException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Reclamation;
+import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.entity.reclamationPriority;
 import tn.esprit.meetico.entity.reclamationType;
@@ -50,6 +51,9 @@ public class ReclamationController {
 
 	@Autowired
 	EmailServiceImpl emailServiceImpl;
+	
+	@Autowired
+	ReclamationRepository Rrepo;
 
 	@PostMapping("/AddAffectReclamationUser/{pictureId}")
 	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
@@ -58,26 +62,33 @@ public class ReclamationController {
 			HttpServletRequest request, @PathVariable(name = "pictureId") Integer pictureId) {
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
+		if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
 		return reclamationservice.addAffectReclamationUser(reclamation, user, pictureId);
-
+		}
+		return null;
 	}
 
 	@PutMapping("/UpdateReclamation")
 	@ApiOperation(value = "Update reclamation")
 	@ResponseBody
-	public void updateReclamation(@RequestBody Reclamation reclamation /*,HttpServletRequest request*/) throws ParseException {
+	public void updateReclamation(@RequestBody Reclamation reclamation /*,HttpServletRequest request*/ ) throws ParseException {
 		/*String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);*/
-		reclamationservice.updateReclamation(reclamation/*,user*/);
+		//if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
+		reclamationservice.updateReclamation(reclamation);
+		//}
 	}
+	
 
 	@DeleteMapping("/DeleteReclamation/{idReclamation}")
 	@ApiOperation(value = "Delete reclamation")
 	@ResponseBody
-	public void deleteReclamation(@PathVariable(name = "idReclamation") Integer idReclamation/*,HttpServletRequest request*/) {
-		/*String userName = request.getUserPrincipal().getName();
-		User user = Urepo.findByUsername(userName);*/
-		reclamationservice.deleteReclamation(idReclamation/*,user*/);
+	public void deleteReclamation(@PathVariable(name = "idReclamation") Integer idReclamation,HttpServletRequest request) {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
+		reclamationservice.deleteReclamation(idReclamation);
+		}
 	}
 
 	@GetMapping("/retrieveReclamation/{idReclamation}")
@@ -162,11 +173,13 @@ public class ReclamationController {
 	@PutMapping("/SendMailReclamation/{idReclamation}")
 	@ApiOperation(value = "SendMailReclamation")
 	@ResponseBody
-	public void SendMailReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) throws ParseException,
+	public void SendMailReclamation(@PathVariable(name = "idReclamation") Integer idReclamation/*, HttpServletRequest request*/) throws ParseException,
 			WriterException, IOException, DocumentException, com.itextpdf.text.DocumentException {
+		/*String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);*/
 		Reclamation r = reclamationservice.retrieveReclamation(idReclamation);
-
-		if (r.getType().equals(reclamationType.SOFTWARE) || r.getType().equals(reclamationType.OTHER)) {
+		
+		if (r.getType().equals(reclamationType.SOFTWARE) || r.getType().equals(reclamationType.OTHER) /*&& user.getRole().equals(Role.ENTREPRENEUR*/) {
 			ex.generatePdfReport(idReclamation);
 
 			String Email = "kacemradhwen@gmail.com";
@@ -176,19 +189,26 @@ public class ReclamationController {
 							+ " We have sent you this reclamation to see if you can work on it and develop it\r\n"
 							+ "Cordialement " + " Group. <br>The Meetico Team.",
 					new File("C:/Meetico/" + r.getTitle() + ".pdf"));
+			
 			reclamationservice.verif(idReclamation);
 		}
+		
 	}
 
 	@PutMapping("/answerAdmin")
 	@ApiOperation(value = "answer Admin")
 	@ResponseBody
-	public void answerAdmin(@RequestBody Reclamation reclamation,HttpServletRequest request) throws ParseException {
+	public void answerAdmin(@RequestBody Reclamation reclamation ,HttpServletRequest request) throws ParseException {
+		Reclamation r = Rrepo.findById(reclamation.getIdReclamation()).orElse(reclamation);
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
-		if (reclamation.getType().equals(reclamationType.TRIP) || reclamation.getType().equals(reclamationType.OTHER)
-				|| reclamation.getType().equals(reclamationType.USER)) {
+		try {
+		if ((r.getType().equals(reclamationType.TRIP) || r.getType().equals(reclamationType.OTHER)
+				|| r.getType().equals(reclamationType.USER)) && user.getRole().equals(Role.ADMIN)) {
 			reclamationservice.answerAdmin(reclamation,user);
+		}
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 
@@ -200,11 +220,11 @@ public class ReclamationController {
 		reclamationservice.answerReclamation(repence, idReclamation);
 	}*/
 
-	@GetMapping("/get")
+	/*@GetMapping("/get")
 	@ApiOperation(value = "get")
 	@ResponseBody
 	public float getReclamationsByPriorityAndType() {
 		return reclamationservice.statReclamationsTreterNonTreter();
 
-	}
+	}*/
 }
