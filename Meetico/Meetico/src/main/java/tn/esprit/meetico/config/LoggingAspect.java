@@ -1,6 +1,7 @@
 package tn.esprit.meetico.config;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,13 @@ public class LoggingAspect {
 
 	}
 	
+	@After("execution(* tn.esprit.meetico.service.*.add*(..))")
+	public void logMethodExitAfter(JoinPoint joinPoint) {
+	String name = joinPoint.getSignature().getName();
+	log.info("/////////////////////////FIN Execution " + name + " : ");
+	
 
+	}
 	/*
 	 * "execution(Modifiers-pattern? Ret-type-pattern Declaring-type-pattern?Name-
 	 * pattern(param-pattern) Throws-pattern?)"

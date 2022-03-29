@@ -325,6 +325,7 @@ public class TripServiceImpl implements ITripService{
 		
 		
 	}
+	///////////////////meilleur destination
 	@Scheduled(fixedRate = 3600000)
 	@Override
 	public String favoriteDestination() {
@@ -392,7 +393,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return destination;
 	}
-
+	///////////////nbr de trip pour chaque utilisateur
 	@Override
 	public List<String> userDestionationsVisitsCount() {
 		List<User> users =tripRepo.listdesutilisateurinscritdansvoyage();
@@ -434,6 +435,7 @@ public class TripServiceImpl implements ITripService{
 		
 		return s;
 	}
+	//////////////nbr de visit pour chaque destination
 	@Scheduled(fixedRate = 3600000)
 	@Override
 	public List<String> destionationVisitorsCount() {
