@@ -107,7 +107,7 @@ public class TripServiceImpl implements ITripService{
 		
 		}else {
 			log.info("we have no match");
-		}/*
+		}
 		User u = userRepo.findById(idEnt).orElse(null);
 		List<User> userss = userRepo.findAll();
 		for(User ur :userss) {
@@ -125,7 +125,7 @@ public class TripServiceImpl implements ITripService{
 			} else {
 				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
 			}
-		}*/
+		}
 		
 	}
 
@@ -180,7 +180,7 @@ public class TripServiceImpl implements ITripService{
 		trip.setUser(u);
 		tripRepo.save(trip);
 	
-		/*
+		
 		for(User ur :users) {
 			String number ="+216"+String.valueOf(ur.getPhoneNumber());
 			log.info(number);
@@ -196,7 +196,7 @@ public class TripServiceImpl implements ITripService{
 			} else {
 				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
 			}
-		}*/
+		}
 		
 		
 
