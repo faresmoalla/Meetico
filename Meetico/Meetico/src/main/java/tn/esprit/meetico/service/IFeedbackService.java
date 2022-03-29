@@ -18,5 +18,5 @@ public interface IFeedbackService {
 	public Set<Feedback> ListFeedbacksByUser(Long idUser);
 	public Set<Feedback> ListFeedbacksByTAG(Long idUser);
 	public List<Float> StatFeedbacksBystars(User user);
-	public void StatFeedbacksBystars1(User user);
+	
 }

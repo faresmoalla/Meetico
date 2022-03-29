@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import tn.esprit.meetico.entity.Comment;
 import tn.esprit.meetico.entity.Publication;
 import tn.esprit.meetico.entity.User;
+import tn.esprit.meetico.repository.FeedbackRepository;
 import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
+import tn.esprit.meetico.service.IFeedbackService;
 import tn.esprit.meetico.service.PublicationServiceImpl;
 
 @Controller
@@ -30,6 +34,8 @@ public class GraphController {
 	PublicationRepository pubrepo;
 	@Autowired
 	UserRepository userRepo;
+	@Autowired
+	IFeedbackService feedbacservice;
 	
 	
 /*
@@ -89,6 +95,19 @@ public class GraphController {
 		//model.addAllAttributes(pub);
 		model.addAttribute("pass", 50);
 		model.addAttribute("fail", 50);
+		return "pieChart";
+	}
+	
+	@GetMapping("/displayPieChart2")
+	public String pieChartFeedback(Model model,HttpServletRequest request) {
+		
+		
+		String userName = request.getUserPrincipal().getName();
+		User user = userRepo.findByUsername(userName);
+		List<Float> stat =feedbacservice.StatFeedbacksBystars(user) ;
+		for(Float s: stat) {
+		model.addAttribute(s);
+		}
 		return "pieChart";
 	}
 
