@@ -26,7 +26,7 @@ public class ReclamationProcessor implements ItemProcessor<User, User> {
 		
 		List<Reclamation> r = reclamationRepository.getAllReclamationsClient(user.getUserId());
 
-		emailServiceImpl.sendEmail(user.getEmail(), "JOIN ProtectHer",
+		emailServiceImpl.sendEmail(user.getEmail(), "JOIN MEETICO",
 				" Dear user\r\n" + " We were unable to answer your Reclamation,\r\n"
 						+ "If it is important, please resend.\r\n" + "Cordialement");
 		// user.setUser(user);
