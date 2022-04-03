@@ -30,13 +30,13 @@ import tn.esprit.meetico.service.SmsService;
 
 @RestController
 @RequestMapping("/comment")
-@Api(tags = "Gestion Commentaire")
+@Api(tags = "Comment Management")
 public class CommentController {
 	@Autowired
 	CommentServiceImpl commentService;
 @Autowired
 UserRepository userRepo;
-	@ApiOperation(value = "Ajouter Commentaire")
+	@ApiOperation(value = "add Comment")
 	@PostMapping("/add-comment/{idPublication}")
 	public void addComment(@RequestBody Comment f, @PathVariable("idPublication") Long idPublication,
 			HttpServletRequest request) {
@@ -45,7 +45,7 @@ UserRepository userRepo;
 		commentService.addcomments(f, idPublication, user);
 	}
 
-	@ApiOperation(value = "Update Commentaire")
+	@ApiOperation(value = "Update Comment")
 	@PutMapping("/{idComment}/{idPublication}")
 	public void updateComment(@RequestBody Comment f, @PathVariable("idComment") Long idComment,
 			HttpServletRequest request) {
@@ -55,12 +55,12 @@ UserRepository userRepo;
 
 	}
 
-	@ApiOperation(value = "Delete Commentaire")
+	@ApiOperation(value = "Delete Comment")
 	@DeleteMapping("/DeleteCommentaire/{idComment}")
 	public void deleteComment(@PathVariable("idComment") Long idComment) {
 		commentService.deleteComment(idComment);
 	}
-	@ApiOperation(value = "Lister commentaire trié")
+	@ApiOperation(value = "Sort All Comments")
 	@GetMapping("/ListCommentsAdmin/{field}")
 	public Paginator<List<Comment>> listCommentsAdminPub(@PathVariable String field) {
 		List<Comment> listcomm = commentService.ListAllCommentsAdmin(field);
