@@ -119,15 +119,15 @@ public class PublicationServiceImpl implements IPublicationService {
 	
 ///////////////////////Delete Publication//////////////////////
 	@Override
-	public void deletePublication(Long idUser, Long idPublication) {
+	public void deletePublication( Long idPublication) {
 
-		User user = utiRepo.findById(idUser).orElse(null);
+		//User user = utiRepo.findById(idUser).orElse(null);
 		Publication publication = publicationrepo.findById(idPublication).orElse(null);
-		if (user.getUserId() == publication.getUserr().getUserId()) {
+		//if (user.getUserId() == publication.getUserr().getUserId()) {
 			publicationrepo.deleteById(idPublication);
-		} else {
-			log.warn("You cant delete this publication");
-		}
+		//} else {
+		//	log.warn("You cant delete this publication");
+		//}
 	}
 
 ////////////////////Update Publication//////////////
@@ -205,7 +205,7 @@ public class PublicationServiceImpl implements IPublicationService {
 	
 //////////////////////// Stat Best User////////////
 	
-	@Scheduled(cron = "*/15 * * * * *")
+	//@Scheduled(cron = "*/15 * * * * *")
 	@Override
 	public int MeilleurUser() {
 		
