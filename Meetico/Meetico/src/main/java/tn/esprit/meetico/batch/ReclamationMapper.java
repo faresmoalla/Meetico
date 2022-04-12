@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import tn.esprit.meetico.entity.Gender;
+import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 
 public class ReclamationMapper implements RowMapper<User> {
@@ -16,6 +17,7 @@ public class ReclamationMapper implements RowMapper<User> {
 				.firstName(rs.getString("first_name")).gender(Gender.valueOf(rs.getString("gender")))
 				.lastName(rs.getString("last_name")).password(rs.getString("password"))
 				.phoneNumber(rs.getLong("phone_number")).picturePath(rs.getString("picture_path"))
+				.role(Role.valueOf(rs.getString("role")))
 				.username(rs.getString("username")).verificationCode(rs.getInt("verification_code")).build();
 	
 	}

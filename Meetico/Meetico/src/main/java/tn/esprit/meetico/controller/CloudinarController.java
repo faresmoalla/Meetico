@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Picture;
 import tn.esprit.meetico.service.CloudinaryService;
 import tn.esprit.meetico.service.PictureService;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/cloudinary")
+@Api(tags = "Upload Api Cloudinary ")
 @CrossOrigin
 public class CloudinarController {
 
@@ -27,6 +31,7 @@ public class CloudinarController {
 	PictureService pictureService;
 
 	@PostMapping("/upload")
+	@ApiOperation(value = "Upload Picture")
 	public ResponseEntity<?> upload(@RequestPart MultipartFile multipartFile) throws IOException {
 		BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
 
@@ -41,7 +46,7 @@ public class CloudinarController {
 		return new ResponseEntity(new MessageResponse("add successfully"), HttpStatus.OK);
 
 	}
-
+	@ApiOperation(value = "Delete Picture")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") int id) throws IOException {
 		if (!pictureService.exists(id))

@@ -28,7 +28,7 @@ import tn.esprit.meetico.service.PublicationServiceImpl;
 
 @RestController
 @RequestMapping("/publication")
-@Api(tags = "Gestion Publication")
+@Api(tags = "Publication Management")
 
 public class PublicationController {
 	@Autowired
@@ -38,7 +38,7 @@ public class PublicationController {
 	@Autowired
 	UserRepository userRepo;
 
-	@ApiOperation(value = "Ajouter Publication")
+	@ApiOperation(value = "Add Publication")
 	@PostMapping("/add-publication")
 	public void addPublication(HttpServletRequest request, @RequestBody Publication f) {
         String username = request.getUserPrincipal().getName();
@@ -48,7 +48,7 @@ public class PublicationController {
 
 	}
 
-	@ApiOperation(value = "Supprimer Publication")
+	@ApiOperation(value = "Delete Publication")
 	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
 	@ResponseBody
 	public void deletePublication(@PathVariable("idUtilisateur") Long idUtilisateur,
@@ -58,7 +58,7 @@ public class PublicationController {
 	}
 	
 
-	@ApiOperation(value = " Ajouter ou Supprimer Like Sur Publication")
+	@ApiOperation(value = " Add Or Delete Like From Publication")
 	@PutMapping("/addLike/{idPublicaiton}")
 	public void addLike(@PathVariable("idPublicaiton") Long idPublicaiton, HttpServletRequest request) {
 		 String username = request.getUserPrincipal().getName();
@@ -66,7 +66,7 @@ public class PublicationController {
 		pubService.addLike(idPublicaiton, user);
 	}
 
-	@ApiOperation(value = "Ajouter Ou Supprimer Dislike Sur Publication")
+	@ApiOperation(value = "Add Or Delete Dislike From Publication")
 	@PutMapping("/addDislike/{idPublicaiton}")
 	public void addDislike(@PathVariable("idPublicaiton") Long idPublicaiton, HttpServletRequest request) {
 		 String username = request.getUserPrincipal().getName();
@@ -74,28 +74,28 @@ public class PublicationController {
 		pubService.addDislike(idPublicaiton, user);
 	}
 
-	@ApiOperation(value = "Nombre de Commentaires Sur Publication")
+	@ApiOperation(value = "Number of Comments From Publication")
 	@GetMapping("/nbrComments/{idPublicaiton}")
 	public int nbrCommentsByPub(@PathVariable("idPublicaiton") Long idPublicaiton) {
 		return pubService.nbrCommentsByPu(idPublicaiton);
 
 	}
 
-	@ApiOperation(value = "Nombre de Likes Sur Publication")
+	@ApiOperation(value = "Number of Likes From Publication")
 	@GetMapping("/nbrLike/{idPublicaiton}")
 	public int NbrLikes(@PathVariable("idPublicaiton") Long idPublicaiton) {
 		return pubService.nbrLikeByPub(idPublicaiton);
 
 	}
 
-	@ApiOperation(value = "Nombre de Dislikes Sur Publication")
+	@ApiOperation(value = "Number of Dislikes From Publication")
 	@GetMapping("/nbrDisLike/{idPublicaiton}")
 	public int NbrDisLikes(@PathVariable("idPublicaiton") Long idPublicaiton) {
 		return pubService.nbrDisLikeByPub(idPublicaiton);
 
 	}
 
-	@ApiOperation(value = "Les Publication d'aujourd'hui ")
+	@ApiOperation(value = "Daily publications")
 	@GetMapping("/GetPublicationToday")
 	public List<Publication> GetPublicationToday() {
 
@@ -106,7 +106,7 @@ public class PublicationController {
 
 	}
 
-	@ApiOperation(value = "Statistiques L'utu qui le plus de publications")
+	@ApiOperation(value = "Statistics User whith the highest publications")
 	@GetMapping("/MeilleurUser")
 	public int MeilleurUser() {
 		return pubService.MeilleurUser();

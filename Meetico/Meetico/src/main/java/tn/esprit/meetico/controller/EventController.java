@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Event;
 import tn.esprit.meetico.entity.User;
@@ -39,6 +40,7 @@ import tn.esprit.meetico.service.IEvent;
 
 
 @RestController
+@Api(tags = "Event Management")
 @RequestMapping("/event")
 public class EventController {
 @Autowired
@@ -49,6 +51,7 @@ EventRepo eventRep ;
 EmailServiceImpl e;
 @Autowired
 UserRepository userRepo ; 
+@ApiOperation(value = "Add Event")
 @PostMapping("/add-event")
 @ResponseBody
 public void adddEvent( @RequestBody Event event , HttpServletRequest request) throws SendFailedException
@@ -62,7 +65,7 @@ public void adddEvent( @RequestBody Event event , HttpServletRequest request) th
 
 }
 
-
+@ApiOperation(value = "Delete Event")
 @DeleteMapping("RemoveEvent/{id-event}")
 @ResponseBody
 public ResponseEntity<String> deleteevent(@PathVariable("id-event") int idEvent){
@@ -76,7 +79,7 @@ public ResponseEntity<String> deleteevent(@PathVariable("id-event") int idEvent)
 }
 
 
-
+@ApiOperation(value = "Get Event By Id")
 @GetMapping("get-event-byId/{id-event}")
 @ResponseBody
 public ResponseEntity<Event> getEvent(@PathVariable("id-event")  int idEvent){
@@ -84,7 +87,7 @@ public ResponseEntity<Event> getEvent(@PathVariable("id-event")  int idEvent){
 	return new ResponseEntity<Event>(event, HttpStatus.OK);
 }
 
-
+@ApiOperation(value = "Update Event")
 @PutMapping("update-event/{id-event}")
 public ResponseEntity<Event> updateEvent(@Valid @PathVariable("id-event") int idEvent, @RequestBody Event event){
 	
@@ -93,7 +96,7 @@ public ResponseEntity<Event> updateEvent(@Valid @PathVariable("id-event") int id
 }
 
 
-@ApiOperation(value="assign user to event")
+@ApiOperation(value="Assign User To Event")
 @PostMapping("/add-user-to-event/{idEvent}")
 @ResponseBody
 public void assignUserToEvent ( HttpServletRequest request,@PathVariable("idEvent")Integer idEvent)
@@ -103,7 +106,7 @@ String username = request.getUserPrincipal().getName();
 Ievent.assignUserEvent(user, idEvent);
 
 }
-
+@ApiOperation(value="Get All Events")
 @GetMapping("all-Events")
 public ResponseEntity<List<Event>> getEvents(){
 	
@@ -112,7 +115,7 @@ public ResponseEntity<List<Event>> getEvents(){
 	
 }
 
-@ApiOperation(value="remove user from event")
+@ApiOperation(value="Remove User From Event")
 @DeleteMapping("/remove-user-from-event/{userId}/{idEvent}")
 @ResponseBody
 public void removefromevent (@PathVariable("userId")Long userId,@PathVariable("idEvent")Integer idEvent)
@@ -128,7 +131,7 @@ public void removefromevent (@PathVariable("userId")Long userId,@PathVariable("i
 //}
 
 
-
+@ApiOperation(value="Upload Picture")
 @PutMapping("/PhotoEvent")
 @ResponseBody
    public Event uploadphotoEvent(@RequestParam Integer idEvent ,@RequestPart("file") MultipartFile file)
@@ -147,7 +150,7 @@ e.setImg(Paths.get("upload//" + file.getOriginalFilename()).toString());
 }}
 
 
-catch (Exception e) {
+catch (Exception e) {	
 e.printStackTrace();
 }
 return null;
@@ -157,7 +160,7 @@ return null;
 
  }
 
-
+@ApiOperation(value="Statics")
 @GetMapping("/stat/{idEvent}")
 @ResponseBody
 public float statForEvent (@PathVariable("idEvent")Integer idEvent ){

@@ -25,7 +25,7 @@ import tn.esprit.meetico.service.FeedbackServiceImpl;
 import tn.esprit.meetico.service.IFeedbackService;
 
 @RestController
-@Api(tags = "Gestion Feedback")
+@Api(tags = "Feedback Management")
 @RequestMapping("/Feedback")
 public class FeedbackController {
 	
@@ -35,7 +35,7 @@ public class FeedbackController {
 	UserRepository Urepo;
 	
 	@PostMapping("/AddAffectFeedbackUsers/{ListUsers}/{idTrip}")
-	@ApiOperation(value = "Ajouter et affecter des utilisateur et le voyage  a un feedback")
+	@ApiOperation(value = "Add And Affect Users And Trip With Feedback ")
 	@ResponseBody
 	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,HttpServletRequest request,@PathVariable(name="ListUsers") List<Long> ListUsers,@PathVariable(name="idTrip") Integer idTrip){
 		String userName = request.getUserPrincipal().getName();
@@ -50,39 +50,39 @@ public class FeedbackController {
 		return feedbackservice.UpdateFeedback(feedback,  usersId);
 	}
 	@DeleteMapping("/DeleteFeedback/{idFeedback}")
-	@ApiOperation(value = "Delete feedback ")
+	@ApiOperation(value = "Delete Feedback ")
 	@ResponseBody
 	public void DeleteFeedback(@PathVariable(name="idFeedback") Integer idFeedback) {
 		
 		feedbackservice.deleteFeedback(idFeedback);
 	}
 	@PutMapping("/DesaffectUserFeedback/{idFeedback}/{idUser}")
-	@ApiOperation(value = "Desaffect user feedback")
+	@ApiOperation(value = "Decommission Users From Feedback")
 	@ResponseBody
 	public void DesaffectUserFeedback(@PathVariable(name="idFeedback") Integer idFeedback,@PathVariable(name="idUser") Long idUser) {
 		
 		feedbackservice.desaffecterFeedback(idFeedback, idUser);
 	}
 	@GetMapping("/getAllFeedbacksAdmin")
-	@ApiOperation(value = "get All Feedbacks Admim")
+	@ApiOperation(value = "Get All Feedbacks Admim")
 	@ResponseBody
 	public List<Feedback> getAllFeedbacksAdmin() {
 		return feedbackservice.ListAllFeedbackAdmin();
 	}
 	@GetMapping("/getFeedbackByClient/{idUser}")
-	@ApiOperation(value = "retrieve un Feedback")
+	@ApiOperation(value = "Get All Feedbacks")
 	@ResponseBody
 	public Set<Feedback> getFeedbackbyClient(@PathVariable(name="idUser") Long idUser) {
 		return feedbackservice.ListFeedbacksByUser(idUser);
 	}
 	@GetMapping("/getFeedbackByClientTAG/{idUser}")
-	@ApiOperation(value = "get Feedback By Client TAG ")
+	@ApiOperation(value = "Retrieve Feedbacks By Tagged User ")
 	@ResponseBody
 	public 	Set<Feedback> getFeedbackByClientTAG(@PathVariable(name="idUser") Long idUser) throws ParseException {
 		return feedbackservice.ListFeedbacksByTAG(idUser);
 	}
 	@GetMapping("/Statistique")
-	@ApiOperation(value = "Pourcentage Stars by ")
+	@ApiOperation(value = "Percentage Of Feedbacks By Stars  ")
 	@ResponseBody
 	public 	List<Float> statFeedbackByStars(HttpServletRequest request) throws ParseException {
 		String userName = request.getUserPrincipal().getName();
@@ -94,35 +94,6 @@ public class FeedbackController {
 	
 	
 	
-	/*
-	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
-	@ApiOperation(value = "get reclamation by priority ")
-	@ResponseBody
-	public 	Set<Reclamation> getReclamationsByPriority(@PathVariable(name="reclamationPriority") reclamationPriority pr) throws ParseException {
-		return null;
-	}
-	@GetMapping("/getReclamationByPriorityAndType/{reclamationPriority}/{typeReclamation}")
-	@ApiOperation(value = "get reclamation by priority and type")
-	@ResponseBody
-	public 	Set<Reclamation> getReclamationsByPriorityAndType(@PathVariable(name="reclamationPriority") reclamationPriority pr,@PathVariable(name="typeReclamation") reclamationType rt) throws ParseException {
-		return null;
-	}
-	@GetMapping("/getReclamationByUser/{userId}")
-	@ApiOperation(value = "get reclamation by user ")
-	@ResponseBody
-	public 	List<Reclamation> getReclamationsByUser(@PathVariable(name="userId") Long userId) throws ParseException {
-		return null;
-	
-	
-	}
-	@GetMapping("/getReclamationByUserandStatus/{userId}")
-	@ApiOperation(value = "get reclamation by user and status ")
-	@ResponseBody
-	public 	Set<Reclamation> getReclamationsByUserAndStatus(@PathVariable(name="userId") Long userId) throws ParseException {
-		return null;
-	
-	
-	}*/
 	
 	
 }

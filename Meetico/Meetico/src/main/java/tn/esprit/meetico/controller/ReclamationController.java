@@ -35,7 +35,7 @@ import tn.esprit.meetico.service.IReclamationService;
 import tn.esprit.meetico.service.ReclamationExporter;
 
 @RestController
-@Api(tags = "Gestion reclamation")
+@Api(tags = " Reclamation Management")
 @RequestMapping("/Reclamation")
 @CrossOrigin
 public class ReclamationController {
@@ -56,7 +56,7 @@ public class ReclamationController {
 	ReclamationRepository Rrepo;
 
 	@PostMapping("/AddAffectReclamationUser/{pictureId}")
-	@ApiOperation(value = "Ajouter et affecter un utilisateur a une reclamation")
+	@ApiOperation(value = "Add and affect  User Whith Reclamation")
 	@ResponseBody
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,
 			HttpServletRequest request, @PathVariable(name = "pictureId") Integer pictureId) {
@@ -69,7 +69,7 @@ public class ReclamationController {
 	}
 
 	@PutMapping("/UpdateReclamation")
-	@ApiOperation(value = "Update reclamation")
+	@ApiOperation(value = "Update Reclamation")
 	@ResponseBody
 	public void updateReclamation(@RequestBody Reclamation reclamation /*,HttpServletRequest request*/ ) throws ParseException {
 		/*String userName = request.getUserPrincipal().getName();
@@ -81,7 +81,7 @@ public class ReclamationController {
 	
 
 	@DeleteMapping("/DeleteReclamation/{idReclamation}")
-	@ApiOperation(value = "Delete reclamation")
+	@ApiOperation(value = "Delete Reclamation")
 	@ResponseBody
 	public void deleteReclamation(@PathVariable(name = "idReclamation") Integer idReclamation,HttpServletRequest request) {
 		String userName = request.getUserPrincipal().getName();
@@ -92,14 +92,14 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/retrieveReclamation/{idReclamation}")
-	@ApiOperation(value = "retrieve une Reclamation")
+	@ApiOperation(value = "Retrieve Reclamation")
 	@ResponseBody
 	public Reclamation retrieveReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
 		return reclamationservice.retrieveReclamation(idReclamation);
 	}
 
 	@GetMapping("/getReclamationByType/{typeReclamation}")
-	@ApiOperation(value = "get reclamation by type ")
+	@ApiOperation(value = "Get Reclamation By Type ")
 	@ResponseBody
 	public Set<Reclamation> getReclamationsByType(@PathVariable(name = "typeReclamation") reclamationType rt)
 			throws ParseException {
@@ -107,7 +107,7 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/getReclamationByPriority/{reclamationPriority}")
-	@ApiOperation(value = "get reclamation by priority ")
+	@ApiOperation(value = "Get Reclamation By Priority ")
 	@ResponseBody
 	public Set<Reclamation> getReclamationsByPriority(
 			@PathVariable(name = "reclamationPriority") reclamationPriority pr) throws ParseException {
@@ -115,7 +115,7 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/getReclamationByPriorityAndType/{reclamationPriority}/{typeReclamation}")
-	@ApiOperation(value = "get reclamation by priority and type")
+	@ApiOperation(value = "Get Reclamation By Priority And Type")
 	@ResponseBody
 	public Set<Reclamation> getReclamationsByPriorityAndType(
 			@PathVariable(name = "reclamationPriority") reclamationPriority pr,
@@ -124,7 +124,7 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/getReclamationByUser/{userId}")
-	@ApiOperation(value = "get reclamation by user ")
+	@ApiOperation(value = "Get Reclamation By User ")
 	@ResponseBody
 	public List<Reclamation> getReclamationsByUser(@PathVariable(name = "userId") Long userId) throws ParseException {
 		return reclamationservice.ListAllReclamationsClient(userId);
@@ -132,7 +132,7 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/getReclamationByUserandStatus/{userId}")
-	@ApiOperation(value = "get reclamation by user and status ")
+	@ApiOperation(value = "Get Reclamation By User And Atatus ")
 	@ResponseBody
 	public Set<Reclamation> getReclamationsByUserAndStatus(@PathVariable(name = "userId") Long userId)
 			throws ParseException {
@@ -141,7 +141,7 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/statWatingReclamationbytypeandpriority/{type}/{priority}")
-	@ApiOperation(value = "stat Wating Reclamation by type and priority ")
+	@ApiOperation(value = "Statistics Wating Reclamations By Type and priority ")
 	@ResponseBody
 	public float statWatingReclamationbytypeandpriority(@PathVariable(name = "type") reclamationType type,
 			@PathVariable(name = "priority") reclamationPriority priority) throws ParseException {
@@ -149,21 +149,21 @@ public class ReclamationController {
 	}
 
 	@GetMapping("/statWatingReclamation")
-	@ApiOperation(value = "stat Wating Reclamation ")
+	@ApiOperation(value = "Statistics Wating Reclamations ")
 	@ResponseBody
 	public float statWatingReclamation() throws ParseException {
 		return reclamationservice.statWatingReclamation();
 	}
 
 	@GetMapping("/statWatingReclamationByType/{type}")
-	@ApiOperation(value = "stat Wating Reclamation By Type ")
+	@ApiOperation(value = "Statistics Wating Reclamations By Type ")
 	@ResponseBody
 	public float statWatingReclamationByType(@PathVariable(name = "type") reclamationType type) throws ParseException {
 		return reclamationservice.statWatingReclamationByType(type);
 	}
 
 	@GetMapping("/statWatingReclamationByPriority/{priority}")
-	@ApiOperation(value = "percentage of Reclamation By priority ")
+	@ApiOperation(value = "Percentage Of Reclamation By Priority ")
 	@ResponseBody
 	public float statWatingReclamationByPriority(@PathVariable(name = "priority") reclamationPriority priority)
 			throws ParseException {
@@ -171,7 +171,7 @@ public class ReclamationController {
 	}
 
 	@PutMapping("/SendMailReclamation/{idReclamation}")
-	@ApiOperation(value = "SendMailReclamation")
+	@ApiOperation(value = "Verify Reclamation By Sending Mail")
 	@ResponseBody
 	public void SendMailReclamation(@PathVariable(name = "idReclamation") Integer idReclamation/*, HttpServletRequest request*/) throws ParseException,
 			WriterException, IOException, DocumentException, com.itextpdf.text.DocumentException {
@@ -196,7 +196,7 @@ public class ReclamationController {
 	}
 
 	@PutMapping("/answerAdmin")
-	@ApiOperation(value = "answer Admin")
+	@ApiOperation(value = "Verify Reclamation By the answer")
 	@ResponseBody
 	public void answerAdmin(@RequestBody Reclamation reclamation ,HttpServletRequest request) throws ParseException {
 		Reclamation r = Rrepo.findById(reclamation.getIdReclamation()).orElse(reclamation);
