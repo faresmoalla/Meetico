@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.PublicationServiceImpl;
-
+@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/publication")
 @Api(tags = "Publication Management")
@@ -49,11 +50,11 @@ public class PublicationController {
 	}
 
 	@ApiOperation(value = "Delete Publication")
-	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
+	@DeleteMapping("/supprimer-publication/{idPublicaiton}")
 	@ResponseBody
-	public void deletePublication(@PathVariable("idUtilisateur") Long idUtilisateur,
+	public void deletePublication(
 			@PathVariable("idPublicaiton") Long idPublicaiton) {
-		pubService.deletePublication(idUtilisateur, idPublicaiton);
+		pubService.deletePublication( idPublicaiton);
 
 	}
 	
@@ -95,17 +96,27 @@ public class PublicationController {
 
 	}
 
+	
 	@ApiOperation(value = "Daily publications")
 	@GetMapping("/GetPublicationToday")
 	public List<Publication> GetPublicationToday() {
 
 		Date currentSqlDate = new Date(System.currentTimeMillis());
-		List<Publication> listp = pubRepo.getPubToday(currentSqlDate);
-
+		List<Publication> listp = pubRepo.findAll();
 		return listp;
 
 	}
-
+	
+//	@ApiOperation(value = "Afficher All publications")
+//	@GetMapping("/GetPublicationToday")
+//	public List<Publication> getAllPubs() {
+//
+//		Date currentSqlDate = new Date(System.currentTimeMillis());
+//		//List<Publication> listp = pubRepo.getPubToday(currentSqlDate);
+//		List<Publication> listp = pubRepo.findAll();
+//		return listp;
+//
+//	}
 	@ApiOperation(value = "Statistics User whith the highest publications")
 	@GetMapping("/MeilleurUser")
 	public int MeilleurUser() {
