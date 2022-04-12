@@ -26,7 +26,7 @@ import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.PublicationServiceImpl;
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin")
 @RestController
 @RequestMapping("/publication")
 @Api(tags = "Publication Management")
