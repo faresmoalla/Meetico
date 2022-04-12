@@ -50,7 +50,11 @@ public class PublicationController {
 	}
 
 	@ApiOperation(value = "Delete Publication")
+<<<<<<< Updated upstream
 	@DeleteMapping("/supprimer-publication/{idPublicaiton}")
+=======
+	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
+>>>>>>> Stashed changes
 	@ResponseBody
 	public void deletePublication(
 			@PathVariable("idPublicaiton") Long idPublicaiton) {
@@ -96,7 +100,10 @@ public class PublicationController {
 
 	}
 
+<<<<<<< Updated upstream
 	
+=======
+>>>>>>> Stashed changes
 	@ApiOperation(value = "Daily publications")
 	@GetMapping("/GetPublicationToday")
 	public List<Publication> GetPublicationToday() {
@@ -106,6 +113,7 @@ public class PublicationController {
 		return listp;
 
 	}
+<<<<<<< Updated upstream
 	
 //	@ApiOperation(value = "Afficher All publications")
 //	@GetMapping("/GetPublicationToday")
@@ -117,6 +125,9 @@ public class PublicationController {
 //		return listp;
 //
 //	}
+=======
+
+>>>>>>> Stashed changes
 	@ApiOperation(value = "Statistics User whith the highest publications")
 	@GetMapping("/MeilleurUser")
 	public int MeilleurUser() {
