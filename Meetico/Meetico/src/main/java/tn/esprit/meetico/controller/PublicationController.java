@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +25,11 @@ import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.PublicationServiceImpl;
+<<<<<<< HEAD
 @CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin")
+=======
+
+>>>>>>> parent of e57cee1 (modif)
 @RestController
 @RequestMapping("/publication")
 @Api(tags = "Publication Management")
@@ -50,15 +53,19 @@ public class PublicationController {
 	}
 
 	@ApiOperation(value = "Delete Publication")
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	@DeleteMapping("/supprimer-publication/{idPublicaiton}")
 =======
 	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
 >>>>>>> Stashed changes
+=======
+	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
+>>>>>>> parent of e57cee1 (modif)
 	@ResponseBody
-	public void deletePublication(
+	public void deletePublication(@PathVariable("idUtilisateur") Long idUtilisateur,
 			@PathVariable("idPublicaiton") Long idPublicaiton) {
-		pubService.deletePublication( idPublicaiton);
+		pubService.deletePublication(idUtilisateur, idPublicaiton);
 
 	}
 	
@@ -100,19 +107,24 @@ public class PublicationController {
 
 	}
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of e57cee1 (modif)
 	@ApiOperation(value = "Daily publications")
 	@GetMapping("/GetPublicationToday")
 	public List<Publication> GetPublicationToday() {
 
 		Date currentSqlDate = new Date(System.currentTimeMillis());
-		List<Publication> listp = pubRepo.findAll();
+		List<Publication> listp = pubRepo.getPubToday(currentSqlDate);
+
 		return listp;
 
 	}
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	
 //	@ApiOperation(value = "Afficher All publications")
@@ -128,6 +140,9 @@ public class PublicationController {
 =======
 
 >>>>>>> Stashed changes
+=======
+
+>>>>>>> parent of e57cee1 (modif)
 	@ApiOperation(value = "Statistics User whith the highest publications")
 	@GetMapping("/MeilleurUser")
 	public int MeilleurUser() {

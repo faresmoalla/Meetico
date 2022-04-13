@@ -97,7 +97,9 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private Set<Profession> professions;
 
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@JsonIgnore
+	private Set<Reclamation> reclamations;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "sender", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
@@ -119,12 +121,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	private Set<Comment> comments;
 
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	@JsonIgnore
-	private Set<Reclamation> reclamations;
-	
-	@OneToMany( cascade = CascadeType.ALL, mappedBy = "userr")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "userr")
 	@JsonIgnore
 	private Set<Publication> publications;
 
