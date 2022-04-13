@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.meetico.entity.User;
-import tn.esprit.meetico.util.AuthUser;
+import tn.esprit.meetico.util.Member;
 import tn.esprit.meetico.util.UserAttribute;
 
 public interface IUserService {
@@ -14,7 +14,7 @@ public interface IUserService {
 	
 	ResponseEntity<Integer> registerEmployee(User employee);
 
-	ResponseEntity<String> authenticateUser(@Valid AuthUser user);
+	ResponseEntity<String> authenticateUser(@Valid Member user);
 	
 	ResponseEntity<String> updateUser(String username, User updation);
 	

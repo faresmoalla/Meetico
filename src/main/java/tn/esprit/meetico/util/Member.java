@@ -3,7 +3,7 @@ package tn.esprit.meetico.util;
 import lombok.Getter;
 
 @Getter
-public class AuthUser {
+public class Member {
 	
 	private String username;
 	

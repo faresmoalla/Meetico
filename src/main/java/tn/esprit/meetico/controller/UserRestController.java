@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.service.IUserService;
-import tn.esprit.meetico.util.AuthUser;
+import tn.esprit.meetico.util.Member;
 import tn.esprit.meetico.util.UserAttribute;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", origins = "http://localhost:4200")
 @RestController
 @Api(tags = "User Management")
 @RequestMapping("/user")
@@ -43,7 +43,7 @@ public class UserRestController {
 	
 	@ApiOperation(value = "Authenticate a user")
 	@PostMapping("/authenticateUser")
-	public ResponseEntity<String> authenticateUser(@Valid @RequestBody AuthUser user) {
+	public ResponseEntity<String> authenticateUser(@Valid @RequestBody Member user) {
 		return userService.authenticateUser(user);
 	}
 
@@ -70,7 +70,7 @@ public class UserRestController {
 	}
 
 	@ApiOperation(value = "Approve a pending employee")
-	@PutMapping("/approvePendingEmployee")
+	@GetMapping("/approvePendingEmployee")
 	@ResponseBody
 	public ResponseEntity<String> approvePendingEmployee(@RequestParam Integer verificationCode) {
 		return userService.approvePendingEmployee(verificationCode);

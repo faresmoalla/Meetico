@@ -22,7 +22,7 @@ import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.security.JWTUtils;
-import tn.esprit.meetico.util.AuthUser;
+import tn.esprit.meetico.util.Member;
 import tn.esprit.meetico.util.UserAttribute;
 
 @Service
@@ -66,15 +66,13 @@ public class UserServiceImpl implements IUserService {
 		return ResponseEntity.ok().body(employee.getVerificationCode());
 	}
 
-	public ResponseEntity<String> authenticateUser(AuthUser user) {
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+	public ResponseEntity<String> authenticateUser(Member member) {
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-		return ResponseEntity.ok().body("You are logged in as an" + roles.get(0).toString() + " with token : " + jwt);
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList());
+		return ResponseEntity.ok().body("You are logged in as an " + roles.get(0).toString() + " with token : " + jwt);
 	}
 
 	@Override
