@@ -26,7 +26,11 @@ import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.PublicationServiceImpl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 @CrossOrigin(origins = "http://localhost:4200",exposedHeaders="Access-Control-Allow-Origin")
+=======
+
+>>>>>>> parent of e57cee1 (modif)
 =======
 
 >>>>>>> parent of e57cee1 (modif)
@@ -54,11 +58,15 @@ public class PublicationController {
 
 	@ApiOperation(value = "Delete Publication")
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	@DeleteMapping("/supprimer-publication/{idPublicaiton}")
 =======
 	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
 >>>>>>> Stashed changes
+=======
+	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
+>>>>>>> parent of e57cee1 (modif)
 =======
 	@DeleteMapping("/supprimer-publication/{idUtilisateur}/{idPublicaiton}")
 >>>>>>> parent of e57cee1 (modif)
@@ -108,10 +116,13 @@ public class PublicationController {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of e57cee1 (modif)
 =======
 >>>>>>> parent of e57cee1 (modif)
 	@ApiOperation(value = "Daily publications")
@@ -124,6 +135,7 @@ public class PublicationController {
 		return listp;
 
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< Updated upstream
 	
@@ -140,6 +152,9 @@ public class PublicationController {
 =======
 
 >>>>>>> Stashed changes
+=======
+
+>>>>>>> parent of e57cee1 (modif)
 =======
 
 >>>>>>> parent of e57cee1 (modif)
