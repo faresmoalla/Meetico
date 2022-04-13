@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.meetico.entity.Profession;
 
 @Repository
-public interface ProfessionRepository extends JpaRepository<Profession, Long> {}
+public interface ProfessionRepository extends JpaRepository<Profession, Long> { }

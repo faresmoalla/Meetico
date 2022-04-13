@@ -14,13 +14,10 @@ public class SwaggerConfig {
 
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("tn.esprit.meetico")).paths(PathSelectors.any()).build()
-				.apiInfo(apiInfo());
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("tn.esprit.meetico")).paths(PathSelectors.any()).build().apiInfo(apiInfo());
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Swagger Configuration for Meetico")
-				.description("\"Spring Boot Swagger Configuration\"").version("1.0.0").build();
+		return new ApiInfoBuilder().title("Swagger Configuration for Meetico").description("\"Spring Boot Swagger Configuration\"").version("1.0.0").build();
 	}
 }

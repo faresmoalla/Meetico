@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.meetico.entity.ActivityField;
 
 @Repository
-public interface ActivityFieldRepository extends JpaRepository<ActivityField, Long> {}
+public interface ActivityFieldRepository extends JpaRepository<ActivityField, Long> { }

@@ -27,10 +27,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
 	
 	List<User> findByActive(Boolean active);
 	
+	List<User> findByGender(Gender gender);
+	
 	User findByUsername(String username);
 	
 	User findByVerificationCode(Integer verificationCode);
 	
-	List<User> findByGender(Gender male);
 
 }

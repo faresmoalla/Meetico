@@ -19,7 +19,6 @@ public class MessageServiceImpl {
 	private String twilloSenderNumber;
 
 	public void sendSMS(SMSResponse smsResponse) {
-		
 		try {
 			Twilio.init(accountSID, accountAuthToken);
 			String smsText = smsResponse.getText();
@@ -30,7 +29,6 @@ public class MessageServiceImpl {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 }

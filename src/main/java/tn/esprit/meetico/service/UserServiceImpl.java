@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import lombok.extern.slf4j.Slf4j;
 import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.repository.UserRepository;
@@ -27,7 +25,6 @@ import tn.esprit.meetico.security.JWTUtils;
 import tn.esprit.meetico.util.AuthUser;
 import tn.esprit.meetico.util.UserAttribute;
 
-@Slf4j
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -74,10 +71,10 @@ public class UserServiceImpl implements IUserService {
 				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		jwtUtils.generateJwtToken(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		return ResponseEntity.ok().body("You are logged in as an" + roles.get(0).toString() + ".");
+		return ResponseEntity.ok().body("You are logged in as an" + roles.get(0).toString() + " with token : " + jwt);
 	}
 
 	@Override
@@ -107,7 +104,7 @@ public class UserServiceImpl implements IUserService {
 		}
 		return ResponseEntity.badRequest().body("No correspondance.");
 	}
-	
+
 	@Override
 	public ResponseEntity<List<User>> retrieveAllUsers() {
 		return ResponseEntity.ok().body(userRepository.findAll());
@@ -152,135 +149,133 @@ public class UserServiceImpl implements IUserService {
 		Integer size = userRepository.findAll().size();
 		if (ascendant) {
 			if (userAttributes.size() == 1)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).ascending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(
+						PageRequest.of(0, size, Sort.by(userAttributes.get(0).toString()).ascending()).getSort()));
 			else if (userAttributes.size() == 2)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).ascending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest
+								.of(0, size,
+										Sort.by(userAttributes.get(0).toString())
+												.and(Sort.by(userAttributes.get(1).toString())).ascending())
+								.getSort()));
 			else if (userAttributes.size() == 3)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).ascending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest
+								.of(0, size,
+										Sort.by(userAttributes.get(0).toString())
+												.and(Sort.by(userAttributes.get(1).toString()))
+												.and(Sort.by(userAttributes.get(2).toString())).ascending())
+								.getSort()));
 			else if (userAttributes.size() == 4)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).ascending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString())).ascending())
+								.getSort()));
 			else if (userAttributes.size() == 5)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).ascending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString()))
+										.and(Sort.by(userAttributes.get(4).toString())).ascending())
+								.getSort()));
 			else if (userAttributes.size() == 6)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(
-						Sort.by(userAttributes.get(5).toString())).ascending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString()))
+										.and(Sort.by(userAttributes.get(4).toString()))
+										.and(Sort.by(userAttributes.get(5).toString())).ascending())
+								.getSort()));
 			else if (userAttributes.size() == 7)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(								
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).ascending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).ascending()).getSort()));
 			else if (userAttributes.size() == 8)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(								
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).and(								
-						Sort.by(userAttributes.get(7).toString())).ascending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).and(Sort.by(userAttributes.get(7).toString()))
+						.ascending()).getSort()));
 			else
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).and(
-						Sort.by(userAttributes.get(7).toString())).and(
-						Sort.by(userAttributes.get(8).toString())).ascending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).and(Sort.by(userAttributes.get(7).toString()))
+						.and(Sort.by(userAttributes.get(8).toString())).ascending()).getSort()));
 		} else {
 			if (userAttributes.size() == 1)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).descending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(
+						PageRequest.of(0, size, Sort.by(userAttributes.get(0).toString()).descending()).getSort()));
 			else if (userAttributes.size() == 2)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).descending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest
+								.of(0, size,
+										Sort.by(userAttributes.get(0).toString())
+												.and(Sort.by(userAttributes.get(1).toString())).descending())
+								.getSort()));
 			else if (userAttributes.size() == 3)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).descending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest
+								.of(0, size,
+										Sort.by(userAttributes.get(0).toString())
+												.and(Sort.by(userAttributes.get(1).toString()))
+												.and(Sort.by(userAttributes.get(2).toString())).descending())
+								.getSort()));
 			else if (userAttributes.size() == 4)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).descending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString())).descending())
+								.getSort()));
 			else if (userAttributes.size() == 5)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).descending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString()))
+										.and(Sort.by(userAttributes.get(4).toString())).descending())
+								.getSort()));
 			else if (userAttributes.size() == 6)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(
-						Sort.by(userAttributes.get(5).toString())).descending()).getSort()));
+				return ResponseEntity.ok()
+						.body(userRepository.findAll(PageRequest.of(0, size,
+								Sort.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+										.and(Sort.by(userAttributes.get(2).toString()))
+										.and(Sort.by(userAttributes.get(3).toString()))
+										.and(Sort.by(userAttributes.get(4).toString()))
+										.and(Sort.by(userAttributes.get(5).toString())).descending())
+								.getSort()));
 			else if (userAttributes.size() == 7)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(								
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).descending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).descending()).getSort()));
 			else if (userAttributes.size() == 8)
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(								
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).and(								
-						Sort.by(userAttributes.get(7).toString())).descending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).and(Sort.by(userAttributes.get(7).toString()))
+						.descending()).getSort()));
 			else
-				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size,
-						Sort.by(userAttributes.get(0).toString()).and(
-						Sort.by(userAttributes.get(1).toString())).and(
-						Sort.by(userAttributes.get(2).toString())).and(
-						Sort.by(userAttributes.get(3).toString())).and(
-						Sort.by(userAttributes.get(4).toString())).and(
-						Sort.by(userAttributes.get(5).toString())).and(
-						Sort.by(userAttributes.get(6).toString())).and(
-						Sort.by(userAttributes.get(7).toString())).and(
-						Sort.by(userAttributes.get(8).toString())).descending()).getSort()));
+				return ResponseEntity.ok().body(userRepository.findAll(PageRequest.of(0, size, Sort
+						.by(userAttributes.get(0).toString()).and(Sort.by(userAttributes.get(1).toString()))
+						.and(Sort.by(userAttributes.get(2).toString())).and(Sort.by(userAttributes.get(3).toString()))
+						.and(Sort.by(userAttributes.get(4).toString())).and(Sort.by(userAttributes.get(5).toString()))
+						.and(Sort.by(userAttributes.get(6).toString())).and(Sort.by(userAttributes.get(7).toString()))
+						.and(Sort.by(userAttributes.get(8).toString())).descending()).getSort()));
 		}
 	}
-	
+
 	@Override
 	public ResponseEntity<List<User>> searchForUsers(String input) {
 		List<User> users = userRepository.findAllByInput(input);
@@ -290,10 +285,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	@Scheduled(fixedRate = 3600000)
-	public void accountManagement() {
+	public ResponseEntity<String> accountManagement() {
 		Integer number = userRepository.findByActive(false).size();
-		log.info("We have detected " + number + " accounts' status showed as Pending.");
+		return ResponseEntity.ok().body("We have detected " + number + " accounts' status showed as Pending.");
 	}
 
 }

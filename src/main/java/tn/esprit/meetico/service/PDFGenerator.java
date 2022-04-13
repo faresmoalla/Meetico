@@ -34,7 +34,7 @@ public class PDFGenerator {
 	private String logoImgPath;
 
 	@Autowired
-	RequestRepository requestRepository;
+	private RequestRepository requestRepository;
 
 	private static Font COURIER = new Font(Font.FontFamily.COURIER, 18, Font.BOLD);
 	private static Font COURIER_MEDIUM = new Font(Font.FontFamily.COURIER, 14, Font.BOLD);

@@ -48,8 +48,7 @@ public class RequestRestController {
 	@ApiOperation(value = "Assign a sender to a request")
 	@PutMapping("/assignSenderToRequest")
 	@ResponseBody
-	public ResponseEntity<String> assignSenderToRequest(@RequestParam("sender-id") Long senderId,
-			@RequestParam("request-id") Long requestId) {
+	public ResponseEntity<String> assignSenderToRequest(@RequestParam("sender-id") Long senderId, @RequestParam("request-id") Long requestId) {
 		return requestService.assignSenderToRequest(senderId, requestId);
 	}
 

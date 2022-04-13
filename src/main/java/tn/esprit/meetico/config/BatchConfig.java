@@ -51,15 +51,13 @@ public class BatchConfig {
 
 	@Bean
 	public Step requestEmailSenderStep() {
-		return this.stepBuilderFactory.get("emailSenderStep").<Request, Request>chunk(100).reader(requestItemReader())
-				.processor(requestItemProcessor()).writer(requestItemWriter()).build();
+		return this.stepBuilderFactory.get("emailSenderStep").<Request, Request>chunk(100).reader(requestItemReader()).processor(requestItemProcessor()).writer(requestItemWriter()).build();
 	}
 
 	@Bean
 	@Primary
 	public Job requestEmailSenderJob() {
-		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(requestEmailSenderStep())
-				.build();
+		return this.jobBuilderFactory.get("emailSenderJob" + new Random().nextInt()).start(requestEmailSenderStep()).build();
 	}
 	
 }

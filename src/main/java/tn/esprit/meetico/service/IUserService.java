@@ -30,8 +30,6 @@ public interface IUserService {
 	
 	ResponseEntity<List<User>> searchForUsers(String input);
 
-	void accountManagement();
-
-
+	ResponseEntity<String> accountManagement();
 
 }

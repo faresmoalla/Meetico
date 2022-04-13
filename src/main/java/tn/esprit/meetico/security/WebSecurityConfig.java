@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tn.esprit.meetico.service.UserDetailsServiceImpl;
 
 @Configuration
@@ -53,23 +52,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.cors().and().httpBasic().and().csrf().disable();
-
-		http.authorizeRequests()
-			.antMatchers("/user/signIn").permitAll()
-			.antMatchers("/user/updateUser").permitAll()
-			.antMatchers("/user/assignPictureToUser").permitAll();
-
-		http.authorizeRequests()
-			.antMatchers("/request/**").hasAuthority("ENTREPRENEUR")
-			.antMatchers("/user/signUp").hasAnyAuthority("ENTREPRENEUR")
-			.antMatchers("/user/removeUser").hasAuthority("ENTREPRENEUR")
-			.antMatchers("/user/retrieveSortedUsers").hasAuthority("ENTREPRENEUR")
-			.antMatchers("/user/searchForUsers").hasAuthority("ENTREPRENEUR")
-			.antMatchers("/user/approvePendingAccount").hasAuthority("EMPLOYEE")
-			.anyRequest().authenticated();
-		
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.cors().and().httpBasic().and().authorizeRequests().anyRequest().authenticated().and().csrf().disable();
+//		
+//		http.authorizeRequests()
+//			.antMatchers("/user/signIn").permitAll()
+//			.antMatchers("/user/updateUser").permitAll()
+//			.antMatchers("/user/assignPictureToUser").permitAll();
+//
+//		http.authorizeRequests()
+//			.antMatchers("/request/**").hasAuthority("ENTREPRENEUR")
+//			.antMatchers("/user/signUp").hasAnyAuthority("ENTREPRENEUR")
+//			.antMatchers("/user/removeUser").hasAuthority("ENTREPRENEUR")
+//			.antMatchers("/user/retrieveSortedUsers").hasAuthority("ENTREPRENEUR")
+//			.antMatchers("/user/searchForUsers").hasAuthority("ENTREPRENEUR")
+//			.antMatchers("/user/approvePendingAccount").hasAuthority("EMPLOYEE")
+//		.anyRequest().authenticated();
+//					
+//		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
 }
