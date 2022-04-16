@@ -38,8 +38,8 @@ public class Publication implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idPublication;
 	// @NotEmpty(message = "the content field is required")
-	@NotBlank
-	@Size(max = 100 , message="max akber 100")
+	//@NotBlank
+	//@Size(max = 100 , message="max akber 100")
      private String contents;
 	
 	@Temporal(TemporalType.DATE)

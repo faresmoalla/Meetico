@@ -8,9 +8,10 @@ import tn.esprit.meetico.entity.Gender;
 import tn.esprit.meetico.entity.User;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.cloudinary.provisioning.Account.Role;
+
 import tn.esprit.meetico.entity.Gender;
 import tn.esprit.meetico.entity.Reclamation;
-import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.entity.reclamationPriority;
 import tn.esprit.meetico.entity.reclamationType;
@@ -23,8 +24,10 @@ public class PublicationMapper implements RowMapper<User> {
 				.firstName(rs.getString("first_name")).gender(Gender.valueOf(rs.getString("gender")))
 				.lastName(rs.getString("last_name")).password(rs.getString("password"))
 				.phoneNumber(rs.getLong("phone_number")).picturePath(rs.getString("picture_path"))
-				.role(Role.valueOf(rs.getString("role")))
-				.username(rs.getString("username")).verificationCode(rs.getInt("verification_code")).build();
+				.username(rs.getString("username")).verificationCode(rs.getInt("verification_code"))
+				
+				
+				.build();
 	
 	}
 }
