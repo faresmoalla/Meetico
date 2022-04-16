@@ -27,6 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +48,8 @@ public class Feedback implements Serializable   {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name="idFeedback")  
+	@Column(name="idFeedback") 
+	
 	private Integer idFeedback;
 
 	@NotBlank(message="The title must be written\"")
@@ -85,11 +87,13 @@ public class Feedback implements Serializable   {
 	private User user;
 	
 	@ManyToMany(mappedBy = "feedbacks")
-	@JsonIgnore
+	
+	@ApiModelProperty(value = "This parameter will be ignored", required = false)
 	private Set<User> users;
 	
 	@ManyToOne
 	@JsonIgnore
+	@ApiModelProperty(value = "This parameter will be ignored", required = false)
 	private Trip trip;
 	
 }

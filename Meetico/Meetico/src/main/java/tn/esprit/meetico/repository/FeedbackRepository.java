@@ -8,8 +8,16 @@ import tn.esprit.meetico.entity.Feedback;
 
 
 public interface FeedbackRepository extends JpaRepository<Feedback,Integer>{
+	
+	
+	
+	
+	
 	@Query("SELECT f FROM Feedback f join f.user u WHERE u.userId =:userId")
 	 Set<Feedback> getAllFeedbacksClient(@Param(value = "userId") Long userId);
+	
+	
+	
 	@Query("SELECT f FROM Feedback f join f.users u WHERE u.userId = :userId")
 	Set<Feedback> getFeedbacksClientTAG(@Param(value = "userId") Long userId);
 	@Query("SELECT f FROM Feedback f join f.users u WHERE u.userId = :userId")

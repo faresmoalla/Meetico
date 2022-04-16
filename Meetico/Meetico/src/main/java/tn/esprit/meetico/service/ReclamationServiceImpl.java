@@ -38,9 +38,17 @@ public class ReclamationServiceImpl implements IReclamationService {
 	public Reclamation addAffectReclamationUser(Reclamation reclamation, User user, Integer idPicture) {
 
 		//User user = userrepository.findById(userId).orElse(null);
-		Picture P = picturerepository.findById(idPicture).orElse(null);
+		Picture P =null;
+		if(idPicture!= null) {
+				P=picturerepository.findById(idPicture).orElse(null);
+		}
 		reclamation.setUser(user);
 		reclamation.setPicture(P);
+		Date currentSqlDate = new Date(System.currentTimeMillis());
+		reclamation.setSendingDate(currentSqlDate);
+		reclamation.setLastModificationDate(currentSqlDate);
+		reclamation.setStatus(false);
+		
 		return reclamationRepository.save(reclamation);
 	}
 
@@ -53,16 +61,14 @@ public class ReclamationServiceImpl implements IReclamationService {
 	@Override
 	public void updateReclamation(Reclamation reclamation/*,User user*/) throws ParseException {
 	
-
+		Date currentSqlDate = new Date(System.currentTimeMillis());
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
 		/*if(R.getUser().getUserId()==user.getUserId()) {*/
 		R.setDescription(reclamation.getDescription());
 		//R.setLastModificationDate(reclamation.getLastModificationDate());
 		R.setPriority(reclamation.getPriority());
 		R.setType(reclamation.getType());
-
-		R.setLastModificationDate(new Date(
-				string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
+		R.setLastModificationDate(currentSqlDate);
 		//R.setPicture(reclamation.getPicture());
 		
 		reclamationRepository.save(R);
@@ -177,13 +183,12 @@ public class ReclamationServiceImpl implements IReclamationService {
 
 	@Override
 	public void answerAdmin(Reclamation reclamation, User user) throws ParseException {
-
+		Date currentSqlDate = new Date(System.currentTimeMillis());
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
 		
 		if(R.getUser().getUserId()== user.getUserId()) {
 		R.setAnswerAdmin(reclamation.getAnswerAdmin());
-		R.setAnswerDate(new Date(
-				string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")))));
+		R.setAnswerDate(currentSqlDate);
 		reclamationRepository.save(R);
 		verif(reclamation.getIdReclamation());
 		}

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.itextpdf.text.pdf.qrcode.WriterException;
@@ -37,7 +38,7 @@ import tn.esprit.meetico.service.ReclamationExporter;
 @RestController
 @Api(tags = " Reclamation Management")
 @RequestMapping("/Reclamation")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ReclamationController {
 	
 	@Autowired
@@ -54,12 +55,12 @@ public class ReclamationController {
 	
 	@Autowired
 	ReclamationRepository Rrepo;
-
-	@PostMapping("/AddAffectReclamationUser/{pictureId}")
+	@CrossOrigin
+	@PostMapping("/AddAffectReclamationUser")
 	@ApiOperation(value = "Add and affect  User Whith Reclamation")
 	@ResponseBody
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,
-			HttpServletRequest request, @PathVariable(name = "pictureId") Integer pictureId) {
+			HttpServletRequest request, @RequestParam(required = false, name = "pictureId") Integer pictureId) {
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
 		if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
@@ -97,7 +98,7 @@ public class ReclamationController {
 	public Reclamation retrieveReclamation(@PathVariable(name = "idReclamation") Integer idReclamation) {
 		return reclamationservice.retrieveReclamation(idReclamation);
 	}
-
+	@CrossOrigin
 	@GetMapping("/getReclamationByType/{typeReclamation}")
 	@ApiOperation(value = "Get Reclamation By Type ")
 	@ResponseBody
@@ -123,20 +124,23 @@ public class ReclamationController {
 		return reclamationservice.listReclamationByPriorityAndTypeAdmin(pr, rt);
 	}
 
-	@GetMapping("/getReclamationByUser/{userId}")
+	@GetMapping("/getReclamationByUser")
 	@ApiOperation(value = "Get Reclamation By User ")
 	@ResponseBody
-	public List<Reclamation> getReclamationsByUser(@PathVariable(name = "userId") Long userId) throws ParseException {
-		return reclamationservice.ListAllReclamationsClient(userId);
-
+	public List<Reclamation> getReclamationsByUser(HttpServletRequest request) throws ParseException {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		return reclamationservice.ListAllReclamationsClient(user.getUserId());	
 	}
 
-	@GetMapping("/getReclamationByUserandStatus/{userId}")
+	@GetMapping("/getReclamationByUserandStatus")
 	@ApiOperation(value = "Get Reclamation By User And Atatus ")
 	@ResponseBody
-	public Set<Reclamation> getReclamationsByUserAndStatus(@PathVariable(name = "userId") Long userId)
+	public Set<Reclamation> getReclamationsByUserAndStatus(HttpServletRequest request)
 			throws ParseException {
-		return reclamationservice.ListReclamationByStatusClient(userId);
+				String userName = request.getUserPrincipal().getName();
+				User user = Urepo.findByUsername(userName);
+		return reclamationservice.ListReclamationByStatusClient(user.getUserId());
 
 	}
 

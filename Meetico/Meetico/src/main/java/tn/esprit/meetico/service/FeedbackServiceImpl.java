@@ -1,6 +1,11 @@
 package tn.esprit.meetico.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +13,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Optional;
+
 import tn.esprit.meetico.entity.Feedback;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
@@ -27,25 +35,42 @@ public class FeedbackServiceImpl implements IFeedbackService {
 	
 	@Override
 	@Transactional
-	public void AddAndAffectFeedbackUsersTrip(Feedback feed , List<Long> idUsers, User user,Integer idTrip) {
+	public Feedback AddAndAffectFeedbackUsersTrip(Feedback feed ,  User user,Integer idTrip) {
 		Feedback f =addFeedback(feed, user,idTrip);
 		
-		for (Long idUser : idUsers) {
-			User U = userrepository.findById(idUser).orElse(null);
-			U.getFeedbacks().add(f);
-			userrepository.save(U);
-		}
+		return f;
 		
 	}
 		@Override
-		public Feedback addFeedback(Feedback feedback, User user,Integer idTrip) {
+		public Feedback addFeedback(Feedback feedback, User user,Integer  idTrip) {
 			
 			//User u = userrepository.findById(idUSer).orElse(null);
-			Trip t= tripRepository.findById(idTrip).orElse(null);
-			feedback.setUser(user);
+			
+			Trip t=null;
+			if(idTrip!=null) {
+				t= tripRepository.findById(idTrip).orElse(null);
+				
+			}
 			feedback.setTrip(t);
+			feedback.setUser(user);
+			
+			
+			Date currentSqlDate = new Date(System.currentTimeMillis());
+            feedback.setSendingDate(currentSqlDate);
+            feedback.setLastModificationDate(currentSqlDate);
+		/*	feedback.setSendingDate(new Date( 
+					string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy  MMMM dd HH:mm:ss")))));
+			feedback.setLastModificationDate(new Date( 
+					string2Date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy  MMMM dd HH:mm:ss")))));
+			*/
+			
+			
 			return feedbackrepository.save(feedback);
 		}
+	/*	public Long string2Date(String date) throws ParseException {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy  MMMM dd HH:mm:ss");
+			return simpleDateFormat.parse(date).getTime();
+		}*/
 		@Override
 		public Feedback retrieveFeedback(Integer idfeedback) {
 			return feedbackrepository.findById(idfeedback).orElse(null);

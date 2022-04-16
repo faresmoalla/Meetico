@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
@@ -34,13 +36,13 @@ public class FeedbackController {
 	@Autowired
 	UserRepository Urepo;
 	
-	@PostMapping("/AddAffectFeedbackUsers/{ListUsers}/{idTrip}")
+	@PostMapping("/AddAffectFeedbackUsers")
 	@ApiOperation(value = "Add And Affect Users And Trip With Feedback ")
 	@ResponseBody
-	public void AddAffectFeedbackUsers(@RequestBody Feedback feedback,HttpServletRequest request,@PathVariable(name="ListUsers") List<Long> ListUsers,@PathVariable(name="idTrip") Integer idTrip){
+	public Feedback AddAffectFeedbackUsers(@RequestBody Feedback feedback,HttpServletRequest request,@RequestParam(required = false,name="idTrip") Integer idTrip){
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
-		feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, ListUsers,user, idTrip);
+		return feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, user, idTrip);
 	}
 	
 	@PutMapping("/updateFeedback/{idUsers}")
@@ -63,17 +65,20 @@ public class FeedbackController {
 		
 		feedbackservice.desaffecterFeedback(idFeedback, idUser);
 	}
+	@CrossOrigin
 	@GetMapping("/getAllFeedbacksAdmin")
 	@ApiOperation(value = "Get All Feedbacks Admim")
 	@ResponseBody
 	public List<Feedback> getAllFeedbacksAdmin() {
 		return feedbackservice.ListAllFeedbackAdmin();
 	}
-	@GetMapping("/getFeedbackByClient/{idUser}")
+	@GetMapping("/getFeedbackByClient")
 	@ApiOperation(value = "Get All Feedbacks")
 	@ResponseBody
-	public Set<Feedback> getFeedbackbyClient(@PathVariable(name="idUser") Long idUser) {
-		return feedbackservice.ListFeedbacksByUser(idUser);
+	public Set<Feedback> getFeedbackbyClient( HttpServletRequest request) {
+		String userName = request.getUserPrincipal().getName();
+		User user = Urepo.findByUsername(userName);
+		return feedbackservice.ListFeedbacksByUser(user.getUserId());
 	}
 	@GetMapping("/getFeedbackByClientTAG/{idUser}")
 	@ApiOperation(value = "Retrieve Feedbacks By Tagged User ")
