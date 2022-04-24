@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.meetico.entity.Picture;
+
 import tn.esprit.meetico.repository.PictureRepository;
 
 @Service
@@ -22,6 +23,7 @@ public class PictureService {
 	    }
 
 	    public void save(Picture picture){
+	    	
 	        imagenRepository.save(picture);
 	    }
 

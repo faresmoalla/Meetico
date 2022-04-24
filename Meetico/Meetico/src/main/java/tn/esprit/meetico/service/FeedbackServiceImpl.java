@@ -78,15 +78,18 @@ public class FeedbackServiceImpl implements IFeedbackService {
 		
 		@Override
 		public Feedback UpdateFeedback(Feedback f, List<Long> usersId) {
+			Date currentSqlDate = new Date(System.currentTimeMillis());
+            
 		Feedback feedback = retrieveFeedback(f.getIdFeedback());
 		feedback.setDescription(f.getDescription());
-		feedback.setLastModificationDate(f.getLastModificationDate());
+		feedback.setLastModificationDate(currentSqlDate);
 		feedback.setStars(f.getStars());
-		
+		if ( usersId!=null) {
 		for (Long idUser : usersId) {
 			User U = userrepository.findById(idUser).orElse(null);
 			U.getFeedbacks().add(feedback);
 			userrepository.save(U);
+		}
 		}
 		return feedbackrepository.save(feedback);
 	}
@@ -138,7 +141,9 @@ public class FeedbackServiceImpl implements IFeedbackService {
 			List<Float> statTotale = new ArrayList();
 			Integer sss;
 			//Integer nbrFeedback =user.getFeedbacks().size();
-			Integer nbrFeedback= feedbackrepository.nbrFeedbacks(user.getUserId());
+		//	Integer nbrFeedback= feedbackrepository.nbrFeedbacks(user.getUserId());
+			Integer nbrFeedback= feedbackrepository.getAllFeedbacksClient(user.getUserId()).size();
+			
 			for(Integer star=1; star<=5; star++) {
 				sss=feedbackrepository.nbrFeedbackbystars(star);
 				System.out.println("//////////////////////"+sss+"//////////////////////");

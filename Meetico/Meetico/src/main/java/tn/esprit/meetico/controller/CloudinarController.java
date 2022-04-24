@@ -9,19 +9,24 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Picture;
+import tn.esprit.meetico.entity.User;
+import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CloudinaryService;
 import tn.esprit.meetico.service.PictureService;
 import tn.esprit.meetico.util.MessageResponse;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
-
+import java.util.Optional;
+@CrossOrigin(origins = "*" )
 @RestController
 @RequestMapping("/cloudinary")
 @Api(tags = "Upload Api Cloudinary ")
-@CrossOrigin
+
 public class CloudinarController {
 
 	@Autowired
@@ -29,23 +34,29 @@ public class CloudinarController {
 
 	@Autowired
 	PictureService pictureService;
-
+	
+	
+	
+    
 	@PostMapping("/upload")
 	@ApiOperation(value = "Upload Picture")
-	public ResponseEntity<?> upload(@RequestPart MultipartFile multipartFile) throws IOException {
+	public Integer upload(@RequestPart MultipartFile multipartFile) throws IOException {
+		
+		
 		BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
 
 		if (bi == null) {
-			return new ResponseEntity(new MessageResponse("imagen no válida"), HttpStatus.BAD_REQUEST);
+			return null;
 		}
 		Map result = cloudinaryService.upload(multipartFile);
 		Picture picture = new Picture((String) result.get("original_filename"), (String) result.get("url"),
 				(String) result.get("public_id"));
 		pictureService.save(picture);
 
-		return new ResponseEntity(new MessageResponse("add successfully"), HttpStatus.OK);
-
+		return picture.getId();
 	}
+    
+    
 	@ApiOperation(value = "Delete Picture")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") int id) throws IOException {
@@ -58,5 +69,14 @@ public class CloudinarController {
 		return new ResponseEntity(new MessageResponse("deleted image"), HttpStatus.OK);
 
 	}
+	@ApiOperation(value = "Delete Picture")
+	@GetMapping("/getPicture/{id}")
+	
+	public Optional<Picture> getPictureById(int idPicture) {
+		Optional<Picture> P = pictureService.getOne(idPicture);
+	    
+		return P;
+	}
+	
 
 }

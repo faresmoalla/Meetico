@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
+import tn.esprit.meetico.entity.Picture;
+import tn.esprit.meetico.entity.User;
+
 @Service
 public class CloudinaryService {
 	
@@ -28,6 +31,7 @@ public class CloudinaryService {
 	}
 
 	public Map upload(MultipartFile mulitipartFile) throws IOException {
+		
 		File file = convert(mulitipartFile);
 		Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
 		file.delete();
@@ -49,5 +53,8 @@ public class CloudinaryService {
 		fo.close();
 		return file;
 	}
+	
+	
+	
 
 }

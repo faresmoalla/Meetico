@@ -27,7 +27,7 @@ public class MainApplication {
 	Job job;
 
 	//@Scheduled(cron = "0 */1 * * * ?")
-	 @Scheduled(cron = "0 0 */1 * * ?")
+	 @Scheduled(cron = "0 0 0 */1 * ?")
 	public void perform() throws Exception {
 		JobParameters params = new JobParametersBuilder().addString("JobID", String.valueOf(System.currentTimeMillis()))
 				.toJobParameters();

@@ -1,11 +1,14 @@
 package tn.esprit.meetico.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.dom4j.DocumentException;
@@ -19,11 +22,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.itextpdf.text.pdf.qrcode.WriterException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import tn.esprit.meetico.entity.Picture;
 import tn.esprit.meetico.entity.Reclamation;
 import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
@@ -31,8 +38,10 @@ import tn.esprit.meetico.entity.reclamationPriority;
 import tn.esprit.meetico.entity.reclamationType;
 import tn.esprit.meetico.repository.ReclamationRepository;
 import tn.esprit.meetico.repository.UserRepository;
+import tn.esprit.meetico.service.CloudinaryService;
 import tn.esprit.meetico.service.EmailServiceImpl;
 import tn.esprit.meetico.service.IReclamationService;
+import tn.esprit.meetico.service.PictureService;
 import tn.esprit.meetico.service.ReclamationExporter;
 
 @RestController
@@ -53,14 +62,16 @@ public class ReclamationController {
 	@Autowired
 	EmailServiceImpl emailServiceImpl;
 	
+
+	
 	@Autowired
 	ReclamationRepository Rrepo;
 	@CrossOrigin
-	@PostMapping("/AddAffectReclamationUser")
+	@PostMapping("/AddAffectReclamationUser/{pictureId}?")
 	@ApiOperation(value = "Add and affect  User Whith Reclamation")
 	@ResponseBody
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,
-			HttpServletRequest request, @RequestParam(required = false, name = "pictureId") Integer pictureId) {
+			HttpServletRequest request, @PathVariable(required = false, name = "pictureId") Integer pictureId) {
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
 		if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
@@ -132,6 +143,13 @@ public class ReclamationController {
 		User user = Urepo.findByUsername(userName);
 		return reclamationservice.ListAllReclamationsClient(user.getUserId());	
 	}
+	@GetMapping("/getAllReclamation")
+	@ApiOperation(value = "Get All Reclamations ")
+	@ResponseBody
+	public List<Reclamation> getAllReclamations() throws ParseException {
+		
+		return reclamationservice.ListAllReclamationsAdmin();	
+	}
 
 	@GetMapping("/getReclamationByUserandStatus")
 	@ApiOperation(value = "Get Reclamation By User And Atatus ")
@@ -141,7 +159,6 @@ public class ReclamationController {
 				String userName = request.getUserPrincipal().getName();
 				User user = Urepo.findByUsername(userName);
 		return reclamationservice.ListReclamationByStatusClient(user.getUserId());
-
 	}
 
 	@GetMapping("/statWatingReclamationbytypeandpriority/{type}/{priority}")
@@ -206,14 +223,7 @@ public class ReclamationController {
 		Reclamation r = Rrepo.findById(reclamation.getIdReclamation()).orElse(reclamation);
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
-		try {
-		if ((r.getType().equals(reclamationType.TRIP) || r.getType().equals(reclamationType.OTHER)
-				|| r.getType().equals(reclamationType.USER)) && user.getRole().equals(Role.ADMIN)) {
 			reclamationservice.answerAdmin(reclamation,user);
-		}
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
 	}
 
 	/*@PutMapping("/answerReclamation/{repence}/{idReclamation}")

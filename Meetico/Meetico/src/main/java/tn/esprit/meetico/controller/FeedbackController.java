@@ -42,14 +42,15 @@ public class FeedbackController {
 	public Feedback AddAffectFeedbackUsers(@RequestBody Feedback feedback,HttpServletRequest request,@RequestParam(required = false,name="idTrip") Integer idTrip){
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
+		
 		return feedbackservice.AddAndAffectFeedbackUsersTrip(feedback, user, idTrip);
 	}
 	
-	@PutMapping("/updateFeedback/{idUsers}")
+	@PutMapping("/updateFeedback")
 	@ApiOperation(value = "Update Feedback")
 	@ResponseBody
-	public Feedback updateFeedback(@RequestBody Feedback feedback,@PathVariable(name="idUsers") List<Long> usersId) {
-		return feedbackservice.UpdateFeedback(feedback,  usersId);
+	public Feedback updateFeedback(@RequestBody Feedback feedback, @RequestParam(required = false, name="idUsers") List<Long> usersId) {
+		return feedbackservice.UpdateFeedback(feedback,usersId);
 	}
 	@DeleteMapping("/DeleteFeedback/{idFeedback}")
 	@ApiOperation(value = "Delete Feedback ")

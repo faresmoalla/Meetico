@@ -59,20 +59,19 @@ public class ReclamationServiceImpl implements IReclamationService {
 	}
 
 	@Override
-	public void updateReclamation(Reclamation reclamation/*,User user*/) throws ParseException {
+	public void updateReclamation(Reclamation reclamation) throws ParseException {
 	
 		Date currentSqlDate = new Date(System.currentTimeMillis());
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
-		/*if(R.getUser().getUserId()==user.getUserId()) {*/
+		
+		R.setTitle(reclamation.getTitle());
 		R.setDescription(reclamation.getDescription());
-		//R.setLastModificationDate(reclamation.getLastModificationDate());
 		R.setPriority(reclamation.getPriority());
 		R.setType(reclamation.getType());
 		R.setLastModificationDate(currentSqlDate);
 		//R.setPicture(reclamation.getPicture());
-		
 		reclamationRepository.save(R);
-		//}	
+		
 	}
 
 	public Long string2Date(String date) throws ParseException {
@@ -122,7 +121,7 @@ public class ReclamationServiceImpl implements IReclamationService {
 	@Override
 	public boolean verif(Integer idReclamation) {
 		Reclamation r = retrieveReclamation(idReclamation);
-		if (r.getStatus() == false) {
+		if (r.getStatus() == false ) {
 			r.setStatus(true);
 		}
 		reclamationRepository.save(r);
@@ -185,16 +184,16 @@ public class ReclamationServiceImpl implements IReclamationService {
 	public void answerAdmin(Reclamation reclamation, User user) throws ParseException {
 		Date currentSqlDate = new Date(System.currentTimeMillis());
 		Reclamation R = retrieveReclamation(reclamation.getIdReclamation());
-		
-		if(R.getUser().getUserId()== user.getUserId()) {
+				
 		R.setAnswerAdmin(reclamation.getAnswerAdmin());
 		R.setAnswerDate(currentSqlDate);
+		R.setStatus(true);
 		reclamationRepository.save(R);
 		verif(reclamation.getIdReclamation());
 		}
 		
 		
-	}
+	
 
 	/*public void answerReclamation(String answer, Integer idReclamation) {
 		Reclamation r = retrieveReclamation(idReclamation);
