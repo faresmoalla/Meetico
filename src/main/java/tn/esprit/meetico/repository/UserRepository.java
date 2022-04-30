@@ -12,7 +12,7 @@ import tn.esprit.meetico.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
 	
-	@Query("SELECT u FROM User u WHERE u.username LIKE %:input% OR u.email LIKE %:input%")
+	@Query("SELECT u FROM User u WHERE CONCAT(u.firstName, ' ', u.lastName) LIKE %:input% or u.username LIKE %:input% OR u.email LIKE %:input% or u.phoneNumber LIKE %:input%")
 	List<User> findAllByInput(@Param("input") String input);
 	
 	@Query("SELECT u FROM User u WHERE u.userId = :entrepreneurId AND u.role = 'ENTREPRENEUR'")
@@ -32,6 +32,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
 	User findByUsername(String username);
 	
 	User findByVerificationCode(Integer verificationCode);
-	
 
 }

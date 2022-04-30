@@ -1,6 +1,5 @@
 package tn.esprit.meetico.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -29,9 +28,7 @@ public class Request implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	private Long requestId;
-	
-	private Boolean converted;
-	
+		
 	private String email;
 	
 	private String firstName;
@@ -45,7 +42,6 @@ public class Request implements Serializable {
 	
 	private Long phoneNumber;
 	
-	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private User sender;
 	

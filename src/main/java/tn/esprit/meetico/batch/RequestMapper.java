@@ -13,7 +13,6 @@ public class RequestMapper implements RowMapper<Request> {
 	public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return Request.builder()
 				.requestId(rs.getLong("request_id"))
-				.converted(rs.getBoolean("converted"))
 				.email(rs.getString("email"))
 				.firstName(rs.getString("first_name"))
 				.gender(Gender.valueOf(rs.getString("gender")))

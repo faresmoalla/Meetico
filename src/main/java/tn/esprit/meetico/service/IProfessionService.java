@@ -1,16 +1,16 @@
 package tn.esprit.meetico.service;
 
-import org.springframework.http.ResponseEntity;
 import tn.esprit.meetico.entity.Profession;
+import tn.esprit.meetico.entity.User;
 
 public interface IProfessionService {
 
-	ResponseEntity<String> addProfession(Profession profession);
+	Profession addProfession(Profession profession);
 
-	ResponseEntity<String> updateProfession(Long professionId, Profession updation);
+	Profession updateProfession(Long professionId, String updation);
 
-	ResponseEntity<String> deleteProfession(Long professionId);
+	void deleteProfession(Long professionId);
 
-	ResponseEntity<String> assignUserToProfession(Long userId, Long professionId);
+	User assignUserToProfession(Long userId, Long professionId);
 
 }

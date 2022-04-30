@@ -1,16 +1,21 @@
 package tn.esprit.meetico.service;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
 import tn.esprit.meetico.entity.Request;
 
 public interface IRequestService {
 
-	ResponseEntity<String> createRequest(Request request);
+	Request createRequest(Request request);
 		
-	ResponseEntity<String> updateRequest(Long requestId, Request updation);
+	Request updateRequest(Long requestId, Request updation);
 
-	ResponseEntity<String> deleteRequest(Long requestId);
+	void deleteRequest(Long requestId);
+	
+	List<Request> retrieveAllRequests(Long userId);
 
-	ResponseEntity<String> assignSenderToRequest(Long senderId, Long invitationId);
+	Request assignSenderToRequest(Long senderId, Long invitationId);
+
+	List<Request> searchForRequests(String input);
 
 }

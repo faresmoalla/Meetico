@@ -1,35 +1,46 @@
 package tn.esprit.meetico.service;
 
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.meetico.entity.User;
-import tn.esprit.meetico.util.Member;
-import tn.esprit.meetico.util.UserAttribute;
+import tn.esprit.meetico.util.Credentials;
+import tn.esprit.meetico.util.Sort;
+import tn.esprit.meetico.util.UserDetails;
 
 public interface IUserService {
 	
-	ResponseEntity<String> registerEntrepreneur(User entrepreneur);
+	User registerEntrepreneur(User entrepreneur) throws Exception;
 	
-	ResponseEntity<Integer> registerEmployee(User employee);
+	User registerEmployee(User employee);
 
-	ResponseEntity<String> authenticateUser(@Valid Member user);
+	UserDetails authenticateUser(@Valid Credentials user);
 	
-	ResponseEntity<String> updateUser(String username, User updation);
+	User updateProfile(User connectedUser);
 	
-	ResponseEntity<String> removeUser(Long userId);
-	
-	ResponseEntity<List<User>> retrieveAllUsers();
+	void removeUser(Long userId);
 		
-	ResponseEntity<String> approvePendingEmployee(Integer verificationCode);
+	List<User> retrieveAllUsers();
+		
+	User approvePendingEmployee(Integer verificationCode);
 	
-	ResponseEntity<String> assignPictureToUser(Long userId, MultipartFile file);
+	User assignPictureToUser(Long userId, MultipartFile file) throws Exception, IOException;
 	
-	ResponseEntity<List<User>> retrieveSortedUsers(List<UserAttribute> userAttributes, Boolean ascendant);
+	List<User> retrieveSortedUsers(Boolean descendant, Sort sortedBy);
 	
-	ResponseEntity<List<User>> searchForUsers(String input);
+	List<User> searchForUsers(String input);
+	
+	void signInStatus(Long userId);
+		
+	void signOutStatus(Long userId);
 
-	ResponseEntity<String> accountManagement();
+	void followUser(Long followerId, Long userId);
+	
+	void unfollowUser(Long followerId, Long userId);
+		
+	Integer countActiveUsers();
+
+	List<Integer> calculateProfileCompletion();
 
 }

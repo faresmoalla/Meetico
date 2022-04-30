@@ -45,22 +45,20 @@ public class RequestProcessor implements ItemProcessor<Request, Request> {
 		String username = email.substring(0, email.indexOf("@")).replace(".", "");
 		String password = request.getNic().toString().length() == 8 ? request.getNic().toString() : "0" + request.getNic().toString();
 		Long phoneNumber = request.getPhoneNumber();
-		if (!request.getConverted()) {
-			pdfGenerator.generatePdf(request);
-			Integer verificationCode = userService.registerEmployee(new User(email, firstName, gender, lastName, password, phoneNumber, username)).getBody();
-			File file = new File("C:/Meetico/" + (request.getNic().toString().length() == 8 ? request.getNic().toString() : "0" + request.getNic().toString()) + ".pdf");
-			emailServiceImpl.sendEmail(request.getEmail(), "JOIN MEETICO", (request.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ") + request.getFirstName() + ", "
-							+ "<br>We kindly request you to accept our invitation to join the Meetico plateform. "
-							+ "<br><b>Your username : " + username + "</b> "
-							+ "<br><b>Your password : " + password + "</b> "
-							+ "<br>Visit <a href='http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT' target='_blank'>http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT</a> to complete the registration. "
-							+ "<br>The Meetico Team.", file);
-			file.delete();
-			messageServiceImpl.sendSMS(new SMSResponse("+216" + request.getPhoneNumber(), "Your Meetico verification code is: " + verificationCode));
-			request.setSendTime(new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).getTime()));
-			request.setSender(entrepreneur);
-			request.setStatus(Status.DELIVERED);
-		}
+		pdfGenerator.generatePdf(request);
+		Integer verificationCode = userService.registerEmployee(new User(email, firstName, gender, lastName, password, phoneNumber, username)).getVerificationCode();
+		File file = new File("C:/Meetico/" + (request.getNic().toString().length() == 8 ? request.getNic().toString() : "0" + request.getNic().toString()) + ".pdf");
+		emailServiceImpl.sendEmail(request.getEmail(), "JOIN MEETICO", (request.getGender().equals(Gender.MALE) ? "Welcome Mr. " : "Welcome Ms. ") + request.getFirstName() + ", "
+				+ "<br>We kindly request you to accept our invitation to join the Meetico plateform. "
+				+ "<br><b>Your username : " + username + "</b> "
+				+ "<br><b>Your password : " + password + "</b> "
+				+ "<br>Visit <a href='http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT' target='_blank'>http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT</a> to complete the registration. "
+				+ "<br>The Meetico Team.", file);
+		file.delete();
+		messageServiceImpl.sendSMS(new SMSResponse("+216" + request.getPhoneNumber(), "Your Meetico verification code is: " + verificationCode));
+		request.setSendTime(new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).getTime()));
+		request.setSender(entrepreneur);
+		request.setStatus(Status.DELIVERED);
 		return request;
 	}
 

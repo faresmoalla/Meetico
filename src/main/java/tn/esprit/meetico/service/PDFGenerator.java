@@ -43,17 +43,13 @@ public class PDFGenerator {
 	public void generatePdf(Request request) throws WriterException, IOException {
 		Document document = new Document(PageSize.A4.rotate());
 		try {
-			PdfWriter.getInstance(document,
-					new FileOutputStream(
-							pdfDir + (request.getNic().toString().length() == 8 ? request.getNic().toString()
-									: "0" + request.getNic().toString()) + ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(pdfDir + (request.getNic().toString().length() == 8 ? request.getNic().toString() : "0" + request.getNic().toString()) + ".pdf"));
 			document.open();
 			addLogo(document);
 			addTitle(document);
 			addBody(document, request);
 			addQRCode(document, request);
 			document.close();
-			request.setConverted(true);
 			requestRepository.save(request);
 		} catch (FileNotFoundException | DocumentException e) {
 			e.printStackTrace();

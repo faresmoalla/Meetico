@@ -1,8 +1,8 @@
 package tn.esprit.meetico.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.esprit.meetico.entity.Request;
 import tn.esprit.meetico.entity.Status;
@@ -20,7 +20,7 @@ public class RequestServiceImpl implements IRequestService {
 	private UserRepository userRepository;
 
 	@Override
-	public ResponseEntity<String> createRequest(Request request) {
+	public Request createRequest(Request request) {
 		String firstName = request.getFirstName().replaceAll("\\s+", " ");
 		firstName = firstName.replaceFirst("\\s", "");
 		firstName = replaceLast(firstName, " ", "");
@@ -36,8 +36,7 @@ public class RequestServiceImpl implements IRequestService {
 		request.setLastName(lastName);
 		request.setSendTime(null);
 		request.setStatus(Status.UNSENT);
-		requestRepository.save(request);
-		return ResponseEntity.ok().body("Request created successfully");
+		return requestRepository.save(request);
 	}
 	
 	 private String replaceLast(String string, String find, String replace) {
@@ -60,39 +59,40 @@ public class RequestServiceImpl implements IRequestService {
 	 }
 
 	@Override
-	public ResponseEntity<String> updateRequest(Long requestId, Request updation) {
+	public Request updateRequest(Long requestId, Request updation) {
 		Request request = requestRepository.findById(requestId).orElse(null);
-		if (request != null) {
-			request.setEmail(Optional.ofNullable(updation.getEmail()).orElse(request.getEmail()));
-			request.setFirstName(
-					Optional.ofNullable(updation.getFirstName()).orElse(request.getFirstName()));
-			request.setLastName(Optional.ofNullable(updation.getLastName()).orElse(request.getLastName()));
-			requestRepository.save(request);
-			return ResponseEntity.ok().body("Request updated successfully.");
-		}
-		return ResponseEntity.badRequest().body("No correspondance.");
+		request.setEmail(Optional.ofNullable(updation.getEmail()).orElse(request.getEmail()));
+		request.setFirstName(Optional.ofNullable(updation.getFirstName()).orElse(request.getFirstName()));
+		request.setGender(Optional.ofNullable(updation.getGender()).orElse(request.getGender()));
+		request.setLastName(Optional.ofNullable(updation.getLastName()).orElse(request.getLastName()));
+		request.setNic(Optional.ofNullable(updation.getNic()).orElse(request.getNic()));
+		request.setPhoneNumber(Optional.ofNullable(updation.getPhoneNumber()).orElse(request.getPhoneNumber()));
+		request.setStatus(Optional.ofNullable(updation.getStatus()).orElse(request.getStatus()));
+		return requestRepository.save(request);
 	}
 	
 	@Override
-	public ResponseEntity<String> deleteRequest(Long requestId) {
-		Request request = requestRepository.findById(requestId).orElse(null);
-		if (request != null) {
-			requestRepository.deleteById(requestId);
-			return ResponseEntity.ok().body("Request deleted successfully.");
-		}
-		return ResponseEntity.badRequest().body("No correspondance.");
+	public void deleteRequest(Long requestId) {
+		requestRepository.deleteById(requestId);
+	}
+	
+	@Override
+	public List<Request> retrieveAllRequests(Long userId) {
+		return requestRepository.findAllByUserId(userId);
 	}
 
 	@Override
-	public ResponseEntity<String> assignSenderToRequest(Long senderId, Long requestId) {
+	public Request assignSenderToRequest(Long senderId, Long requestId) {
 		Request request = requestRepository.findById(requestId).orElse(null);
 		User user = userRepository.findById(senderId).orElse(null);
-		if (request != null && user != null) {
-			request.setSender(user);
-			requestRepository.save(request);
-			return ResponseEntity.ok().body("Sender assigned successfully.");
-		}
-		return ResponseEntity.badRequest().body("No correspondance.");
+		request.setSender(user);
+		return requestRepository.save(request);
+	}
+	
+	@Override
+	public List<Request> searchForRequests(String input) {
+		List<Request> requests = requestRepository.findAllByInput(input);
+		return requests;
 	}
 
 }

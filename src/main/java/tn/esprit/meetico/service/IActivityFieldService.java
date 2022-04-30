@@ -1,16 +1,16 @@
 package tn.esprit.meetico.service;
 
-import org.springframework.http.ResponseEntity;
 import tn.esprit.meetico.entity.ActivityField;
+import tn.esprit.meetico.entity.User;
 
 public interface IActivityFieldService {
 
-	ResponseEntity<String> addActivityField(ActivityField activityField);
+	ActivityField addActivityField(ActivityField activityField);
 
-	ResponseEntity<String> updateActivityField(Long activityFieldId, ActivityField updation);
+	ActivityField updateActivityField(Long activityFieldId, String updation);
 
-	ResponseEntity<String> deleteActivityField(Long activityFieldId);
+	void deleteActivityField(Long activityFieldId);
 
-	ResponseEntity<String> assignUserToActivityField(Long userId, Long activityFieldId);
+	User assignUserToActivityField(Long userId, Long activityFieldId);
 
 }
