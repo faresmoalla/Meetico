@@ -41,8 +41,8 @@ public class Comment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idComment;
 		
-	@Size(min=5)
-	 @NotEmpty(message = "the content field is required")
+	//@Size(min=5)
+	 //@NotEmpty(message = "the content field is required")
      private String contents;
 	
 	//@NotNull
@@ -53,15 +53,15 @@ public class Comment implements Serializable {
 	
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	User user;
 	
-	
+		
 	
 	
 
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	Publication publications;
 	
 	

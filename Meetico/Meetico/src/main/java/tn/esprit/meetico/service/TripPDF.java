@@ -160,8 +160,8 @@ public class TripPDF {
 
 		document.add(table);
 
-		List<FileDB> files = trip.getFiles();
-		PdfPTable table3 = new PdfPTable(files.size());
+	//	List<FileDB> files = trip.getFiles();
+		//PdfPTable table3 = new PdfPTable(files.size());
 		
 		PdfPTable table1 = new PdfPTable(5);
 		table1.setWidthPercentage(100f);
@@ -175,24 +175,24 @@ public class TripPDF {
 		
 		
 		
-		for (FileDB f : files) {
-			
-			byte[] byt = f.getData();
-			// ImageIcon imageIcon = new ImageIcon(byt);
-			// imageIcon.getImage();
-
-			ByteArrayInputStream bais = new ByteArrayInputStream(byt);
-			BufferedImage img = ImageIO.read(bais);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(img, "png", baos);
-			Image iTextImage = Image.getInstance(baos.toByteArray());
-			iTextImage.scaleAbsolute(100, 100);
-			document.add(iTextImage);
-			
-			
-			
-
-		}
+//		for (FileDB f : files) {
+//			
+//			byte[] byt = f.getData();
+//			// ImageIcon imageIcon = new ImageIcon(byt);
+//			// imageIcon.getImage();
+//
+//			ByteArrayInputStream bais = new ByteArrayInputStream(byt);
+//			BufferedImage img = ImageIO.read(bais);
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			ImageIO.write(img, "png", baos);
+//			Image iTextImage = Image.getInstance(baos.toByteArray());
+//			iTextImage.scaleAbsolute(100, 100);
+//			document.add(iTextImage);
+//			
+//			
+//			
+//
+//		}
 		document.close();
 	}
 

@@ -2,6 +2,7 @@ package tn.esprit.meetico.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,13 +13,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,27 +50,30 @@ public class Publication implements Serializable {
 	//@NotEmpty(message = "the content field is required")
 	private Date date ;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="publications")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="publications"
+		,orphanRemoval = true)
 	@JsonIgnore
 	private Set<Comment> comments;
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	User userr;
 	
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="publication")
+	/// (cascade= {CascadeType.PERSIST, CascadeType.REMOVE}, fetch=FetchType.EAGER)
+	@OneToMany(cascade = { CascadeType.ALL,CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy="publication",orphanRemoval = true)
 	@JsonIgnore
 	private Set<PostLike> likes;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="publication")
+	@OneToMany(cascade = { CascadeType.ALL,CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy="publication",orphanRemoval = true)
 	@JsonIgnore
 	private Set<PostDislike> dislikes;
 	
+		
 	
-	
-	@OneToMany(mappedBy="publication",cascade = CascadeType.ALL)
-	@JsonIgnore
+	 
+	  @OneToMany(cascade = { CascadeType.ALL,CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy="publication",orphanRemoval = true)
+	//@JsonIgnore
+	  @JsonManagedReference
 	private Set<FileDB> files;
 	
 	

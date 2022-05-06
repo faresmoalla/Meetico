@@ -26,12 +26,12 @@ public class PostLike implements Serializable {
 	
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	Publication publication;
 	
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	User utilis;
 	
 	

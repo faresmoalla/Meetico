@@ -30,7 +30,7 @@ public class Alert {
 	private Long idAlert;
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	User utilis;
 	
 	

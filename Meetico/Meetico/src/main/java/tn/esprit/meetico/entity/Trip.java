@@ -62,12 +62,12 @@ public class Trip implements Serializable{
 	@JsonIgnore
 	private User user;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
-	@JsonIgnore
-	private Set<Feedback> feedbacks;
-	
-	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<FileDB> files;
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
+//	@JsonIgnore
+//	private Set<Feedback> feedbacks;
+//	
+//	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL)
+//	@JsonIgnore
+//	private List<FileDB> files;
 
 }

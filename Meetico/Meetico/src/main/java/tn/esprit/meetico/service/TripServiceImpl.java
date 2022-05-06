@@ -287,7 +287,7 @@ public class TripServiceImpl implements ITripService{
 		Trip t=tripRepo.findById(idTrip).orElse(null);
 		for(Long idf :idFiles) {
 			FileDB f=fileRepo.findById(idf).orElse(null);
-			f.setTrip(t);
+	//		f.setTrip(t);
 			fileRepo.save(f);
 		}
 		

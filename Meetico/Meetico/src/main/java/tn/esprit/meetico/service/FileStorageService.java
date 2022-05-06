@@ -39,13 +39,13 @@ public class FileStorageService {
 		return fileDBRepository.findAll().stream();
 	}
 
-	public Stream<FileDB> getAllFilesBytrip(Integer id) {
-		Trip t = tripRepo.findById(id).orElse(null);
-		return t.getFiles().stream();
-	}
-
-	public List<FileDB> getFileByTrip(Integer id) {
-		Trip t = tripRepo.findById(id).orElse(null);
-		return t.getFiles();
-	}
+//	public Stream<FileDB> getAllFilesBytrip(Integer id) {
+//		Trip t = tripRepo.findById(id).orElse(null);
+//		return t.getFiles().stream();
+//	}
+//
+//	public List<FileDB> getFileByTrip(Integer id) {
+//		Trip t = tripRepo.findById(id).orElse(null);
+//		return t.getFiles();
+//	}
 }
