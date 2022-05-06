@@ -82,11 +82,12 @@ public class RequestServiceImpl implements IRequestService {
 	}
 
 	@Override
-	public Request assignSenderToRequest(Long senderId, Long requestId) {
+	public User assignSenderToRequest(Long requestId, Long senderId) {
 		Request request = requestRepository.findById(requestId).orElse(null);
 		User user = userRepository.findById(senderId).orElse(null);
 		request.setSender(user);
-		return requestRepository.save(request);
+		requestRepository.save(request);
+		return user;
 	}
 	
 	@Override

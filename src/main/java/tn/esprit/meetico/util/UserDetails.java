@@ -11,4 +11,5 @@ public class UserDetails {
 	private User user;
 
 	private String accessToken;
+
 }

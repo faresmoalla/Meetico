@@ -3,6 +3,7 @@ package tn.esprit.meetico.service;
 import java.util.List;
 
 import tn.esprit.meetico.entity.Request;
+import tn.esprit.meetico.entity.User;
 
 public interface IRequestService {
 
@@ -14,7 +15,7 @@ public interface IRequestService {
 	
 	List<Request> retrieveAllRequests(Long userId);
 
-	Request assignSenderToRequest(Long senderId, Long invitationId);
+	User assignSenderToRequest(Long requestId, Long senderId);
 
 	List<Request> searchForRequests(String input);
 

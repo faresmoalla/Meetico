@@ -15,7 +15,7 @@ import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.EmailServiceImpl;
 import tn.esprit.meetico.service.IUserService;
 import tn.esprit.meetico.service.MessageServiceImpl;
-import tn.esprit.meetico.service.PDFGenerator;
+import tn.esprit.meetico.service.PDFGeneratorImpl;
 import tn.esprit.meetico.util.SMSResponse;
 
 public class RequestProcessor implements ItemProcessor<Request, Request> {
@@ -30,7 +30,7 @@ public class RequestProcessor implements ItemProcessor<Request, Request> {
 	private MessageServiceImpl messageServiceImpl;
 
 	@Autowired
-	private PDFGenerator pdfGenerator;
+	private PDFGeneratorImpl pdfGenerator;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -55,7 +55,7 @@ public class RequestProcessor implements ItemProcessor<Request, Request> {
 				+ "<br>Visit <a href='http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT' target='_blank'>http://localhost:8081/SpringMVC/swagger-ui/index.html#/User%20Management/approvePendingEmployeeUsingPUT</a> to complete the registration. "
 				+ "<br>The Meetico Team.", file);
 		file.delete();
-		messageServiceImpl.sendSMS(new SMSResponse("+216" + request.getPhoneNumber(), "Your Meetico verification code is: " + verificationCode));
+//		messageServiceImpl.sendSMS(new SMSResponse("+216" + request.getPhoneNumber(), "Your Meetico verification code is: " + verificationCode));
 		request.setSendTime(new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).getTime()));
 		request.setSender(entrepreneur);
 		request.setStatus(Status.DELIVERED);

@@ -35,26 +35,26 @@ public class UserRestController {
 	@Autowired
 	private IUserService userService;
 	
-	@ApiOperation(value = "Register an entrepreneur")
-	@PostMapping(value = "/registerEntrepreneur")
+	@ApiOperation("Register an entrepreneur")
+	@PostMapping("/registerEntrepreneur")
 	public User registerEntrepreneur(@Valid @RequestBody User entrepreneur) throws Exception {
 		return userService.registerEntrepreneur(entrepreneur);
 	}
 	
-	@ApiOperation(value = "Authenticate a user")
+	@ApiOperation("Authenticate a user")
 	@PostMapping("/authenticateUser")
 	public UserDetails authenticateUser(@Valid @RequestBody Credentials credentials) {
 		return userService.authenticateUser(credentials);
 	}
 
-	@ApiOperation(value = "Update a profile")
+	@ApiOperation("Update a profile")
 	@PutMapping("/updateProfile")
 	@ResponseBody
 	public User updateProfile(@RequestBody User connectedUser) {
 		return userService.updateProfile(connectedUser);
 	}
 
-	@ApiOperation(value = "Remove a user")
+	@ApiOperation("Remove a user")
 	@DeleteMapping("/removeUser")
 	@ResponseBody
 	public void removeUser(@RequestParam Long userId) {
@@ -62,41 +62,41 @@ public class UserRestController {
 	}
 	
 	@Transactional
-	@ApiOperation(value = "Retrieve all users")
+	@ApiOperation("Retrieve all users")
 	@GetMapping("/retrieveAllUsers")
-	public List<User> retrieveSortedUsers(@RequestParam(defaultValue = "false") Boolean descendant, @RequestParam(defaultValue = "userId") Sort sortedBy) {
-		return userService.retrieveSortedUsers(descendant, sortedBy);
+	public List<User> retrieveAllUsers(@RequestParam(defaultValue = "false") Boolean descendant, @RequestParam(defaultValue = "userId") Sort sortedBy) {
+		return userService.retrieveAllUsers(descendant, sortedBy);
 	}
 
-	@ApiOperation(value = "Approve a pending employee")
+	@ApiOperation("Approve a pending employee")
 	@PutMapping("/approvePendingEmployee")
 	@ResponseBody
 	public User approvePendingEmployee(@RequestParam Integer verificationCode) {
 		return userService.approvePendingEmployee(verificationCode);
 	}
 
-	@ApiOperation(value = "Assign a picture to a user")
+	@ApiOperation("Assign a picture to a user")
 	@PutMapping("/assignPictureToUser")
 	public User assignPictureToUser(@RequestParam Long userId, @RequestPart("file") MultipartFile file) throws Exception, IOException {
 		return userService.assignPictureToUser(userId, file);
 	}
 	
 	@Transactional
-	@ApiOperation(value = "Search for users")
+	@ApiOperation("Search for users")
 	@GetMapping("/searchForUsers")
 	@ResponseBody
 	public List<User> searchForUsers(@RequestParam String input) {
 		return userService.searchForUsers(input);
 	}
 	
-	@ApiOperation(value = "Update a user's status when logged in")
+	@ApiOperation("Update a user's status when logged in")
 	@PutMapping("/signInStatus")
 	@ResponseBody
 	public void signInStatus(@RequestParam Long userId) {
 		userService.signInStatus(userId);
 	}
 	
-	@ApiOperation(value = "Update a user's status when logged out")
+	@ApiOperation("Update a user's status when logged out")
 	@PutMapping("/signOutStatus")
 	@ResponseBody
 	public void signOutStatus(@RequestParam Long userId) {
@@ -117,19 +117,25 @@ public class UserRestController {
 		userService.unfollowUser(followerId, userId);
 	}
 	
+	@ApiOperation("Upload a convertable PDF")
+	@PostMapping("/uploadConvertablePDF")
+	public List<String> uploadConvertablePDF(@RequestPart("file") MultipartFile file) throws Exception {
+		return userService.uploadConvertablePDF(file);
+	}
+	
 	@Transactional
-	@ApiOperation(value = "Calculate a profile's completion")
+	@ApiOperation("Calculate a profile's completion")
 	@GetMapping("/calculateProfileCompletion")
 	public List<Integer> calculateProfileCompletion() {
 		return userService.calculateProfileCompletion();
 	}
 	
 	@Transactional
-	@ApiOperation(value = "Count Active Users")
-	@GetMapping("/countActiveUsers")
+	@ApiOperation("Account Statistics")
+	@GetMapping("/accountStatistics")
 	@ResponseBody
-	public Integer countActiveUsers() {
-		return userService.countActiveUsers();
+	public List<Object> accountStatistics() {
+		return userService.accountStatistics();
 	}
-
+	
 }

@@ -20,14 +20,12 @@ public interface IUserService {
 	User updateProfile(User connectedUser);
 	
 	void removeUser(Long userId);
-		
-	List<User> retrieveAllUsers();
-		
+	
+	List<User> retrieveAllUsers(Boolean descendant, Sort sortedBy);
+				
 	User approvePendingEmployee(Integer verificationCode);
 	
 	User assignPictureToUser(Long userId, MultipartFile file) throws Exception, IOException;
-	
-	List<User> retrieveSortedUsers(Boolean descendant, Sort sortedBy);
 	
 	List<User> searchForUsers(String input);
 	
@@ -38,9 +36,11 @@ public interface IUserService {
 	void followUser(Long followerId, Long userId);
 	
 	void unfollowUser(Long followerId, Long userId);
-		
-	Integer countActiveUsers();
+	
+	List<String> uploadConvertablePDF(MultipartFile file) throws Exception, IOException;
 
 	List<Integer> calculateProfileCompletion();
+	
+	List<Object> accountStatistics();
 
 }

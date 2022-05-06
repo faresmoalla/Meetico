@@ -22,7 +22,7 @@ import tn.esprit.meetico.entity.Request;
 import tn.esprit.meetico.repository.RequestRepository;
 
 @Component
-public class PDFGenerator {
+public class PDFGeneratorImpl {
 
 	@Value("C:/Meetico/")
 	private String pdfDir;
@@ -70,7 +70,7 @@ public class PDFGenerator {
 	private void addTitle(Document document) throws DocumentException {
 		String localDateString = LocalDateTime.now().format(DateTimeFormatter.ofPattern(localDateFormat));
 		Paragraph p1 = new Paragraph();
-		leaveEmptyLine(p1, 3);
+		leaveEmptyLine(p1, 2);
 		p1.add(new Paragraph("Employee Invitation", COURIER));
 		leaveEmptyLine(p1, 1);
 		p1.add(new Paragraph("Invitation generated on " + localDateString, COURIER_MEDIUM));
@@ -79,20 +79,21 @@ public class PDFGenerator {
 
 	private void addBody(Document document, Request request) throws DocumentException {
 		Paragraph paragraph = new Paragraph();
-		leaveEmptyLine(paragraph, 3);
+		leaveEmptyLine(paragraph, 1);
 		paragraph.add((new Paragraph("\nNational Identity Card : " + request.getNic(), COURIER_SMALL)));
 		paragraph.add((new Paragraph("\nFirst Name : " + request.getFirstName(), COURIER_SMALL)));
 		paragraph.add((new Paragraph("\nLast Name : " + request.getLastName(), COURIER_SMALL)));
 		paragraph.add((new Paragraph("\nGender : " + request.getGender(), COURIER_SMALL)));
+		paragraph.add((new Paragraph("\nPhone Number : " + request.getPhoneNumber(), COURIER_SMALL)));
+		paragraph.add((new Paragraph("\nEmail Address : " + request.getEmail(), COURIER_SMALL)));
 		document.add(paragraph);
 	}
 
 	private void addQRCode(Document document, Request request) throws DocumentException, WriterException, IOException {
-		QRCodeGenerator.generateQRCodeImage(request.getNic().toString(), 100, 100,
-				"./src/main/resources/" + request.getEmail() + ".png");
+		QRCodeGeneratorImpl.generateQRCodeImage(request.getNic().toString(), 100, 100, "./src/main/resources/" + request.getEmail() + ".png");
 		try {
 			Paragraph p1 = new Paragraph();
-			leaveEmptyLine(p1, 2);
+			leaveEmptyLine(p1, 1);
 			document.add(p1);
 			Image img = Image.getInstance("./src/main/resources/" + request.getEmail() + ".png");
 			img.setAlignment(Element.ALIGN_RIGHT);
