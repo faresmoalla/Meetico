@@ -2,11 +2,14 @@ package tn.esprit.meetico.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletResponse;
 
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
+import tn.esprit.meetico.entity.DestionationVisitorsCount;
 
 public interface ITripService {
 	
@@ -27,10 +30,13 @@ public interface ITripService {
 	public List<Trip> affichTrip();
 
 	public List<User> afficherutilisateurbymatching(String destination, Date startdate, String city);
+	public List<Trip> searchbydestination(String destination);
 
 	public void deleteutilisateurdetrip(Integer idtrip, List<Long> iduser);
 
 	public void affecterFileToTip(List<Long> idFiles, Integer idTrip);
+	
+	public Set<Trip> affichetListVoyageByEntrepreneur(Long idEnt);
 
 	public int listUserByVoyage(Integer idTrip);
 
@@ -41,6 +47,8 @@ public interface ITripService {
 	public List<String> userDestionationsVisitsCount();
 
 	public List<String> destionationVisitorsCount();
+	
+	public List<DestionationVisitorsCount> destionationVisitorsCountA();
 	
 	public String meilleurDestination();
 	

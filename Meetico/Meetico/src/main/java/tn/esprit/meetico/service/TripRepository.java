@@ -1,4 +1,4 @@
-package tn.esprit.meetico.repository;
+package tn.esprit.meetico.service;
 
 import java.util.Date;
 import java.util.List;
