@@ -34,11 +34,4 @@ public class Picture {
 	    
 @OneToOne(mappedBy = "picture")
 private Reclamation reclamation;
-
-@ManyToOne
-@JsonIgnore
-private User user;
-
-
-
 }

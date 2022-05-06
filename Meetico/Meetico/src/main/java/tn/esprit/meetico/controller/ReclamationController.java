@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.itextpdf.text.pdf.qrcode.WriterException;
+import com.pusher.rest.Pusher;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import tn.esprit.meetico.entity.Picture;
@@ -36,6 +41,7 @@ import tn.esprit.meetico.entity.Role;
 import tn.esprit.meetico.entity.User;
 import tn.esprit.meetico.entity.reclamationPriority;
 import tn.esprit.meetico.entity.reclamationType;
+import tn.esprit.meetico.repository.PictureRepository;
 import tn.esprit.meetico.repository.ReclamationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CloudinaryService;
@@ -55,27 +61,41 @@ public class ReclamationController {
 
 	@Autowired
 	IReclamationService reclamationservice;
-
+	
+	
+	@Autowired
+	PictureRepository picturerepository;
+	
 	@Autowired
 	ReclamationExporter ex;
 
 	@Autowired
 	EmailServiceImpl emailServiceImpl;
 	
-
 	
+	
+	Pusher pusher = new Pusher("1403408", "e482ed9e5d276bdd5972", "45f336b827736cd83523");
+    Map<String, String> notification = new HashMap<>();	
 	@Autowired
 	ReclamationRepository Rrepo;
 	@CrossOrigin
-	@PostMapping("/AddAffectReclamationUser/{pictureId}?")
+	@PostMapping("/AddAffectReclamationUser/{pictureId}")
 	@ApiOperation(value = "Add and affect  User Whith Reclamation")
 	@ResponseBody
 	public Reclamation AddAffectReclamationUser(@RequestBody Reclamation reclamation,
-			HttpServletRequest request, @PathVariable(required = false, name = "pictureId") Integer pictureId) {
+			HttpServletRequest request, @PathVariable( name = "pictureId") Integer pictureId) {
+		this.pusher.setCluster("eu");
+		this.pusher.setEncrypted(true);
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
+		notification.put("FirstName", user.getFirstName());
+		notification.put("Message", "NEW Reclamation");
+		
 		if(user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.ENTREPRENEUR)) {
-		return reclamationservice.addAffectReclamationUser(reclamation, user, pictureId);
+			Reclamation r = reclamationservice.addAffectReclamationUser(reclamation, user, pictureId);
+			this.pusher.trigger("Notification", "AddReclamation", Collections.singleton(notification));
+			
+		return r;
 		}
 		return null;
 	}
@@ -224,6 +244,17 @@ public class ReclamationController {
 		String userName = request.getUserPrincipal().getName();
 		User user = Urepo.findByUsername(userName);
 			reclamationservice.answerAdmin(reclamation,user);
+	}
+	
+	@GetMapping("/retrievePicture/{idP}")
+	@ApiOperation(value = "Retrieve Picture")
+	@ResponseBody
+	public Picture retrievePicture(@PathVariable(name = "idP ") int idP) {
+		 
+	    Picture picture = picturerepository.findById(idP).orElse(null) ;
+	    System.out.println(picture);
+	   
+		return picture ;
 	}
 
 	/*@PutMapping("/answerReclamation/{repence}/{idReclamation}")

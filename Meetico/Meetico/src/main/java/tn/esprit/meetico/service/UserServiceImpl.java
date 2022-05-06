@@ -295,4 +295,10 @@ public class UserServiceImpl implements IUserService {
 		log.info("We have detected " + number + " accounts' status showed as Pending.");
 	}
 
+	@Override
+	public List<User> retrieveAllUsers() {
+		
+		return userRepository.findAll();
+	}
+
 }

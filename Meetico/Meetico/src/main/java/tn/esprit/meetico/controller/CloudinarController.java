@@ -41,13 +41,7 @@ public class CloudinarController {
 	@PostMapping("/upload")
 	@ApiOperation(value = "Upload Picture")
 	public Integer upload(@RequestPart MultipartFile multipartFile) throws IOException {
-		
-		
-		BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
-
-		if (bi == null) {
-			return null;
-		}
+	
 		Map result = cloudinaryService.upload(multipartFile);
 		Picture picture = new Picture((String) result.get("original_filename"), (String) result.get("url"),
 				(String) result.get("public_id"));
@@ -69,14 +63,15 @@ public class CloudinarController {
 		return new ResponseEntity(new MessageResponse("deleted image"), HttpStatus.OK);
 
 	}
-	@ApiOperation(value = "Delete Picture")
+	@ApiOperation(value = "Detail Picture")
 	@GetMapping("/getPicture/{id}")
 	
-	public Optional<Picture> getPictureById(int idPicture) {
+	public Optional<Picture> getPictureById(@PathVariable(name="id") int idPicture) {
 		Optional<Picture> P = pictureService.getOne(idPicture);
 	    
 		return P;
 	}
+	
 	
 
 }

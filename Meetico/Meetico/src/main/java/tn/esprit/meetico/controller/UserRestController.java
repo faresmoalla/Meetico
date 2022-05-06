@@ -102,5 +102,12 @@ public class UserRestController {
 	public ResponseEntity<List<User>> searchForUsers(@RequestParam String input) {
 		return userService.searchForUsers(input);
 	}
+	
+	@Transactional
+	@ApiOperation(value = "Retrieve all users")
+	@GetMapping("/retrieveAllUsers")
+	public List<User> retrieveSortedUsers() {
+		return userService.retrieveAllUsers();
+	}
 
 }
