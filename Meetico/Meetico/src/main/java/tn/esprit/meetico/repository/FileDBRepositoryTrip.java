@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.meetico.entity.FileTrip;
 
 
-@Repository
+
 public interface FileDBRepositoryTrip extends JpaRepository<FileTrip, Long> {
 	
 
