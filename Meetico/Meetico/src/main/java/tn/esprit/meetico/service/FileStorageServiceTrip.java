@@ -47,16 +47,25 @@ public class FileStorageServiceTrip {
   public FileTrip getFiletime(Integer id) {
 	    Trip t = tripRepo.findById(id).orElse(null);
 	     
-	    	
-			return t.getFiles();
+	    	Timer timer = new Timer();
+	    	TimerTask task = new TimerTask() {
+	            public void run() {
+	               for(FileTrip f :t.getFiles())
+	               {
+	            	   idf= f.getId();
+	               }
+	            }
+	        };
+	         
+	        timer.schedule(task, 50, 50);
+			return getFile(idf);
 	    
 	  }
   
   public Stream<FileTrip> getAllFiles() {
     return fileDBRepo.findAll().stream();
   }
-}/*
-  public FileTrip getAllFilesBytrip(Integer id) {
+  public Stream<FileTrip> getAllFilesBytrip(Integer id) {
 	  Trip t =tripRepo.findById(id).orElse(null);
 	    return t.getFiles().stream();
 	  }
@@ -64,4 +73,4 @@ public class FileStorageServiceTrip {
 	  Trip t =tripRepo.findById(id).orElse(null);
 	    return t.getFiles();
 	  }
-}*/
+}

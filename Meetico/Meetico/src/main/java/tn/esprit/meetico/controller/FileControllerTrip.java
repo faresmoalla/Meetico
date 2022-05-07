@@ -85,8 +85,8 @@ public class FileControllerTrip {
     
   }
   @GetMapping("/filesdevoyage/{id}")
-  public FileTrip getListFilesdevoyage(@PathVariable Integer id) {
-    FileTrip files = storageService.getFile(null);
+  public List<FileTrip> getListFilesdevoyage(@PathVariable Integer id) {
+    List<FileTrip> files = storageService.getFileByTrip(id);
     return files;
 }
   @GetMapping("/files/{id}")
@@ -113,83 +113,81 @@ public class FileControllerTrip {
   public Trip getFilebytrip(@PathVariable Long id) {
     return storageService.gettripbyfile(id);
   }
-//  @GetMapping("/filesByTrip/{id}")
-//  public ResponseEntity<List<ResponseFile>> getListFilesByTRip(@PathVariable Integer id) {
-//    List<ResponseFile> files = storageService.getAllFilesBytrip(id).map(dbFile -> {
-//      String fileDownloadUri = ServletUriComponentsBuilder
-//          .fromCurrentContextPath()
-//          .path("/SpringMVC/File/files/")
-//          .path(dbFile.getId().toString())
-//          .toUriString();
-//      return new ResponseFile(
-//          dbFile.getName(),
-//          fileDownloadUri,
-//          dbFile.getType(),
-//          dbFile.getData().length);
-//    }).collect(Collectors.toList());
-//    return ResponseEntity.status(HttpStatus.OK).body(files);
-//  }
-//  
-//  /
-//  @GetMapping("/filesByTRipp/{id}")
-//  @ResponseBody
-//  public ResponseEntity<byte[]> getFilebytripp(@PathVariable Integer id) {
-//    List<FileTrip> fileDB = storageService.getFileByTrip(id);
-//    
-//    //for(FileDB f :fileDB) {
-//    	//return ResponseEntity.ok()
-//    	  //      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + f.getName() + "\"")
-//    	    //    .body(f.getData()) ;
-//    	
-//    //}
-//	return ResponseEntity.ok()
-//    	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.iterator().next().getName()+ "\"")
-//    	        .body(fileDB.iterator().next().getData() ) ;
-//  }
-//
-//  @GetMapping("/filesByTRippp/{id}")
-//  @ResponseBody
-//  public List<ResponseEntity<byte[]>> getFileBytrippp(@PathVariable Integer id) {
-//	  /*
-//    List<FileDB> fileDB = storageService.getFileByTrip(id);
-//    List<byte[]> b = new ArrayList<byte[]>() ;
-//    		//new ArrayList(ResponseEntity<byte[]>);
-//    for(FileDB f :fileDB) {
-//    	byte[] s=f.getData();
-//    	b.add(s);	
-//    }
-//    return  ResponseEntity.ok()
-//	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
-//	        .body(b) ;
-//  }*/
-//	  List<FileTrip> fileDB = storageService.getFileByTrip(id);
-//	  List<ResponseEntity<byte[]>> b = new ArrayList<ResponseEntity<byte[]>>();
-//	  ResponseEntity<byte[]> s =new ResponseEntity<byte[]>(null,null,HttpStatus.OK);
-//	  for(FileTrip f :fileDB) {
-//		  s=ResponseEntity.ok()
-//					        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + f.getName() + "\"")
-//					        .body(f.getData());
-//		  b.add(s);
-//			        
-//	  }
-//	  return b;
-//}
-//  @GetMapping("/filesByTRipppp/{id}")
-//  @ResponseBody
-//  public ResponseEntity<List<byte[]>> getFileBytripppp(@PathVariable Integer id) {
-//	  
-//	  
-//	    List<FileTrip> fileDB = storageService.getFileByTrip(id);
-//	    List<byte[]> b = new ArrayList<byte[]>() ;
-//	    		//new ArrayList(ResponseEntity<byte[]>);
-//	    for(FileTrip f :fileDB) {
-//	    	byte[] s=f.getData();
-//	    	b.add(s);	
-//	    }
-//	    return  ResponseEntity.ok()
-//		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
-//		        .body(b) ;
-//	  }
+  @GetMapping("/filesByTrip/{id}")
+  public ResponseEntity<List<ResponseFile>> getListFilesByTRip(@PathVariable Integer id) {
+    List<ResponseFile> files = storageService.getAllFilesBytrip(id).map(dbFile -> {
+      String fileDownloadUri = ServletUriComponentsBuilder
+          .fromCurrentContextPath()
+          .path("/SpringMVC/File/files/")
+          .path(dbFile.getId().toString())
+          .toUriString();
+      return new ResponseFile(
+          dbFile.getName(),
+          fileDownloadUri,
+          dbFile.getType(),
+          dbFile.getData().length);
+    }).collect(Collectors.toList());
+    return ResponseEntity.status(HttpStatus.OK).body(files);
+  }
   
+  @GetMapping("/filesByTRipp/{id}")
+  @ResponseBody
+  public ResponseEntity<byte[]> getFilebytripp(@PathVariable Integer id) {
+    List<FileTrip> fileDB = storageService.getFileByTrip(id);
+    
+    //for(FileDB f :fileDB) {
+    	//return ResponseEntity.ok()
+    	  //      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + f.getName() + "\"")
+    	    //    .body(f.getData()) ;
+    	
+    //}
+	return ResponseEntity.ok()
+    	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.iterator().next().getName()+ "\"")
+    	        .body(fileDB.iterator().next().getData() ) ;
+  }
+
+  @GetMapping("/filesByTRippp/{id}")
+  @ResponseBody
+  public List<ResponseEntity<byte[]>> getFileBytrippp(@PathVariable Integer id) {
+	  /*
+    List<FileDB> fileDB = storageService.getFileByTrip(id);
+    List<byte[]> b = new ArrayList<byte[]>() ;
+    		//new ArrayList(ResponseEntity<byte[]>);
+    for(FileDB f :fileDB) {
+    	byte[] s=f.getData();
+    	b.add(s);	
+    }
+    return  ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
+	        .body(b) ;
+  }*/
+	  List<FileTrip> fileDB = storageService.getFileByTrip(id);
+	  List<ResponseEntity<byte[]>> b = new ArrayList<ResponseEntity<byte[]>>();
+	  ResponseEntity<byte[]> s =new ResponseEntity<byte[]>(null,null,HttpStatus.OK);
+	  for(FileTrip f :fileDB) {
+		  s=ResponseEntity.ok()
+					        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + f.getName() + "\"")
+					        .body(f.getData());
+		  b.add(s);
+			        
+	  }
+	  return b;
+}
+  @GetMapping("/filesByTRipppp/{id}")
+  @ResponseBody
+  public ResponseEntity<List<byte[]>> getFileBytripppp(@PathVariable Integer id) {
+	  
+	  
+	    List<FileTrip> fileDB = storageService.getFileByTrip(id);
+	    List<byte[]> b = new ArrayList<byte[]>() ;
+	    		//new ArrayList(ResponseEntity<byte[]>);
+	    for(FileTrip f :fileDB) {
+	    	byte[] s=f.getData();
+	    	b.add(s);	
+	    }
+	    return  ResponseEntity.ok()
+		        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
+		        .body(b) ;
+	  }
   
 }
