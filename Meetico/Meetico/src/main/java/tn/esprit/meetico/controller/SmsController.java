@@ -2,6 +2,7 @@ package tn.esprit.meetico.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import tn.esprit.meetico.entity.SmsRequest;
 import tn.esprit.meetico.service.SmsService;
 
 import javax.validation.Valid;
+
+@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
 
 @RestController
 @RequestMapping("/sms")

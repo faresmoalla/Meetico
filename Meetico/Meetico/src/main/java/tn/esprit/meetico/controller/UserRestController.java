@@ -2,12 +2,12 @@ package tn.esprit.meetico.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.meetico.entity.User;
-import tn.esprit.meetico.security.AuthTokenFilter;
 import tn.esprit.meetico.service.IUserService;
-import tn.esprit.meetico.util.AuthUser;
-import tn.esprit.meetico.util.UserAttribute;
+import tn.esprit.meetico.util.Credentials;
+import tn.esprit.meetico.util.Sort;
+import tn.esprit.meetico.util.UserDetails;
 
+@CrossOrigin(allowCredentials = "true", origins = "https://localhost:4200")
 @RestController
 @Api(tags = "User Management")
 @RequestMapping("/user")
@@ -34,80 +35,107 @@ public class UserRestController {
 	@Autowired
 	private IUserService userService;
 	
-	@Autowired
-	private AuthTokenFilter authTokenFilter;
-	
-	@Transactional
-	@ApiOperation(value = "Search for users")
-	@GetMapping("/blabla")
-	@ResponseBody
-	public String blabla(HttpServletRequest request) {
-		return authTokenFilter.parseJwt(request);
-	}
-	
-	
-	@ApiOperation(value = "Register an entrepreneur")
+	@ApiOperation("Register an entrepreneur")
 	@PostMapping("/registerEntrepreneur")
-	public ResponseEntity<String> registerEntrepreneur(@Valid @RequestBody User entrepreneur) {
+	public User registerEntrepreneur(@Valid @RequestBody User entrepreneur) throws Exception {
 		return userService.registerEntrepreneur(entrepreneur);
 	}
 	
-	@ApiOperation(value = "Authenticate a user")
+	@ApiOperation("Authenticate a user")
 	@PostMapping("/authenticateUser")
-	public ResponseEntity<String> authenticateUser(@Valid @RequestBody AuthUser user) {
-		return userService.authenticateUser(user);
+	public UserDetails authenticateUser(@Valid @RequestBody Credentials credentials) {
+		return userService.authenticateUser(credentials);
 	}
 
-	@ApiOperation(value = "Update a user")
-	@PutMapping("/updateUser")
+	@ApiOperation("Update a profile")
+	@PutMapping("/updateProfile")
 	@ResponseBody
-	public ResponseEntity<String> updateUser(HttpServletRequest request, @RequestBody User updation) {
-        String username = request.getUserPrincipal().getName();
-        
-        
-		return userService.updateUser(username, updation);
+	public User updateProfile(@RequestBody User connectedUser) {
+		return userService.updateProfile(connectedUser);
 	}
 
-	@ApiOperation(value = "Remove a user")
+	@ApiOperation("Remove a user")
 	@DeleteMapping("/removeUser")
 	@ResponseBody
-	public ResponseEntity<String> removeUser(@RequestParam Long userId) {
-		return userService.removeUser(userId);
+	public void removeUser(@RequestParam Long userId) {
+		userService.removeUser(userId);
+	}
+	
+	@Transactional
+	@ApiOperation("Retrieve all users")
+	@GetMapping("/retrieveAllUsers")
+	public List<User> retrieveAllUsers(@RequestParam(defaultValue = "false") Boolean descendant, @RequestParam(defaultValue = "userId") Sort sortedBy) {
+		return userService.retrieveAllUsers(descendant, sortedBy);
 	}
 
-	@ApiOperation(value = "Approve a pending employee")
+	@ApiOperation("Approve a pending employee")
 	@PutMapping("/approvePendingEmployee")
 	@ResponseBody
-	public ResponseEntity<String> approvePendingEmployee(@RequestParam Integer verificationCode) {
+	public User approvePendingEmployee(@RequestParam Integer verificationCode) {
 		return userService.approvePendingEmployee(verificationCode);
 	}
 
-	@ApiOperation(value = "Assign a picture to a user")
+	@ApiOperation("Assign a picture to a user")
 	@PutMapping("/assignPictureToUser")
-	public ResponseEntity<String> assignPictureToUser(@RequestParam Long userId, @RequestPart("file") MultipartFile file) {
+	public User assignPictureToUser(@RequestParam Long userId, @RequestPart("file") MultipartFile file) throws Exception, IOException {
 		return userService.assignPictureToUser(userId, file);
 	}
 	
 	@Transactional
-	@ApiOperation(value = "Retrieve sorted users")
-	@GetMapping("/retrieveSortedUsers")
-	public ResponseEntity<List<User>> retrieveSortedUsers(@RequestParam List<UserAttribute> userAttributes, @RequestParam(required = false, defaultValue = "true") Boolean ascendant) {
-		return userService.retrieveSortedUsers(userAttributes, ascendant);
-	}
-	
-	@Transactional
-	@ApiOperation(value = "Search for users")
+	@ApiOperation("Search for users")
 	@GetMapping("/searchForUsers")
 	@ResponseBody
-	public ResponseEntity<List<User>> searchForUsers(@RequestParam String input) {
+	public List<User> searchForUsers(@RequestParam String input) {
 		return userService.searchForUsers(input);
 	}
 	
-	@Transactional
-	@ApiOperation(value = "Retrieve all users")
-	@GetMapping("/retrieveAllUsers")
-	public List<User> retrieveSortedUsers() {
-		return userService.retrieveAllUsers();
+	@ApiOperation("Update a user's status when logged in")
+	@PutMapping("/signInStatus")
+	@ResponseBody
+	public void signInStatus(@RequestParam Long userId) {
+		userService.signInStatus(userId);
+	}
+	
+	@ApiOperation("Update a user's status when logged out")
+	@PutMapping("/signOutStatus")
+	@ResponseBody
+	public void signOutStatus(@RequestParam Long userId) {
+		userService.signOutStatus(userId);
+	}
+	
+	@ApiOperation(value = "Follow a user")
+	@PutMapping("/followUser")
+	@ResponseBody
+	public void followUser(@RequestParam Long followerId, @RequestParam Long userId) {
+		userService.followUser(followerId, userId);
 	}
 
+	@ApiOperation(value = "Unfollow a user")
+	@PutMapping("/unfollowUser")
+	@ResponseBody
+	public void unfollowUser(@RequestParam Long followerId, @RequestParam Long userId) {
+		userService.unfollowUser(followerId, userId);
+	}
+	
+	@ApiOperation("Upload a convertable PDF")
+	@PostMapping("/uploadConvertablePDF")
+	public List<String> uploadConvertablePDF(@RequestPart("file") MultipartFile file) throws Exception {
+		return userService.uploadConvertablePDF(file);
+	}
+	
+	@Transactional
+	@ApiOperation("Calculate a profile's completion")
+	@GetMapping("/calculateProfileCompletion")
+	public List<Integer> calculateProfileCompletion() {
+		return userService.calculateProfileCompletion();
+	}
+	
+	@Transactional
+	@ApiOperation("Account Statistics")
+	@GetMapping("/accountStatistics")
+	@ResponseBody
+	public List<Object> accountStatistics() {
+		return userService.accountStatistics();
+	}
+	
 }

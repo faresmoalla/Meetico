@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import tn.esprit.meetico.config.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,8 @@ import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.CommentServiceImpl;
 import tn.esprit.meetico.service.SmsService;
+
+@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
 
 @RestController
 @RequestMapping("/comment")
