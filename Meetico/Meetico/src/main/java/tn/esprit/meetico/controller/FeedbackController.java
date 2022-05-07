@@ -26,8 +26,6 @@ import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.FeedbackServiceImpl;
 import tn.esprit.meetico.service.IFeedbackService;
 
-@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
-
 @RestController
 @Api(tags = "Feedback Management")
 @RequestMapping("/Feedback")

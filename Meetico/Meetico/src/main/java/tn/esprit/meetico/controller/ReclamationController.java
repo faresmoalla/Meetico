@@ -50,11 +50,10 @@ import tn.esprit.meetico.service.IReclamationService;
 import tn.esprit.meetico.service.PictureService;
 import tn.esprit.meetico.service.ReclamationExporter;
 
-@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
-
 @RestController
 @Api(tags = " Reclamation Management")
 @RequestMapping("/Reclamation")
+@CrossOrigin(origins = "*")
 public class ReclamationController {
 	
 	@Autowired

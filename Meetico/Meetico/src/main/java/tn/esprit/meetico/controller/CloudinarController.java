@@ -22,9 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
-
-@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
-
+@CrossOrigin(origins = "*" )
 @RestController
 @RequestMapping("/cloudinary")
 @Api(tags = "Upload Api Cloudinary ")

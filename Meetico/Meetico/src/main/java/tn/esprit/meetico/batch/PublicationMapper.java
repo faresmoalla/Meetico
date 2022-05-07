@@ -23,7 +23,7 @@ public class PublicationMapper implements RowMapper<User> {
 				.birthday(rs.getDate("birthday")).city(rs.getString("city")).email(rs.getString("email"))
 				.firstName(rs.getString("first_name")).gender(Gender.valueOf(rs.getString("gender")))
 				.lastName(rs.getString("last_name")).password(rs.getString("password"))
-				.phoneNumber(rs.getLong("phone_number")).picture(rs.getString("picture"))
+				.phoneNumber(rs.getLong("phone_number")).picturePath(rs.getString("picture_path"))
 				.username(rs.getString("username")).verificationCode(rs.getInt("verification_code"))
 				
 				

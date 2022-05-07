@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +23,6 @@ import tn.esprit.meetico.repository.PublicationRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.service.IFeedbackService;
 import tn.esprit.meetico.service.PublicationServiceImpl;
-
-@CrossOrigin(allowCredentials = "true", origins="http://localhost:4200")
 
 @Controller
 

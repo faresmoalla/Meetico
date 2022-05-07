@@ -91,6 +91,8 @@ public class User implements Serializable {
 	// @Size(min = 8, max = 8)
 	private Long phoneNumber;
 
+	private String picturePath;
+
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private Set<Profession> professions;
@@ -137,13 +139,9 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "utilis")
 	@JsonIgnore
 	private Set<Alert> alerts;
-		
-	private Date lastSeen;
-
-	private String picture;
 	
-	@Temporal(TemporalType.DATE)
-	private Date createdAt;
+	
+
 
 	@NonNull
 //	@Size(min = 4, max = 25)
@@ -151,6 +149,4 @@ public class User implements Serializable {
 
 	private Integer verificationCode;
 
-	
-	
 }
