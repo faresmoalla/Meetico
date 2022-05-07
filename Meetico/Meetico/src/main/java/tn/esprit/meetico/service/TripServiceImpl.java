@@ -282,13 +282,13 @@ public class TripServiceImpl implements ITripService{
 		}
 
 	@Override
-	public void affecterFileToTip(List<Long> idFiles, Integer idTrip) {
+	public void affecterFileToTip(Long idFiles, Integer idTrip) {
 		Trip t=tripRepo.findById(idTrip).orElse(null);
-		for(Long idf :idFiles) {
-			FileTrip f=fileRepo.findById(idf).orElse(null);
-			f.setTrip(t);
-			fileRepo.save(f);
-		}
+		
+			FileTrip f=fileRepo.findById(idFiles).orElse(null);
+			t.setFiles(f);
+			tripRepo.save(t);
+		
 		
 	}
 
