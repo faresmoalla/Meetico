@@ -161,7 +161,7 @@ public class CommentServiceImpl implements ICommentService {
 	public void deleteComment(Long idComment) {
 		Comment comment = commentRepo.findById(idComment).orElse(null);
 		
-		
+		comment.setUser(null);
 		commentRepo.delete(comment);
 		
 	}

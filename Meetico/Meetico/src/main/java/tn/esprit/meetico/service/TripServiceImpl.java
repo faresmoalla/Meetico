@@ -186,7 +186,7 @@ public class TripServiceImpl implements ITripService{
 		trip.setUser(u);
 		tripRepo.save(trip);
 	
-		
+		/*
 		for(User ur :users) {
 			String number ="+216"+String.valueOf(ur.getPhoneNumber());
 			log.info(number);
@@ -195,7 +195,7 @@ public class TripServiceImpl implements ITripService{
 		
 		
 		
-		}
+		}*/
 		
 			
 		 return trip;
