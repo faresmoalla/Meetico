@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import tn.esprit.meetico.config.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,7 @@ import tn.esprit.meetico.service.SmsService;
 
 @RestController
 @RequestMapping("/comment")
+@CrossOrigin
 @Api(tags = "Comment Management")
 public class CommentController {
 	@Autowired
@@ -54,7 +57,17 @@ UserRepository userRepo;
 		commentService.updateComment(f, idComment, user);
 
 	}
+	@ApiOperation(value = "Test add Comment")
+	@PostMapping("/testaddcomment")
+	public void testaddcomment(@RequestBody Comment f) {
+	   // String username = request.getUserPrincipal().getName();
+      //  User user = userRepo.findByUsername(username);
+        
+		commentService.testaddComment(f);
+	}
 
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@ApiOperation(value = "Delete Comment")
 	@DeleteMapping("/DeleteCommentaire/{idComment}")
 	public void deleteComment(@PathVariable("idComment") Long idComment) {
@@ -74,10 +87,15 @@ UserRepository userRepo;
 		return new Paginator<>(productsWithPagination.getSize(), productsWithPagination);
 	}
 
-	@GetMapping("/ListCommentsByPub/{idPublication}/{field}")
+	/*@GetMapping("/ListCommentsByPub/{idPublication}/{field}")
 	@ResponseBody
 	public List<Comment> listComments(@PathVariable("idPublication") Long idPublication) {
 		return commentService.listCommentsByPublication(idPublication);
-	}
+	}*/
 
+	@GetMapping("/ListCommentsByPub/{idPublication}")
+@ResponseBody
+public List<Comment> listComments(@PathVariable("idPublication") Long idPublication) {
+	return commentService.listCommentsByPublication(idPublication);
+}
 }

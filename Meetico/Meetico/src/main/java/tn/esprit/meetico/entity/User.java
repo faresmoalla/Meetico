@@ -16,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -92,6 +95,8 @@ public class User implements Serializable {
 	private Long phoneNumber;
 
 	private String picturePath;
+	@Value("${some.key:disponible}")
+	private String etat;
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

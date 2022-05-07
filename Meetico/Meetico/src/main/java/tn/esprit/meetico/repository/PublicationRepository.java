@@ -34,13 +34,15 @@ public interface PublicationRepository extends JpaRepository<Publication, Long> 
 	List<Publication> GetPublicationToday() ;	
 
 	*/
-	@Query("SELECT c FROM Publication c WHERE c.date > :d1 group by c.userr ")
+	@Query("SELECT c FROM Publication c WHERE c.date = :d1 ")
 	public List<Publication> getPubToday(@Param("d1") Date fromDate);
 	
 	
+	@Query("SELECT c FROM Publication c ORDER by c.date DESC ")
+	public List<Publication> getPubdate();
 	
 	
-	
+
 	
 	
 	

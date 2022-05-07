@@ -43,7 +43,7 @@ public class PDFGeneratorService {
 	public static PublicationRepository pubRepo;
 	
 	private static Logger logger = LoggerFactory.getLogger(PDFGeneratorService.class);
-	static String  logoImgPath ="C:\\Users\\fares\\Desktop\\Meetico\\Meetico\\src\\main\\resources\\static\\meetico.png";
+	static String  logoImgPath ="C:\\Users\\Administrateur.DESKTOP-BMBSNE9\\Documents\\GitHub\\Meetico\\Meetico\\Meetico\\src\\main\\resources\\static\\meetico.png";
 
 	//static String  logoImgPath ="C:\\Users\\Aminous\\Documents\\Workspace STS 4.13.0\\Meetico-Backend-Amine-Zied-Radhwen\\src\\main\\resources\\static\\meetico.png";
 

@@ -8,6 +8,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.twilio.Twilio;
+import com.twilio.type.PhoneNumber;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
@@ -25,20 +27,22 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
-import tn.esprit.meetico.entity.FileDB;
+
+import tn.esprit.meetico.entity.DestionationVisitorsCount;
+import tn.esprit.meetico.entity.FileTrip;
 import tn.esprit.meetico.entity.Gender;
 import tn.esprit.meetico.entity.Note;
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
-import tn.esprit.meetico.repository.FileDBRepository;
+import tn.esprit.meetico.repository.FileDBRepositoryTrip;
 import tn.esprit.meetico.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.meetico.repository.TripRepository;
 import tn.esprit.meetico.repository.UserRepository;
-import tn.esprit.meetico.security.JWTUtils;
+import tn.esprit.meetico.repository.destionationVisitorsCountRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,8 +59,7 @@ import com.vonage.client.sms.messages.TextMessage;
 @SuppressWarnings("deprecation")
 public class TripServiceImpl implements ITripService{
 	
-	@Autowired
-	private JWTUtils jwutil;
+
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -65,12 +68,15 @@ public class TripServiceImpl implements ITripService{
 	private TripRepository tripRepo;
 	
 	@Autowired
-	private FileDBRepository fileRepo;
+	private FileDBRepositoryTrip fileRepo;
 	
 	@Autowired
 	private EmailServiceImpl emailsend;
 	@Autowired
 	StatMeilleurDesitnationRepository srepo;
+	
+	@Autowired
+	destionationVisitorsCountRepository destionationVisitorsCountRepo;
 	/*
 	@Autowired
 	private FirebaseMessagingService firebasemessaging;
@@ -107,7 +113,7 @@ public class TripServiceImpl implements ITripService{
 		
 		}else {
 			log.info("we have no match");
-		}
+		}/*
 		User u = userRepo.findById(idEnt).orElse(null);
 		List<User> userss = userRepo.findAll();
 		for(User ur :userss) {
@@ -126,7 +132,7 @@ public class TripServiceImpl implements ITripService{
 				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
 			}
 		}
-		
+		*/
 	}
 
 	@Override
@@ -180,26 +186,17 @@ public class TripServiceImpl implements ITripService{
 		trip.setUser(u);
 		tripRepo.save(trip);
 	
-		
+		/*
 		for(User ur :users) {
 			String number ="+216"+String.valueOf(ur.getPhoneNumber());
 			log.info(number);
-			VonageClient client = VonageClient.builder().apiKey("03bc878e").apiSecret("wUYDWlKJhsWr8Mt2").build();
-			
-			TextMessage message = new TextMessage("Meetico", number,
-					"un voayge a été ajouté vers "+trip.getDestination()+"de la part de l'entrepreneur"+u.getEmail());
-
-			SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
-
-			if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
-				log.info("Message sent successfully.");
-			} else {
-				log.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
-			}
-		}
+		
+			sendsms(number,trip.getDestination(),u.getEmail());
 		
 		
-
+		
+		}*/
+		
 			
 		 return trip;
 	}
@@ -210,6 +207,7 @@ public class TripServiceImpl implements ITripService{
 		for (Long idutilisateur : idutilisateurs) {
 			User u = userRepo.findById(idutilisateur).orElse(null);
 			u.getTrips().add(t);
+			u.setEtat("En Voyage");
 			userRepo.save(u);
 		}
 		User entrepreneur =t.getUser();
@@ -251,6 +249,7 @@ public class TripServiceImpl implements ITripService{
 		for(Long iduser :idusers) {
 			User user =userRepo.findById(iduser).orElse(null);
 			user.getTrips().remove(t);
+			user.setEtat("disponible");
 			userRepo.save(user);
 		}
 		
@@ -283,13 +282,13 @@ public class TripServiceImpl implements ITripService{
 		}
 
 	@Override
-	public void affecterFileToTip(List<Long> idFiles, Integer idTrip) {
+	public void affecterFileToTip(Long idFiles, Integer idTrip) {
 		Trip t=tripRepo.findById(idTrip).orElse(null);
-		for(Long idf :idFiles) {
-			FileDB f=fileRepo.findById(idf).orElse(null);
-			f.setTrip(t);
-			fileRepo.save(f);
-		}
+		
+			FileTrip f=fileRepo.findById(idFiles).orElse(null);
+			t.setFiles(f);
+			tripRepo.save(t);
+		
 		
 	}
 
@@ -354,7 +353,7 @@ public class TripServiceImpl implements ITripService{
 			//s =t.getDestination()+"est visité"+n+"fois"+max_value;
 			//ls.add(s);
 		}
-		s="The favorite destination was " + destination + " with " + max_value + " visit(s).";
+		s= destination + " with " + max_value + " visit(s).";
 		
 		log.info(s);
 		
@@ -471,6 +470,49 @@ public class TripServiceImpl implements ITripService{
 		
 		return ls;
 	}
+	
+	@Scheduled(fixedRate = 3600000)
+	@Override
+	public List<DestionationVisitorsCount> destionationVisitorsCountA() {
+		// TODO Auto-generated method stub
+		List<Trip> trip =tripRepo.findAll();
+		
+		
+
+		//List<Integer> ns=new ArrayList<>();
+		//String destination=new String();
+		for(Trip t:trip) {
+			int n = 0 ;
+			for(Trip tr:trip) {
+				if(t.getDestination().equalsIgnoreCase(tr.getDestination())) {
+					
+					n++;
+					DestionationVisitorsCount sa= destionationVisitorsCountRepo.findBydetination(t.getDestination());
+					if(sa==null) {
+						DestionationVisitorsCount s=new DestionationVisitorsCount();
+						s.setDetination(t.getDestination());
+						 s.setVisitnbr(n);
+						 destionationVisitorsCountRepo.save(s);
+					}else
+					{
+						sa.setVisitnbr(n);
+						destionationVisitorsCountRepo.save(sa);
+						
+					}
+					 
+					
+				}
+				
+			}
+				
+		
+			
+		}
+		
+		
+		
+		return destionationVisitorsCountRepo.findAll();
+	}
 /*
 	@Override
 	public void exporttripToPdf(HttpServletResponse response, Integer idtrip) {
@@ -522,5 +564,32 @@ public class TripServiceImpl implements ITripService{
 	public List<StatMeilleurDesitnation> listmeilleurdestination() {
 		// TODO Auto-generated method stub
 		return srepo.findAll();
+	}
+
+	@Override
+	public Set<Trip> affichetListVoyageByEntrepreneur(Long idEnt) {
+		User u = userRepo.findById(idEnt).orElse(null);
+		
+		return u.getTripss();
+	}
+
+	@Override
+	public List<Trip> searchbydestination(String destination) {
+		return tripRepo.searchtrip(destination);
+	}
+	
+	public void sendsms(String str, String trip,String email) {
+		Twilio.init("AC1031db4af6517ccd09f33ef47e73e278", "cf4632728e95b7aedd1b953468ce63b4");
+		try {
+			com.twilio.rest.api.v2010.account.Message message = com.twilio.rest.api.v2010.account.Message
+					.creator(new PhoneNumber("+21692207710"), // To number
+							new PhoneNumber("+16066136706"), // From number
+							"Meetico"+
+							"un voayge a été ajouté vers "+trip+"de la part de l'entrepreneur"+email)
+					.create();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 }

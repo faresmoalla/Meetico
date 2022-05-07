@@ -9,29 +9,30 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import lombok.extern.slf4j.Slf4j;
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
 import tn.esprit.meetico.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.meetico.service.TripServiceImpl;
 
+
 @Component
 @Aspect
 @Slf4j
 public class PerformanceAspect {
-
 	@Autowired
 	TripServiceImpl tripSer;
 	@Autowired
 	StatMeilleurDesitnationRepository srepo;
-	@Around("execution(* tn.esprit.meetico.service.*.*(..))")
-	public Object profile(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-		 String name = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName() + "." + proceedingJoinPoint.getSignature().getName();
-		long start = System.currentTimeMillis();
-		Object obj = proceedingJoinPoint.proceed();
-		long elapsedTime = System.currentTimeMillis() - start;
-		log.info("Executin of method "+ name + " took " + elapsedTime + " milliseconds.");
-		return obj;
-	}
+	/*
+	@Around("execution(* tn.esprit.spring.service.*.*(..))")
+public Object profile(ProceedingJoinPoint pjp) throws Throwable {
+long start = System.currentTimeMillis();
+Object obj = pjp.proceed();
+long elapsedTime = System.currentTimeMillis() - start;
+log.info("Method execution time: " + elapsedTime + " milliseconds.");
+return obj;
+}*/
 	@After("execution(public String tn.esprit.meetico.service.TripServiceImpl.favoriteDestination())")
 	public void logMethodEntry(JoinPoint joinPoint) {
 		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -56,5 +57,5 @@ public class PerformanceAspect {
 		
 		
 	}
-	
+
 }

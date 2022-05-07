@@ -21,14 +21,14 @@ import tn.esprit.meetico.repository.PublicationRepository;
 
 
 
-
+@CrossOrigin
 @RestController
-
+@RequestMapping("/pdf")
 public class PDFExportController {
 @Autowired
 PublicationRepository pubRepo;
    
-@CrossOrigin
+
     @GetMapping(value = "/pdf",
             produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> DriverReport() throws IOException {

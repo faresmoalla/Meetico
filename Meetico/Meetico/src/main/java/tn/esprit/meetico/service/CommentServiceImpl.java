@@ -104,10 +104,22 @@ public class CommentServiceImpl implements ICommentService {
 		simpleMailMessage.setSubject(user.getFirstName() + " " + "a commenté votre publication");
 		simpleMailMessage.setText(comment.getContents());
 		javaMailSender.send(simpleMailMessage);
+		/*
 		if (user.getAlerts().size() >= 3) {
 			sendsms2(user.getTel(), 0);
 			userRepo.delete(user);
-		}
+		}*/
+		
+		
+	}
+	
+	
+	
+	
+	public void testaddComment(Comment comment) {
+		Date currentSqlDate = new Date(System.currentTimeMillis());
+		comment.setDate(currentSqlDate);
+		commentRepo.save(comment);
 	}
 
 	///////////////////// Modifier Commentaire ///////////////
@@ -148,10 +160,10 @@ public class CommentServiceImpl implements ICommentService {
 	@Override
 	public void deleteComment(Long idComment) {
 		Comment comment = commentRepo.findById(idComment).orElse(null);
-		if(comment!=null) {
 		
+		comment.setUser(null);
 		commentRepo.delete(comment);
-		}
+		
 	}
 
 	////////////////////////// Afficher les Commentaire d'une Publication
@@ -196,6 +208,22 @@ public class CommentServiceImpl implements ICommentService {
 		}
 
 	}
+	
+	public void sendsms3(String str, int body) {
+		Twilio.init("AC1031db4af6517ccd09f33ef47e73e278", "cf4632728e95b7aedd1b953468ce63b4");
+		try {
+			com.twilio.rest.api.v2010.account.Message message = com.twilio.rest.api.v2010.account.Message
+					.creator(new PhoneNumber("+21692207710"), // To number
+							new PhoneNumber("+16066136706"), // From number
+							"you are not banned anymore welcome back:" + body)
+					.create();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+	
+	
 	@Override
 	public void sendsms2(String str, int body) {
 		Twilio.init("AC1031db4af6517ccd09f33ef47e73e278", "cf4632728e95b7aedd1b953468ce63b4");

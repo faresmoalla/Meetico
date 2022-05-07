@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,12 +32,12 @@ public class PostDislike implements Serializable {
 	
 	
 	
-	@ManyToOne
-	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	//@JsonIgnore
 	Publication publication;
 	
 	@ManyToOne
-	@JsonIgnore
+	//@JsonIgnore
 	User utilis;
 	
 }

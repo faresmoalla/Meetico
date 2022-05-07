@@ -4,9 +4,9 @@ import tn.esprit.meetico.entity.Publication;
 import tn.esprit.meetico.entity.User;
 
 public interface IPublicationService {
-	public void addPublication(Publication publication,  User user);
-	public void deletePublication(Long idUser, Long idPublication) ;
-	public void updatePublication(Long idUser, Long idPublication);
+	public Publication addPublication(Publication publication,  User user);
+	public void deletePublication( Long idPublication) ;
+	//public void updatePublication(Long idUser, Long idPublication);
 	public void addLike(Long idPublicaiton,User user);
 	public void addDislike(Long idPublicaiton, User user);
 	public int nbrLikeByPub(Long idPublicaiton);

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import lombok.AllArgsConstructor;
-import tn.esprit.meetico.entity.FileDB;
+import tn.esprit.meetico.entity.FileTrip;
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.entity.User;
 
@@ -160,8 +160,8 @@ public class TripPDF {
 
 		document.add(table);
 
-		List<FileDB> files = trip.getFiles();
-		PdfPTable table3 = new PdfPTable(files.size());
+	    FileTrip files = trip.getFiles();
+		
 		
 		PdfPTable table1 = new PdfPTable(5);
 		table1.setWidthPercentage(100f);
@@ -175,9 +175,9 @@ public class TripPDF {
 		
 		
 		
-		for (FileDB f : files) {
+		
 			
-			byte[] byt = f.getData();
+			byte[] byt = files.getData();
 			// ImageIcon imageIcon = new ImageIcon(byt);
 			// imageIcon.getImage();
 
@@ -192,7 +192,7 @@ public class TripPDF {
 			
 			
 
-		}
+		
 		document.close();
 	}
 
