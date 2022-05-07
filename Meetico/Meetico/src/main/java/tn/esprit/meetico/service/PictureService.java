@@ -35,8 +35,5 @@ public class PictureService {
 	        return imagenRepository.existsById(id);
 	    }
 	    
-	    public  Picture getPicture(int id){
-	        return imagenRepository.getById(id);
-	    }
 
 }

@@ -145,7 +145,9 @@ public class User implements Serializable {
 	@JsonIgnore
 	private Set<Alert> alerts;
 	
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@JsonIgnore
+	private Set<Picture> picture;
 
 
 	@NonNull

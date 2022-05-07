@@ -27,7 +27,6 @@ public interface IUserService {
 	ResponseEntity<List<User>> retrieveSortedUsers(List<UserAttribute> userAttributes, Boolean ascendant);
 	
 	ResponseEntity<List<User>> searchForUsers(String input);
-	List<User> retrieveAllUsers();
 
 	void accountManagement();
 
