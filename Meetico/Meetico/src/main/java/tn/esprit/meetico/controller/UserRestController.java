@@ -25,6 +25,8 @@ import tn.esprit.meetico.service.IUserService;
 import tn.esprit.meetico.util.AuthUser;
 import tn.esprit.meetico.util.UserAttribute;
 
+
+
 @RestController
 @Api(tags = "User Management")
 @RequestMapping("/user")
