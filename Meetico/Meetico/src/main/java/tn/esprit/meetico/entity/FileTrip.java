@@ -34,7 +34,7 @@ public class FileTrip implements Serializable {
   private String type;
   @Lob
   private byte[] data;
-  @OneToOne(mappedBy="trip")
+  @ManyToOne
   @JsonBackReference
   private Trip trip;
  
