@@ -160,7 +160,7 @@ public class TripPDF {
 
 		document.add(table);
 
-		List<FileTrip> files = trip.getFiles();
+	    FileTrip files = trip.getFiles();
 		
 		
 		PdfPTable table1 = new PdfPTable(5);
@@ -175,9 +175,9 @@ public class TripPDF {
 		
 		
 		
-		for (FileTrip f : files) {
+		
 			
-			byte[] byt = f.getData();
+			byte[] byt = files.getData();
 			// ImageIcon imageIcon = new ImageIcon(byt);
 			// imageIcon.getImage();
 
@@ -192,7 +192,7 @@ public class TripPDF {
 			
 			
 
-		}
+		
 		document.close();
 	}
 
