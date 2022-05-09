@@ -29,7 +29,7 @@ import tn.esprit.meetico.util.MessageResponse;
 @CrossOrigin
 @RestController
 @Api(tags = "File Management")
-@RequestMapping("/File")
+@RequestMapping("/FileT")
 public class FileController {
 
 	@Autowired

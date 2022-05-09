@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import tn.esprit.meetico.entity.FileTrip;
+import tn.esprit.meetico.entity.FileDBTrip;
+
 import tn.esprit.meetico.entity.Trip;
 import tn.esprit.meetico.repository.FileDBRepositoryTrip;
 import tn.esprit.meetico.repository.TripRepository;
@@ -22,54 +23,34 @@ public class FileStorageServiceTrip {
   private FileDBRepositoryTrip fileDBRepo;
   @Autowired
   TripRepository tripRepo;
-  public FileTrip store(MultipartFile file) throws IOException {
+  public FileDBTrip store(MultipartFile file) throws IOException {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-    FileTrip FileDB = new FileTrip(fileName, file.getContentType(), file.getBytes());
+    FileDBTrip FileDB = new FileDBTrip(fileName, file.getContentType(), file.getBytes());
     return fileDBRepo.save(FileDB);
   }public Long store1(MultipartFile file) throws IOException {
 	    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-	    FileTrip FileDB = new FileTrip(fileName, file.getContentType(), file.getBytes());
+	    FileDBTrip FileDB = new FileDBTrip(fileName, file.getContentType(), file.getBytes());
 	    fileDBRepo.save(FileDB);
 	    return FileDB.getId();
 	  }
   public void deletefile(Long idfile) {
-	  FileTrip f =fileDBRepo.findById(idfile).orElse(null);
+	  FileDBTrip f =fileDBRepo.findById(idfile).orElse(null);
 	  f.setTrip(null);
 	  fileDBRepo.delete(f);
   }
-  public FileTrip getFile(Long id) {
+  public FileDBTrip getFile(Long id) {
     return fileDBRepo.findById(id).orElse(null);
   }
   public Trip gettripbyfile(Long id) {
-	  FileTrip f = fileDBRepo.findById(id).orElse(null);
+	  FileDBTrip f = fileDBRepo.findById(id).orElse(null);
 	  return f.getTrip();
   }
-  public FileTrip getFiletime(Integer id) {
-	    Trip t = tripRepo.findById(id).orElse(null);
-	     
-	    	Timer timer = new Timer();
-	    	TimerTask task = new TimerTask() {
-	            public void run() {
-	               for(FileTrip f :t.getFiles())
-	               {
-	            	   idf= f.getId();
-	               }
-	            }
-	        };
-	         
-	        timer.schedule(task, 50, 50);
-			return getFile(idf);
-	    
-	  }
-  
-  public Stream<FileTrip> getAllFiles() {
+ 
+  public Stream<FileDBTrip> getAllFiles() {
     return fileDBRepo.findAll().stream();
   }
-  public Stream<FileTrip> getAllFilesBytrip(Integer id) {
-	  Trip t =tripRepo.findById(id).orElse(null);
-	    return t.getFiles().stream();
-	  }
-  public List<FileTrip> getFileByTrip(Integer id) {
+
+  public FileDBTrip getFileByTrip(Integer id) {
 	  Trip t =tripRepo.findById(id).orElse(null);
 	    return t.getFiles();
 	  }

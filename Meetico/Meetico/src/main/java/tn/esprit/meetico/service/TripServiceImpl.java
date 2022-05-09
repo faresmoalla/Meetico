@@ -31,7 +31,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.meetico.entity.DestionationVisitorsCount;
-import tn.esprit.meetico.entity.FileTrip;
+import tn.esprit.meetico.entity.FileDBTrip;
+
 import tn.esprit.meetico.entity.Gender;
 import tn.esprit.meetico.entity.Note;
 import tn.esprit.meetico.entity.StatMeilleurDesitnation;
@@ -42,6 +43,7 @@ import tn.esprit.meetico.repository.StatMeilleurDesitnationRepository;
 import tn.esprit.meetico.repository.TripRepository;
 import tn.esprit.meetico.repository.UserRepository;
 import tn.esprit.meetico.repository.destionationVisitorsCountRepository;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,7 +188,7 @@ public class TripServiceImpl implements ITripService{
 		trip.setUser(u);
 		tripRepo.save(trip);
 	
-		
+		/*
 		for(User ur :users) {
 			String number ="+216"+String.valueOf(ur.getPhoneNumber());
 			log.info(number);
@@ -196,6 +198,7 @@ public class TripServiceImpl implements ITripService{
 		
 		
 		}
+		*/
 		
 			
 		 return trip;
@@ -282,13 +285,13 @@ public class TripServiceImpl implements ITripService{
 		}
 
 	@Override
-	public void affecterFileToTip(List<Long> idFiles, Integer idTrip) {
+	public void affecterFileToTip(Long idFiles, Integer idTrip) {
 		Trip t=tripRepo.findById(idTrip).orElse(null);
-		for(Long idf :idFiles) {
-			FileTrip f=fileRepo.findById(idf).orElse(null);
-			f.setTrip(t);
-			fileRepo.save(f);
-		}
+		
+		FileDBTrip f=fileRepo.findById(idFiles).orElse(null);
+		t.setFiles(f);
+		tripRepo.save(t);
+	
 		
 	}
 

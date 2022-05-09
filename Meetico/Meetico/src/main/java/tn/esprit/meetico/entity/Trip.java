@@ -39,6 +39,7 @@ import lombok.Setter;
 
 
 
+
 @Entity
 @Getter
 @Setter
@@ -74,9 +75,9 @@ public class Trip implements Serializable{
 	
 	private User user;
 	
-	@OneToMany(mappedBy="trip",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JsonManagedReference
-	private List<FileTrip> files;
+	private FileDBTrip files;
 	
 	
 	

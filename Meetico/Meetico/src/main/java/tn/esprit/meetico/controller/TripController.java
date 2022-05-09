@@ -138,7 +138,7 @@ public class TripController {
 
 	@PutMapping("/affecter-fileToTrip/{id-trip}/{files}")
 	@ResponseBody
-	public void affecterFilesToTrip(@PathVariable("files") List<Long> idfile, @PathVariable("id-trip") Integer idtrip) {
+	public void affecterFilesToTrip(@PathVariable("files") Long idfile, @PathVariable("id-trip") Integer idtrip) {
 		tripService.affecterFileToTip(idfile, idtrip);
 
 	}

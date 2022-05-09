@@ -9,12 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -23,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FileTrip implements Serializable {
+public class FileDBTrip implements Serializable {
 	private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -32,11 +34,12 @@ public class FileTrip implements Serializable {
   private String type;
   @Lob
   private byte[] data;
-  @ManyToOne
+  @OneToOne(mappedBy="files")
   @JsonBackReference
+
   private Trip trip;
  
-  public FileTrip(String name, String type, byte[] data) {
+  public FileDBTrip(String name, String type, byte[] data) {
     this.name = name;
     this.type = type;
     this.data = data;

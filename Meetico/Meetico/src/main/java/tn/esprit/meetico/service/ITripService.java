@@ -34,7 +34,7 @@ public interface ITripService {
 
 	public void deleteutilisateurdetrip(Integer idtrip, List<Long> iduser);
 
-	public void affecterFileToTip(List<Long> idFiles, Integer idTrip);
+	public void affecterFileToTip(Long idFiles, Integer idTrip);
 	
 	public Set<Trip> affichetListVoyageByEntrepreneur(Long idEnt);
 
