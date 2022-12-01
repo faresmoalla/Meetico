@@ -19,8 +19,8 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo());
 	}
 
-	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Swagger Configuration for Meetico")
-				.description("\"Spring Boot Swagger Configuration\"").version("1.0.0").build();
-	}
+//	private ApiInfo apiInfo() {
+//		return new ApiInfoBuilder().title("Swagger Configuration for Meetico")
+//				.description("\"Spring Boot Swagger Configuration\"").version("1.0.0").build();
+//	}
 }

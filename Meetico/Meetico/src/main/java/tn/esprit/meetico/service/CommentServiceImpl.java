@@ -88,6 +88,7 @@ public class CommentServiceImpl implements ICommentService {
 		if (verif(comment) == 1) {
 			commentRepo.save(comment);
 		} else if (verif(comment) == 0) {
+			
 			String encodedPass = passwordencoder.encode(comment.getContents());
 			comment.setContents(encodedPass);
 			// comment.setContents("*****");

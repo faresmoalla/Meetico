@@ -41,7 +41,7 @@ public class Comment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long idComment;
 		
-	//@Size(min=5)
+	//@Size(min=5,max=10)
 	 //@NotEmpty(message = "the content field is required")
      private String contents;
 	

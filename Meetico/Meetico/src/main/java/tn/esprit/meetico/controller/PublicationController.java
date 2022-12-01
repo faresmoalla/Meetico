@@ -221,6 +221,16 @@ public class PublicationController {
 	}
 	
 	*/
+	
+	@GetMapping("/getconnecteduser")
+	public User getConnecteduser(HttpServletRequest request) {
+		 String username = request.getUserPrincipal().getName();
+	        User user = userRepo.findByUsername(username);
+	        return user;
+	        
+	}
+		
+	
 	@ApiOperation(value = "Update Publication")
 	@PutMapping("/update")
 	public void updateComment(@RequestBody Publication f,
